@@ -1,0 +1,175 @@
+X-Kit - xorg.conf manipulator, parser and validator
+=====================
+
+X-Kit is a set of libraries to manipulate the xorg.conf. It was written
+with the following aims in mind:
+
+    * Simple API.
+    * Easy to extend.
+    * Dependent only on Python (no external libraries)
+
+X-Kit was designed to be distribution agnostic so as to provide a
+standard way to manipulate the content of the xorg.conf from different
+applications.
+
+Structure
+---------
+
+The Parser class in xorgparser.py is the core of the project since it
+includes all the main methods for the manipulation and validation of
+the xorg.conf. The XUtils subclass in xutils.py contains some not 
+fundamental but still quite useful methods mainly focussed on dealing
+with the several relationships between the different sections of the
+xorg.conf.
+
+The most important attribute of the Parser class is globaldict i.e. a
+dictionary which contains a structured representation of the content
+of the xorg.conf. The section types are its keys (see self.sections).
+"SubSection" is treated as a special section type.
+
+As regards normal sections, the value assigned to each key of 
+globaldict is another dictionary which has the position of each section
+as a key.
+
+self.globaldict = {
+                   'Device': {
+                              0: [option1, option2, etc.],
+                              1: [...], etc.
+                             },
+                   'Screen': {
+                              0: [option1, option2, etc.],
+                              1: [...], etc.},
+                   etc.
+                  }
+
+For example self.globaldict['Device'][0] corresponds to a list of the
+options available in the 1st "Device" section of the xorg.conf.
+
+SubSections are treated differently from sections:
+
+self.globaldict = {
+                   'Device': {
+                              0: [option1, option2, etc.],
+                              1: [...], etc.
+                             },
+                   'Screen': {
+                              0: [option1, option2, etc.],
+                              1: [...], etc.
+                             },
+                             
+                   'SubSection': {
+                                  0: {
+                                      'section': 'Screen',
+                                      'identifier': 'Display',
+                                      'position': 0,
+                                      'options': [option1, option2, etc.]
+                                     }, 
+                                  1: {...}, etc.
+                                 },
+                  }
+
+In this case they keys of self.globaldict['Device'] (i.e. 0, 1, etc.) 
+represent the position of the "Display" SubSection inside the "Screen"
+section. The following are the keys of self.globaldict['Device'][0], [1], etc.:
+
+- section    = the section in which the SubSection is located (e.g. "Screen")
+- position   = the position of the section (e.g. "Screen") in the xorg.conf
+               e.g. position would be 0 if the SubSection was located in the
+               1st "Screen" section of the xorg.conf (whose options are
+               stored in "self.globaldict['Screen'][0]")
+- identifier = the name of the SubSection (e.g. "Display")
+- options    = a list with the options available in the SubSection
+
+Another important concept to consider is that each line in each section is
+considered as an option. No more than one instance of the same option should
+be found in the same section (e.g. Driver "nv" and Driver "vesa" cannot 
+cohexist in the same Device section). References (e.g. Screen "Default Screen"
+in the Device section), however, are treated as a special kind of option and
+more than one reference of the same kind can be found in the same section
+(e.g. Screen "Screen 1" and Screen "Screen 2" in the same ServerLayout
+section)
+
+IMPORTANT NOTE ON CASE SENSITIVE SECTION NAMES: the parser will accept sections
+in either lowercase and uppercase when reading a configuration file. The same
+is not true when the methods are called and the name of the section is passed
+as a parameter, as in such case the names of the sections must be exactly as in
+"self.sections" i.e. the 1st letter of each word which is part of the name must 
+be in uppercase:
+
+e.g. invalid: "screen", "serverlayout", "Serverlayout"
+     valid:   "Screen", "ServerLayout"
+
+If you don't respect this rule, a KeyError will be raised.
+
+For further information you can have a look at the documentation by typing:
+
+import XKit.xutils
+help(XKit.xutils)
+
+
+Dependencies
+------------
+
+All that X-Kit needs is just a working Python installation. No external
+modules are required.
+
+How to install X-Kit
+---------
+
+If you use Ubuntu you should be able to find the source package on
+Launchpad (see the "Development" section of this file) and in the
+Ubuntu repository (starting from Ubuntu 8.10).
+
+The easiest way to install it is by typing the following command:
+
+    # ./setup.py install
+
+    (as root).
+
+Test suite
+----------
+
+Every new feature and bug fix should first get a test case, to
+maintain nearly 100% code coverage. You can either run the 
+following test files separately:
+
+ tests/0-test.py = unit test for xorgparser.py
+ tests/1-test.py = unit test for xutils.py
+
+or simply run them all with the following file:
+
+ tests/run 
+
+The following file contains the path to the source xorg.conf which
+will be used for testing ("inputFile") and the directory 
+("outputDir") in which the results of the tests will be stored
+("xkittest-0.txt" and "xkittest-1.txt" for 0-test.py and 1-test.py
+respectively).
+
+By default inputFile is set to the xorg.conf file in tests/ and
+outputDir is set to tests/.
+
+It is possible to change the default values of inputFile and 
+outputDir by passing parameters to the "tests/run" file:
+
+The only accepted (optional) parameters are:
+  -o, --output=<dirname>    the directory where the results 
+                            of the tests are saved.
+  -i, --input=<filename>    the xorg.conf used for the tests.
+  -h, --help                help page.
+
+Launching "tests/run" without parameters will make it use the
+default values for inputFile and outputDir.
+
+Development
+-----------
+
+Development of trunk and the Ubuntu implementation takes place in
+the following "x-kit" Launchpad project: 
+
+  https://launchpad.net/x-kit
+  
+This is the place to report bugs, do translations, host your own
+branches (if you wish to do so), and download upstream releases.
+
+Alberto Milone (tseliot) <albertomilone@alice.it>
