@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+
+DEB_PYTHON_SYSTEM := pycentral
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/python-distutils.mk
+
+DEB_PYTHON_INSTALL_ARGS_ALL := --no-compile
+
+common-post-build-indep::
+	(cd tests; PYTHONPATH=.. ./run)
+
+clean::
+	rm -f settings.py tests/xkittest-*.txt

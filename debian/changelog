@@ -1,0 +1,168 @@
+x-kit (0.4.2) jaunty; urgency=low
+
+  * new upstream release: 0.4.2:
+    + xorgparser.py:
+      - remove harmless but useless lines after an Exception in getValue()
+      - make sure that if optiontype != None the option (differently from
+        the value) is always put in quotation marks in addOption()
+    + 0-test.py:
+      - add a test for the quotation marks check in addOption()
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Sun, 04 Jan 2009 12:47:09 +0100
+
+x-kit (0.4.1) UNRELEASED; urgency=low
+
+  * new upstream release: 0.4.1:
+    + xorgparser.py:
+      - removeSection() and commentOutSection() now remove any reference to the
+        sections they remove/comment out from self.identifiers
+    + 0-test.py:
+      - modify the existing tests to test the corrections to removeSection() and
+        commentOutSection() in xorgparser.py
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Fri, 26 Dec 2008 17:10:03 +0100
+
+x-kit (0.4) jaunty; urgency=low
+
+  * new upstream release: 0.4:
+    + xorgparser.py:
+      - preserve commented lines inside sections too
+      - add removeSection()
+      - add commentOut{Option|SubOption|Section|SubSection}()
+        o the new "Comments" key in self.globaldict contains commented options and
+          subsections before these are merged into self.comments
+        o when a whole section is commented out, its content and its subsections are
+          immediately moved to self.comments
+        o commented lines are not meant to be uncommented
+        o commented lines are ignored by the validator
+      - add getSubSections()
+        o return the subsections contained in the section passed as an argument
+      - separate __getOptionsToBlacklist() from removeOption() so that it can be shared
+        with commentOutOption()
+      - docstrings clean-up
+    + 0-test.py:
+      - add tests for the new methods in xorgparser.py
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Mon, 22 Dec 2008 16:56:51 +0100
+
+x-kit (0.3.6) intrepid; urgency=low
+
+  * xorgparser.py:
+    - make sure that globaldict is preserved when
+      writing its content to the destination file (use tempdict)
+    - do not close file objects in writeFile() 
+  * 0-test.py: add testWriteFile1(), testWriteFile2() and
+    testWriteFile3()
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Wed, 10 Sep 2008 17:35:28 +0200
+
+x-kit (0.3.5) intrepid; urgency=low
+
+  * remove Replaces from the debian/control
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Sat, 16 Aug 2008 11:21:52 +0200
+
+x-kit (0.3.4) intrepid; urgency=low
+
+  [ Alberto Milone ]
+  * add getBrokenReferences() to xorgparser.Parser()
+  * move getPosition() and isSection() to xorgparser since they are now required
+    by getBrokenReferences(). Move the relevant tests to 0-test.py
+  * remove all the arguments from xutils.XUtils.checkNFixSection()
+  * make checkNFixSection() rely on getBrokenReferences()
+  * Parser.__process() will now check the following additional cases:
+    - if duplicate sections are found
+    - if broken references are found
+    - if there are sections which don't have an identifier but should
+      have one (except for completely empty sections, which are ignored
+      and don't appear in globaldict)
+  * clean up Parser.getIds()
+  * remove sys.exit from Parser.getReferences()
+  * disable checkDuplicateOptions by default
+  * move getIdentifier and isSection to xorgparser
+  * move all the validator methods to __complianceRules()
+  * add getBrokenReferences() to xorgparser
+  * add validateOptions to the default checks
+  * improve getDefaultServerLayout() in xorgparser so that if one default ServerLayout
+    is set, its existence will be checked
+  * make sure that each ServerLayout has at least 1 reference to a Screen section
+  * print something useful for debugging when raising ParseException
+  * update the README with a note on case-sensitive section names
+
+  [ Martin Pitt ]
+  * debian/rules: Remove some cruft.
+  * debian/control: Rename package x-kit to python-xkit for conforming to
+    Python package naming policy. Also fix section to be 'python'.
+  * debian/rules: Run the test suite during build and clean up the spewage.
+  * Add debian/python-xkit.examples: Ship examples/ directory.
+  * debian/control: Add Vcs-Bzr:.
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Thu, 14 Aug 2008 18:36:12 +0200
+
+x-kit (0.3.3) intrepid; urgency=low
+
+  * perform a better option name check in Parser.__cleanOption() so as not to
+    confuse references to Device sections  with references to InputDevice
+    sections
+  * remove print from setUp() in 0-test.py
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Thu, 07 Aug 2008 13:25:40 +0200
+
+x-kit (0.3.2) intrepid; urgency=low
+
+  * rename exceptions by removing the "NotAvailable" part from their names
+  * add tests/run to run all the tests and to configure the input file and the target
+    directory where to store the results of the tests.
+  * remove the examples from the setup.py
+  * add README
+  * remove gpl.txt in favour of COPYING
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Wed, 06 Aug 2008 20:04:17 +0200
+
+x-kit (0.3.1) intrepid; urgency=low
+
+  * reintroduce prefix in xorgparser.Parser.addOption()
+  * replace PositionNotAvailableException with SectionNotAvailableException
+  * make sure that getValue() checks the availability of a section and
+    raises a SectionNotAvailableException if necessary
+  * introduce Parser.ParseException in __process()
+  * move getDuplicate* from xutils to xorgparser to perform a sanity check
+    in __process()
+  * cleanup of __process()
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Fri, 01 Aug 2008 16:37:38 +0200
+
+x-kit (0.3) intrepid; urgency=low
+
+  * Correct doc about returning None in getValue() in XKit/xorgparser.py
+  * reinitialise the class in writeFile(), correct 0-test.py
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Mon, 21 Jul 2008 10:56:39 +0200
+
+x-kit (0.2) intrepid; urgency=low
+
+  * 0.2 Release
+  * add examples/accessories.py for very specific functions
+  * several stability fixes to XKit/xorgparser.py and XKit/xutils.py
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Mon, 30 Jun 2008 16:07:12 +0200
+
+x-kit (0.1) intrepid; urgency=low
+
+  * XKit/xorgparser.py,
+  * XKit/xutils.py: Modified.
+  * fix "source" in 0-example.py
+  * check Duplicate Sections and options in XKit/xutils.py
+    with checkDuplicates()
+  * add fixReferences() to XKit/xutils.py
+  * make the parser less verbose
+  * handle references of the same type with different values in XKit/xutils.py
+  * change source to /etc/X11/xorg.conf in example 1 and 2
+  * XKit/xutils.py: [5] Fixed __cleanOption for Screen 4 use-case and
+    added printReferences to xutils
+  * prevent makeSection() from removing identifiers
+  * move high-level methods to xutils.XUtils and use expanduser in
+  * if the option has no value assigned, interpret it as True
+    (XKit/xorgparser.py)
+
+ -- Alberto Milone (tseliot) <albertomilone@alice.it>  Fri, 16 May 2008 17:53:24 +0200
