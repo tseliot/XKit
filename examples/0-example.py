@@ -54,9 +54,9 @@ def main():
     Get the value assigned to the AddARGBGLXVisuals option in the 1st Screen section
     '''
     try:
-        print 'AddARGBGLXVisuals', a.getValue('Screen', 'AddARGBGLXVisuals', position=1, identifier='Display')
-    except OptionException, e:
-        print 'Error:', e
+        print('AddARGBGLXVisuals', a.getValue('Screen', 'AddARGBGLXVisuals', position=1, identifier='Display'))
+    except OptionException as e:
+        print('Error:', e)
     
     '''
     Add an Option (with the Option prefix) to the 1st Screen section
@@ -66,7 +66,7 @@ def main():
     '''
     Print the global dict i.e. the dict which contains all sections
     '''
-    print '\nGlobal dict is the dict which contains all sections\n', a.globaldict
+    print('\nGlobal dict is the dict which contains all sections\n', a.globaldict)
     #print '\nGlobal iters is\n', a.globaliters
     
     '''
@@ -79,7 +79,7 @@ def main():
     Add a reference to the Screen section identified as "New Default Screen" to
     the 1st ServerLayout section
     '''
-    print '\nNew Default Screen in progress'
+    print('\nNew Default Screen in progress')
     a.addReference('ServerLayout', 'Screen', 'New Default Screen', position=0)
     a.addReference('ServerLayout', 'InputDevice', 'New Device', position=0)
     a.removeReference('ServerLayout', 'InputDevice', 'New Device', position=0)
@@ -121,7 +121,7 @@ def main():
     '''
     Get the identifier of the 1st Device section
     '''
-    print a.getValue('Device', 'Identifier', 0)
+    print(a.getValue('Device', 'Identifier', 0))
     #print a.getValue('SubSection', 'Name', position=0, identifier='Display', sect='Screen')
     
     
@@ -138,10 +138,10 @@ def main():
     a.addReference('Screen', 'Device', 'My Device', position=0)
     
     a.addReference('Device', 'Screen', 4, position=0)
-    print a.getReferences('Screen', 0, reflist=['Device'])
+    print(a.getReferences('Screen', 0, reflist=['Device']))
     
-    print 'Virtual', a.getValue('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen')
-    print 'Modes', a.getValue('SubSection', 'Modes', position=0, identifier='Display', sect='Screen')
+    print('Virtual', a.getValue('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen'))
+    print('Modes', a.getValue('SubSection', 'Modes', position=0, identifier='Display', sect='Screen'))
     
     '''
     Create a new Device section and print the list of identifiers so as to see
@@ -149,16 +149,16 @@ def main():
     '''
     a.makeSection('Device', identifier='New Graphics Card')
     
-    print '\nCreate Broken Screen section'
+    print('\nCreate Broken Screen section')
     pos = a.makeSection('Screen', identifier='Broken Screen Section')
-    print '\nAdding References'
+    print('\nAdding References')
     a.addReference('Screen', 'Monitor', 'Broken Monitor Section', position=pos)
     a.addReference('Screen', 'Device', 'Broken Device Section', position=pos)
     
     try:
-        print 'Horizsync value is', a.getValue('Monitor', 'Horizsync', 0)
-    except OptionException, e:
-        print 'Error:', e
+        print('Horizsync value is', a.getValue('Monitor', 'Horizsync', 0))
+    except OptionException as e:
+        print('Error:', e)
     
     '''
     Write the changes to the destination file
