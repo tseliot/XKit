@@ -832,7 +832,7 @@ class Parser:
         
         # Comment any section of "section" type
         else:
-            allkeys = self.globaldict[section].keys()
+            allkeys = list(self.globaldict[section].keys())
             toremove = {}.fromkeys(allkeys)
         
         # If the section has an identifier i.e. if the section
@@ -842,13 +842,13 @@ class Parser:
             it = 0
             for reference in self.identifiers[section]:
                 try:
-                    ref = toremove.keys().index(reference[1])
-                    toremove[toremove.keys()[ref]] = it
+                    ref = list(toremove.keys()).index(reference[1])
+                    toremove[list(toremove.keys())[ref]] = it
                 except ValueError:
                     pass
                 it += 1
         
-        sortedRemove = toremove.keys()
+        sortedRemove = list(toremove.keys())
         sortedRemove.sort()
         
         modded = 0
@@ -960,7 +960,7 @@ class Parser:
                 except AttributeError:# if ref is a string
                     if ref:
                         referenceDict.setdefault(ref)
-                for reference in referenceDict.keys():
+                for reference in list(referenceDict.keys()):
                     references[option].append(reference)
         return references
     
@@ -1162,7 +1162,7 @@ class Parser:
                     return sect[0]
         except KeyError:
             raise SectionException
-        raise IdentifierException, errorMsg
+        raise IdentifierException(errorMsg)
 
 
     def __cleanOption(self, option, optname, reference=None, section=None):
@@ -1305,7 +1305,7 @@ class Parser:
                 serverDict = {}
                 for elem in optbits:
                     serverDict.setdefault(elem)
-                return serverDict.keys()
+                return list(serverDict.keys())
             elif optcount > 0 and optcount <= 4:#dealing with a section option
                 return optbits[optlen -1]
             elif optcount > 4:
@@ -1487,7 +1487,7 @@ class Parser:
                     return sect[1]
             except AttributeError:
                 pass
-        raise IdentifierException, errorMsg
+        raise IdentifierException(errorMsg)
     
     def getBrokenReferences(self):
         '''Look for broken references (i.e. references to sections which don't exist)
@@ -1749,7 +1749,7 @@ class Parser:
         
         # Comment any section of "section" type
         else:
-            allkeys = self.globaldict[section].keys()
+            allkeys = list(self.globaldict[section].keys())
             toremove = {}.fromkeys(allkeys)
         
         # If the section has an identifier i.e. if the section
@@ -1759,14 +1759,14 @@ class Parser:
             it = 0
             for reference in self.identifiers[section]:
                 try:
-                    ref = toremove.keys().index(reference[1])
-                    toremove[toremove.keys()[ref]] = it
+                    ref = list(toremove.keys()).index(reference[1])
+                    toremove[list(toremove.keys())[ref]] = it
                 except ValueError:
                     pass
                 it += 1
         
         
-        sortedRemove = toremove.keys()
+        sortedRemove = list(toremove.keys())
         sortedRemove.sort()
         
         
