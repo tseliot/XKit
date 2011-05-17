@@ -17,7 +17,7 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
-from xorgparser import *
+from .xorgparser import *
 import sys
 
 class XUtils(Parser):
@@ -67,7 +67,7 @@ class XUtils(Parser):
         if sectionsList == None check all the Device sections
         '''
         if sectionsList == None:
-            sectionsList = self.globaldict['Device'].keys()
+            sectionsList = list(self.globaldict['Device'].keys())
         
         for section in sectionsList:
             try:
@@ -156,7 +156,7 @@ class XUtils(Parser):
         
         if len(devicesToCheck) == 0:
             #Check all the Device sections
-            devicesToCheck = self.globaldict['Device'].keys()
+            devicesToCheck = list(self.globaldict['Device'].keys())
         
         return devicesToCheck
     
