@@ -22,7 +22,7 @@ from XKit.xutils import *
 import sys
 import unittest
 import os
-import settings
+from . import settings
 
 source = settings.inputFile
 destination = settings.outputDir
@@ -170,7 +170,7 @@ class XUtilsTestCase(unittest.TestCase):
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -206,7 +206,7 @@ Section "ServerLayout"
     Screen "Default Screen Device"
     Option "Whatever"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.parser = xutils.XUtils(tempFile)
@@ -225,7 +225,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -267,7 +267,7 @@ Section "ServerLayout"
     Screen "Default Screen Device" 0 0
     Screen "Another Screen Device" RightOf "Default Screen Device"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.parser = xutils.XUtils(tempFile)
@@ -285,7 +285,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -316,7 +316,7 @@ Section "Device"
     Device "Another Video Device"
 EndSection
 
-'''
+''', file=confFile)
         confFile.close()
 
         self.parser = xutils.XUtils(tempFile)
@@ -324,7 +324,7 @@ EndSection
         devices = self.parser.getDevicesInUse()
         devices.sort()
         
-        self.failUnless(devices == self.parser.globaldict['Device'].keys(), 'All the Device sections should be returned!')
+        self.failUnless(devices == list(self.parser.globaldict['Device'].keys()), 'All the Device sections should be returned!')
 
     def testGetDevicesInUse2(self):
         '''
@@ -335,7 +335,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -371,7 +371,7 @@ Section "ServerLayout"
     Screen "Yet Another Screen Device" LeftOf "Another Screen Device"
     Screen "Another Screen Device"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.parser = xutils.XUtils(tempFile)
@@ -390,7 +390,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -432,7 +432,7 @@ Section "ServerLayout"
     Screen "Default Screen Device" 0 0
     Screen "Another Screen Device" RightOf "Default Screen Device"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         
@@ -449,7 +449,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -493,7 +493,7 @@ Section "ServerLayout"
     Screen "New Screen Device" 0 0
 EndSection
 
-'''
+''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         
@@ -510,7 +510,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -557,7 +557,7 @@ EndSection
 Section "ServerFlags"
     Option "Whatever"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         
@@ -573,7 +573,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -620,7 +620,7 @@ EndSection
 Section "ServerFlags"
     Option "DefaultServerLayout" "A Layout"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         
@@ -635,7 +635,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -682,7 +682,7 @@ EndSection
 Section "ServerFlags"
     Option "DefaultServerLayout" "A Layout"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         enabled = self.parser.isDriverEnabled('foo')
@@ -699,7 +699,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -709,7 +709,7 @@ Section "Device"
     Identifier "Another Video Device"
     Driver "bar"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         enabled = self.parser.isDriverEnabled('foo')
@@ -726,7 +726,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -763,7 +763,7 @@ Section "ServerLayout"
     Screen "Default Screen Device" 0 0
     Screen "Another Screen Device" RightOf "Default Screen Device"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         enabled = self.parser.isDriverEnabled('foo')
@@ -780,7 +780,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -823,7 +823,7 @@ Section "ServerLayout"
     Option "Whatever"
     Screen "New Screen Device" 0 0
 EndSection
-'''        
+''', file=confFile)        
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         relationships = self.parser.getScreenDeviceRelationships()
