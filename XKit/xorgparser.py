@@ -57,7 +57,7 @@ class Parser:
         
         self.globaldict = a global dictionary containing all the sections
                           and options. For further information on 
-                          self.globaldict, have a look at self.__process()
+                          self.globaldict, have a look at self.__check_sanity()
                           and at getValue().
         
         self.requireid = a list of the sections which require to have an
@@ -68,9 +68,9 @@ class Parser:
                            fiers.
         
         self.sections = a tuple containing the names of all
-                        the sections which self.__process() will look for
+                        the sections which self.__check_sanity() will look for
                         in the xorg.conf. Sections with other names
-                        will be ignored by self.__process().
+                        will be ignored by self.__check_sanity().
         
         self.references = a list containing the names of all the possible
                           references.'''
@@ -115,11 +115,11 @@ class Parser:
         for elem in self.globaldict:
             self.globaldict[elem] = {}
         
-        self.__process()
+        self.__check_sanity()
         
         
             
-    def __process(self):
+    def __check_sanity(self):
         '''Perform a sanity check of the file and fill self.globaldict with
         all the sections and subsections in the xorg.conf
         
@@ -312,12 +312,12 @@ class Parser:
             # Make sure that the configuration file is compliant with
             # the rules of xorg
 
-            self.__complianceRules()
+            self.__check_syntax()
             
         else:
             self.getIds()
     
-    def __complianceRules(self):
+    def __check_syntax(self):
         '''This method contains the several checks which can guarantee
         compliance with the syntax rules of the xorg.conf'''
         
@@ -489,7 +489,7 @@ class Parser:
                         
                         error = 'The following option is invalid: %s' % (option.strip())
                         
-                        optbits = self.__cleanForDuplicates(option, includenull=True)
+                        optbits = self.__clean_duplicates(option, includenull=True)
                         
                         if len(optbits) == 1 and optbits[0].strip().lower() not in optionsWhitelist:#ERROR
                             
@@ -517,7 +517,7 @@ class Parser:
             if option.find('#') != -1:#remove comments
                 option = option[0: option.find('#')]
             
-            optbits = self.__cleanForDuplicates(option)
+            optbits = self.__clean_duplicates(option)
             
             # optbits may look like this:
             # 
@@ -557,7 +557,7 @@ class Parser:
         
         return duplicates
         
-    def __cleanForDuplicates(self, option, includenull=None):
+    def __clean_duplicates(self, option, includenull=None):
         '''Clean the option and return all its components in a list
         
         includenull - is used only by validateOptions() and makes
@@ -709,7 +709,7 @@ class Parser:
         else:
             self.globaldict[section][position].append(toadd)
         
-    def __getOptionsToBlacklist(self, section, option, value=None, position=None, reference=None):
+    def __get_options_to_blacklist(self, section, option, value=None, position=None, reference=None):
         '''Private method shared by RemoveOption and CommentOutOption'''
         toremove = {}
         if len(self.globaldict[section]) != 0:#if the section exists
@@ -758,7 +758,7 @@ class Parser:
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)'''
         
-        toremove = self.__getOptionsToBlacklist(section, option, value, position, reference)
+        toremove = self.__get_options_to_blacklist(section, option, value, position, reference)
         for part in toremove:
             modded = 0
             for line in toremove[part]:
@@ -864,7 +864,7 @@ class Parser:
             
             # Remember to remove any related entry from the "Comments"
             # section
-            self.__removeCommentEntries(section, sect)
+            self.__remove_comment_entries(section, sect)
         
             # Remove the section from globaldict
             del self.globaldict[section][sect]
@@ -1110,7 +1110,7 @@ class Parser:
             self.globaldict[self.subsection][elem]['options'].append(toadd)
         
     
-    def __getSubOptionsToBlacklist(self, section, identifier, option, position=None):
+    def __get_suboptions_to_blacklist(self, section, identifier, option, position=None):
         '''Get a dictionay of the suboptions to blacklist.
         
         See addSubOption() for an explanation on the arguments.
@@ -1144,7 +1144,7 @@ class Parser:
     def removeSubOption(self, section, identifier, option, position=None):
         '''Remove an option from a subsection.'''
         
-        toremove = self.__getSubOptionsToBlacklist(section, identifier, option, position)
+        toremove = self.__get_suboptions_to_blacklist(section, identifier, option, position)
         for elem in toremove:
             modded = 0
             for part in toremove[elem]:
@@ -1165,7 +1165,7 @@ class Parser:
         raise IdentifierException(errorMsg)
 
 
-    def __cleanOption(self, option, optname, reference=None, section=None):
+    def __clean_option(self, option, optname, reference=None, section=None):
         '''Clean the option and return the value (i.e. the last item of the list
         which this method generates).
         
@@ -1423,7 +1423,7 @@ class Parser:
                                     else:
                                         stropt = opt.strip()
                                     # clean the option and return the value
-                                    values.append(self.__cleanOption(stropt, option, reference=reference))
+                                    values.append(self.__clean_option(stropt, option, reference=reference))
                     
                     if len(values) == 0:
                         raise OptionException
@@ -1444,7 +1444,7 @@ class Parser:
                             stropt = elem.strip()[0: elem.strip().find('#')]
                         else:
                             stropt = elem.strip()
-                        values.append(self.__cleanOption(stropt, option, reference=reference, section=section))
+                        values.append(self.__clean_option(stropt, option, reference=reference, section=section))
                 
                 if len(values) == 0:
                     raise OptionException
@@ -1562,7 +1562,7 @@ class Parser:
         return default
     
 
-    def __mergeSubSections(self):
+    def __merge_subsections(self):
         '''Put SubSections back into the sections to which they belong.'''
         
         for sect in self.tempdict['SubSection']:
@@ -1597,10 +1597,10 @@ class Parser:
         self.tempdict = copy.deepcopy(self.globaldict)
         
         # Commented options must be dealt with first
-        self.__mergeCommentedOptions()
+        self.__merge_commented_options()
         
         # Merge all the non-commented subsections
-        self.__mergeSubSections()
+        self.__merge_subsections()
         lines = []
         comments = ''.join(self.comments) + '\n'
         lines.append(comments)
@@ -1635,7 +1635,7 @@ class Parser:
         
         return subsections
     
-    def __permanentMergeSubSections(self, subsections):
+    def __permanent_merge_subsections(self, subsections):
         '''Put SubSections back into the sections to which they belong and comment them out
         
         WARNING: this alters globaldict and should be used only in commentOutSection()
@@ -1660,7 +1660,7 @@ class Parser:
             except KeyError:
                 pass
     
-    def __getComments(self, section, position):
+    def __get_comments(self, section, position):
         '''Return the index of the comment entry in the Comments section for a section'''
         
         comments = []
@@ -1671,7 +1671,7 @@ class Parser:
         
         return comments
     
-    def __MergeSubSectionsWithComments(self, subsections):
+    def __merge_subsections_with_comments(self, subsections):
         '''Put SubSections back into the sections to which they belong and comment them out
         
         WARNING: this alters globaldict and should be used only to comment out subsections
@@ -1690,7 +1690,7 @@ class Parser:
             
             startSubSection = '#\tSubSection "%s"\n' % (identifier)
             
-            comments = self.__getComments(section, position)
+            comments = self.__get_comments(section, position)
             if not comments:
                 self.globaldict[self.commentsection][section] = {}
                 self.globaldict[self.commentsection][section][position] = {}
@@ -1712,16 +1712,16 @@ class Parser:
             #remove subsection since it was merged
             del self.globaldict[self.subsection][sect]
     
-    def __commentOutRelatedSubSections(self, section, position):
+    def __comment_out_subsections(self, section, position):
         '''Comment out all the subsections of a section.'''
         
         subsections = self.getSubSections(section, position)
-        self.__permanentMergeSubSections(subsections)
+        self.__permanent_merge_subsections(subsections)
     
-    def __removeCommentEntries(self, section, position):
+    def __remove_comment_entries(self, section, position):
         '''Remove comment sections of specific sections from the "Comments" section'''
         
-        comments = self.__getComments(section, position)
+        comments = self.__get_comments(section, position)
         for commentSection in comments:
             del self.globaldict['Comments'][section][commentSection]
     
@@ -1779,12 +1779,12 @@ class Parser:
 
             # Append all its SubSections (automatically commented
             #  out) and remove them from SubSection
-            self.__commentOutRelatedSubSections(section, sect)
+            self.__comment_out_subsections(section, sect)
             self.comments.append(endSection)
             
             # Remember to remove any related entry from the "Comments"
             # section
-            self.__removeCommentEntries(section, sect)
+            self.__remove_comment_entries(section, sect)
         
             # Remove the section from globaldict
             del self.globaldict[section][sect]
@@ -1814,7 +1814,7 @@ class Parser:
                 subsections.append(subsection)
                 break
         # Add the subsection to the Comments section
-        self.__MergeSubSectionsWithComments(subsections)
+        self.__merge_subsections_with_comments(subsections)
         
     
     def commentOutOption(self, section, option, value=None, position=None, reference=None):
@@ -1826,7 +1826,7 @@ class Parser:
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)'''
         
-        toremove = self.__getOptionsToBlacklist(section, option, value, position, reference)
+        toremove = self.__get_options_to_blacklist(section, option, value, position, reference)
         for part in toremove:
             modded = 0
             for line in toremove[part]:
@@ -1859,7 +1859,7 @@ class Parser:
                   e.g. 0 (i.e. the first element in the list of Screen
                   sections)'''
         
-        toremove = self.__getSubOptionsToBlacklist(section, identifier, option, position)
+        toremove = self.__get_suboptions_to_blacklist(section, identifier, option, position)
         for elem in toremove:
             modded = 0
             for part in toremove[elem]:
@@ -1884,7 +1884,7 @@ class Parser:
                 del self.globaldict[self.subsection][elem]['options'][realpos]
                 modded += 1
     
-    def __mergeCommentedOptions(self):
+    def __merge_commented_options(self):
         '''Put commented out options back into the sections or subsections to which they belong.'''
         
         for sect in self.tempdict[self.commentsection]:
