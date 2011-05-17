@@ -18,7 +18,7 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
-from accessories import *
+from .accessories import *
 import os
 
 def main():
@@ -52,9 +52,9 @@ def main():
     Get the value assigned to the AddARGBGLXVisuals option in the 1st Screen section
     '''
     try:
-        print 'AddARGBGLXVisuals', a.getValue('Screen', 'AddARGBGLXVisuals', position=1, identifier='Display')
-    except OptionNotAvailableException, e:
-        print 'Error:', e
+        print('AddARGBGLXVisuals', a.getValue('Screen', 'AddARGBGLXVisuals', position=1, identifier='Display'))
+    except OptionNotAvailableException as e:
+        print('Error:', e)
     '''
     Add an Option (with the Option prefix) to the 1st Screen section
     '''
@@ -68,7 +68,7 @@ def main():
     '''
     Print the global dict i.e. the dict which contains all sections
     '''
-    print '\nGlobal dict is the dict which contains all sections\n', a.globaldict
+    print('\nGlobal dict is the dict which contains all sections\n', a.globaldict)
     #print '\nGlobal iters is\n', a.globaliters
     
     '''
@@ -120,7 +120,7 @@ def main():
     '''
     Get the identifier of the 1st Device section
     '''
-    print a.getValue('Device', 'Identifier', 0)
+    print(a.getValue('Device', 'Identifier', 0))
     #print a.getValue('SubSection', 'Name', position=0, identifier='Display', sect='Screen')
     
     
@@ -131,13 +131,13 @@ def main():
     '''
     Get the driver  of the 1st Device section
     '''
-    print a.getDriver('Device', 0)
+    print(a.getDriver('Device', 0))
     
     
     a.makeSection('Screen', 'New Screen')
     a.makeSection('Screen', 'New Screen')#this new section won't be created
     a.setDefaultDepth(24, 0)
-    print a.getDefaultDepth(0)
+    print(a.getDefaultDepth(0))
     
     '''
     Create a new device section
@@ -149,30 +149,30 @@ def main():
     a.addReference('Screen', 'Device', 'My Device', position=0)
     
     a.addReference('Device', 'Screen', 4, position=0)
-    print a.getReferences('Screen', 0, reflist=['Device'])
+    print(a.getReferences('Screen', 0, reflist=['Device']))
     a.enableComposite()
     a.addArgbGlxVisuals(0)
     
-    print 'Virtual', a.getValue('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen')
-    print 'Modes', a.getValue('SubSection', 'Modes', position=0, identifier='Display', sect='Screen')
+    print('Virtual', a.getValue('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen'))
+    print('Modes', a.getValue('SubSection', 'Modes', position=0, identifier='Display', sect='Screen'))
     
     '''
     Get the identifier of the first Device section
     '''
-    print 'ID of the 1st Device Section =', a.getIdentifier('Device', 0)
+    print('ID of the 1st Device Section =', a.getIdentifier('Device', 0))
     
     '''
     Get the position of the Device section identified as 'Configured Video Device'
     '''
     try:
-        print 'Position of "Configured Video Device" =', a.getPosition('Device', 'Configured Video Device')
-    except IdentifierException, e:
-        print e
+        print('Position of "Configured Video Device" =', a.getPosition('Device', 'Configured Video Device'))
+    except IdentifierException as e:
+        print(e)
     '''
     See if a section exists
     '''
-    print 'Section Device "Configured Video Device" exists =', a.isSection('Device', 'Configured Video Device')
-    print 'Section Device "Whatever" exists =', a.isSection('Device', 'Whatever')
+    print('Section Device "Configured Video Device" exists =', a.isSection('Device', 'Configured Video Device'))
+    print('Section Device "Whatever" exists =', a.isSection('Device', 'Whatever'))
     
     '''
     Create a new Device section and print the list of identifiers so as to see
@@ -180,11 +180,11 @@ def main():
     '''
     a.makeSection('Device', identifier='New Graphics Card')
     a.makeSection('Screen', identifier='New Screeeeeeeeeen')
-    print '\nIdentifiers after creating a new device section', a.identifiers
+    print('\nIdentifiers after creating a new device section', a.identifiers)
     
-    print '\nCreate Broken Screen section'
+    print('\nCreate Broken Screen section')
     pos = a.makeSection('Screen', identifier='Broken Screen Section')
-    print '\nAdding References'
+    print('\nAdding References')
     a.addReference('Screen', 'Monitor', 'Broken Monitor Section', position=pos)
     a.addReference('Screen', 'Device', 'Broken Device Section', position=pos)
     
