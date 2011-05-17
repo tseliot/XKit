@@ -30,21 +30,21 @@ class Accessories(XUtils):
             self.referencesTree[section] = {}
             for sect in self.globaldict[section]:
                 self.referencesTree[section][sect] = self.getReferences(section, sect)
-                print sect, 'Section - references:', self.getReferences(section, sect)
+                print(sect, 'Section - references:', self.getReferences(section, sect))
         for section in self.referencesTree:
             for elem in self.referencesTree[section]:
                 #print 'ELEMENT', elem
                 for refsect in self.referencesTree[section][elem]:
                     if len(self.referencesTree[section][elem][refsect]) > 0:
-                        print '\n', section, 'Section', '"' + self.getIdentifier(section, elem) + '"', 'depends on', \
+                        print('\n', section, 'Section', '"' + self.getIdentifier(section, elem) + '"', 'depends on', \
                         'Section', refsect, ':\n', \
-                        self.referencesTree[section][elem][refsect]
+                        self.referencesTree[section][elem][refsect])
                         for ref in self.referencesTree[section][elem][refsect]:
                             for sect in self.sections:
                                 if sect.lower() == refsect.strip().lower():
                                     refsect = sect
                             if not self.isSection(refsect, ref):
-                                print '*****WARNING:', refsect, 'Section', ref, 'does not exist!*****'
+                                print('*****WARNING:', refsect, 'Section', ref, 'does not exist!*****')
     
     def printDuplicateOptions(self):
         '''
@@ -52,31 +52,31 @@ class Accessories(XUtils):
         '''
         a = self.checkDuplicateOptions()
         if len(a) > 0:
-            print '\nDuplicate Options:'
+            print('\nDuplicate Options:')
             for section in a:
-                print 'Duplicate Options in', section, 'Section:'
+                print('Duplicate Options in', section, 'Section:')
                 for elem in a[section]:
-                    print '\tSection No:', elem
+                    print('\tSection No:', elem)
                     for option in a[section][elem]:
-                        print '\t\t', option
+                        print('\t\t', option)
         else:
-            print 'No Duplicate Options Found'
+            print('No Duplicate Options Found')
     
     def printDuplicateSections(self):
         a = self.getDuplicateSections()
-        print '\nDuplicate Sections:'
+        print('\nDuplicate Sections:')
         for section in a:
-            print 'Duplicate', section, 'Sections:'
+            print('Duplicate', section, 'Sections:')
             for elem in a[section]:
-                print '\t', elem    
+                print('\t', elem)    
     
     def printSection(self, section):
         '''
         Print the content of all the sections of a certain type
         '''
         for elem in self.globaldict[section]:
-            print 'Section' + '"' + section + '"'
-            print ''.join(self.globaldict[section][elem]) + 'EndSection\n'
+            print('Section' + '"' + section + '"')
+            print(''.join(self.globaldict[section][elem]) + 'EndSection\n')
     
     def getDefaultDepth(self, position):
         '''
