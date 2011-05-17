@@ -23,7 +23,7 @@ import sys
 import unittest
 import os
 import logging
-import settings
+from . import settings
 import tempfile
 import copy
 
@@ -1090,7 +1090,7 @@ EndSection\n'
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 
 
 
@@ -1103,7 +1103,7 @@ Section "Screen"
     Identifier  "MGA 3"
     Device "card2"
 EndSection
-'''
+''', file=confFile)
 
         confFile.close()
         
@@ -1114,7 +1114,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Screen"
     Identifier  "New Screen Device"
 EndSection
@@ -1124,7 +1124,7 @@ Section "ServerLayout"
     Option "Whatever"
     Screen "New Screen Device" 0 0
 EndSection
-'''
+''', file=confFile)
         
         confFile.close()
         
@@ -1140,7 +1140,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Screen"
     Identifier  "New Screen Device"
 EndSection
@@ -1155,7 +1155,7 @@ Section "ServerLayout"
     Screen "New Screen Device" 0 0
     InputDevice "My device"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.assertRaises(ParseException, xorgparser.Parser, tempFile)
@@ -1164,7 +1164,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Screen"
     Identifier  "New Screen Device"
 EndSection
@@ -1172,7 +1172,7 @@ EndSection
 Section "Device"
     Option "FakeOption" "True"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.assertRaises(ParseException, xorgparser.Parser, tempFile)
@@ -1181,7 +1181,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "ServerLayout"
     
     # Uncomment if you have a wacom tablet
@@ -1341,7 +1341,7 @@ EndSection
 Section "Extensions"
     Option      "Composite" "Enable"
 EndSection
-'''
+''', file=confFile)
 
         confFile.close()
         
@@ -1361,7 +1361,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier  "pippo"
 EndSection
@@ -1389,7 +1389,7 @@ Section "ServerLayout"
     InputDevice "Mouse 2"    "SendCoreEvents"
     Option      "BlankTime"  "5"
 EndSection
-'''
+''', file=confFile)
 
         confFile.close()
         
@@ -1406,7 +1406,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1457,7 +1457,7 @@ EndSection
 Section "ServerFlags"
     Option "DefaultServerLayout" "Another Layout"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.assertRaises(ParseException,
@@ -1473,7 +1473,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1507,7 +1507,7 @@ EndSection
 Section "ServerFlags"
     Option "DefaultServerLayout" "A Layout"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.assertRaises(ParseException,
@@ -1523,7 +1523,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1562,7 +1562,7 @@ EndSection
 Section "ServerFlags"
     Option "DefaultServerLayout" "A Layout"
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.assertRaises(ParseException,
@@ -1578,7 +1578,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1618,7 +1618,7 @@ Section "ServerFlags"
     Option "DefaultServerLayout" "A Layout"
     Enable
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         self.assertRaises(ParseException,
@@ -1631,7 +1631,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1641,7 +1641,7 @@ Section "Monitor"
     Identifier "Another Video Device"
     ModelName ""
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         valid = True
         try:
@@ -1658,7 +1658,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1668,7 +1668,7 @@ Section "Monitor"
     Identifier "Another Video Device"
     Enable
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         self.assertRaises(ParseException,
                       xorgparser.Parser, tempFile)
@@ -1692,7 +1692,7 @@ EndSection
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier  "pippo"
 EndSection
@@ -1700,7 +1700,7 @@ EndSection
 Section "Screen"
     Identifier  "MGA 1"
 EndSection
-'''
+''', file=confFile)
         confFile.close() 
         self.parser = xorgparser.Parser(tempFile)
         self.assertRaises(IdentifierException,
@@ -1778,7 +1778,7 @@ EndSection
         inventedOption = '#this does not exist'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1794,7 +1794,7 @@ Section "Monitor"
     Identifier "Yet Another Video Device"
     #Option Fake ScreenSetting
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -1833,7 +1833,7 @@ EndSection
         inventedOption = '#this does not exist'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1857,7 +1857,7 @@ Section "Monitor"
     Identifier "Yet Another Video Device"
     #Option Fake ScreenSetting
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -1903,14 +1903,14 @@ EndSection
         option = 'Fake'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
     Option Fake True
     #another comment
 EndSection
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -1951,7 +1951,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -1967,7 +1967,7 @@ Section "Screen"
     EndSubSection
 EndSection
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2006,7 +2006,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2035,7 +2035,7 @@ Section "Screen"
 EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2057,7 +2057,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2098,7 +2098,7 @@ EndSection
 #EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2197,7 +2197,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2238,7 +2238,7 @@ EndSection
 #EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2334,7 +2334,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2375,7 +2375,7 @@ EndSection
 #EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2445,7 +2445,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2490,7 +2490,7 @@ EndSection
 #EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2617,7 +2617,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2658,7 +2658,7 @@ EndSection
 #EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2715,7 +2715,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2756,7 +2756,7 @@ EndSection
 #EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2828,7 +2828,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2869,7 +2869,7 @@ EndSection
 #EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
@@ -2940,7 +2940,7 @@ EndSection
         option = 'Depth'
         
         confFile = open(tempFile, 'w')
-        print >> confFile, '''
+        print('''
 Section "Device"
     Identifier "Default Video Device"
     Driver "foo"
@@ -2981,7 +2981,7 @@ EndSection
 #EndSection
 
 
-'''
+''', file=confFile)
         confFile.close()
         
         y = xorgparser.Parser(tempFile)
