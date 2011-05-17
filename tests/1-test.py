@@ -22,7 +22,7 @@ from XKit.xutils import *
 import sys
 import unittest
 import os
-from . import settings
+import settings
 
 source = settings.inputFile
 destination = settings.outputDir

@@ -23,7 +23,7 @@ import sys
 import unittest
 import os
 import logging
-from . import settings
+import settings
 import tempfile
 import copy
 
