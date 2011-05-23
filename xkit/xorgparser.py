@@ -306,7 +306,7 @@ class Parser(object):
                 raise ParseException(error)
             
             # Fill self.identifiers
-            self.getIds()
+            self.__fill_identifiers()
             
 
             # Make sure that the configuration file is compliant with
@@ -315,7 +315,7 @@ class Parser(object):
             self.__check_syntax()
             
         else:
-            self.getIds()
+            self.__fill_identifiers()
     
     def __check_syntax(self):
         '''This method contains the several checks which can guarantee
@@ -419,14 +419,12 @@ class Parser(object):
                 error = 'The default ServerLayout does not exist'
                 raise ParseException(error)
         
-    def getIds(self):
-        '''Fill self.identifiers so that it has the section types as keys and a
-        list of tuples as values. The tuples contain the identifier and the
-        position of each section.
+    def __fill_identifiers(self):
+        '''Fill self.identifiers
         
-        NOTE: this method is called automatically in xutils when a section is
-        created but in xorgparser it is necessary to call it manually after
-        creating a new section which requires an identifier
+        self.identifiers has the section types as keys and a list of tuples
+        as values. The tuples contain the identifier and the position of
+        each section.
         
         Here's a basic scheme:
         

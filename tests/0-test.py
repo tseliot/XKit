@@ -47,9 +47,9 @@ class XorgParserTestCase(unittest.TestCase):
         except(OSError, IOError):
             pass
     
-    def testGetIds(self):
+    def test_fill_identifiers(self):
         '''
-        def getIds(self):
+        def __fill_identifiers(self):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
