@@ -129,126 +129,132 @@ class Parser(object):
             * the last section is not complete
             * there are duplicates
         
-        hasSection:
+        has_section:
             * == True: a section is already open
             * == False: a section is closed and/or a new section can be opened
             
-        hasSubSection:
+        has_subsection:
             * == True: a subsection is already open
             * == False: a section is closed and/or a new section can be opened
             
-        sectionFlag: 
+        section_flag:
             * == '':a section is closed and/or a new section can be opened
             * == the name the current section
         
-        sectionTags = counter of the number of Section and EndSection strings
-        subSectionTags = counter of the number of SubSection and EndSubSection
+        section_tags = counter of the number of Section and EndSection strings
+        subsection_tags = counter of the number of SubSection and EndSubSection
                          strings
         
-        linesList = the list of the lines in the source object.
+        lines_list = the list of the lines in the source object.
         
-        globaliters = counts how many times each kind of section
-                             (sectionFlag) is found in the xorg.conf'''
+        global_iters = counts how many times each kind of section
+                             (section_flag) is found in the xorg.conf'''
         
         #See if the source is a file or a file object
         #and act accordingly
         file = self.source
         if file == None:
-            linesList = []
+            lines_list = []
         else:
             if not hasattr(file, 'write'):#it is a file
                 myfile = open(file, 'r')
-                linesList = myfile.readlines()
+                lines_list = myfile.readlines()
                 myfile.close()
             else:#it is a file object
-                linesList = file.readlines()
+                lines_list = file.readlines()
         
         
         # Create a dictionary such as the following:
         # {'Device': {}, 'InputDevice': {}}
         
-        globaliters = {}.fromkeys(self.sections, 0)        
+        global_iters = {}.fromkeys(self.sections, 0)
         
         empty = True
         
-        hasSection = False
-        hasSubSection = False
-        sectionFlag = ''
+        has_section = False
+        has_subsection = False
+        section_flag = ''
         
-        sectionTags = 0
-        subSectionTags = 0
+        section_tags = 0
+        subsection_tags = 0
         
         it = 0
-        for line in linesList:
+        for line in lines_list:
             if line.strip().startswith('#'):
-                if hasSection == False:
+                if has_section == False:
                     self.comments.append(line)
-                else:#hasSection == True
-                    sectionposition = globaliters[sectionFlag]
-                    if hasSubSection == False:
-                        self.globaldict[self.commentsection].setdefault(sectionFlag, {})
-                        self.globaldict[self.commentsection][sectionFlag].setdefault(sectionposition, {})
-                        self.globaldict[self.commentsection][sectionFlag][sectionposition].setdefault('identifier', None)
-                        self.globaldict[self.commentsection][sectionFlag][sectionposition].setdefault('position', sectionposition)
-                        self.globaldict[self.commentsection][sectionFlag][sectionposition].setdefault('section', None)
-                        self.globaldict[self.commentsection][sectionFlag][sectionposition].setdefault('options', [])
-                        self.globaldict[self.commentsection][sectionFlag][sectionposition]['options'].append(line.strip())
-                    else:#hasSubSection == True
-                        curlength = globaliters[self.subsection]
+                else:#has_section == True
+                    section_pos = global_iters[section_flag]
+                    if has_subsection == False:
+                        self.globaldict[self.commentsection].setdefault(section_flag, {})
+                        temp_dict = self.globaldict[self.commentsection][section_flag]
+                        temp_dict.setdefault(section_pos, {})
+                        temp_dict[section_pos].setdefault('identifier', None)
+                        temp_dict[section_pos].setdefault('position', section_pos)
+                        temp_dict[section_pos].setdefault('section', None)
+                        temp_dict[section_pos].setdefault('options', [])
+                        temp_dict[section_pos]['options'].append(line.strip())
+                    else:#has_subsection == True
+                        curlength = global_iters[self.subsection]
                         self.globaldict[self.commentsection].setdefault(self.subsection, {})
-                        self.globaldict[self.commentsection][self.subsection].setdefault(curlength, {})
-                        self.globaldict[self.commentsection][self.subsection][curlength].setdefault('identifier', subSectionId)
-                        self.globaldict[self.commentsection][self.subsection][curlength].setdefault('position', sectionposition)
-                        self.globaldict[self.commentsection][self.subsection][curlength].setdefault('section', sectionFlag)
-                        self.globaldict[self.commentsection][self.subsection][curlength].setdefault('options', [])
-                        self.globaldict[self.commentsection][self.subsection][curlength]['options'].append(line.strip())
-                        
+                        temp_dict = self.globaldict[self.commentsection][self.subsection]
+                        temp_dict.setdefault(curlength, {})
+                        temp_dict[curlength].setdefault('identifier', subsection_id)
+                        temp_dict[curlength].setdefault('position', section_pos)
+                        temp_dict[curlength].setdefault('section', section_flag)
+                        temp_dict[curlength].setdefault('options', [])
+                        temp_dict[curlength]['options'].append(line.strip())
+                    del temp_dict
                 
                 
             # See if the name of the section is acceptable
             # i.e. included in self.sections
             elif line.lower().strip().startswith('section'):#Begin Section
-                testLineFound = False
+                test_line_found = False
                 for sect in self.sections:
                     if line.lower().find('"' + sect.lower() + '"') != -1:
-                        testLineFound = True
+                        test_line_found = True
                         section = sect
                         break
-                if not testLineFound:
+                if not test_line_found:
                     # e.g. in case the name of the section is not
                     # recognised:
                     # Section "whatever"
-                    error = 'The name in the following line is invalid for a section:\n%s' % (line)
+                    error = ('The name in the following line is invalid for a '
+                             'section:\n%s' % (line))
                     raise ParseException(error)
                 else:
-                    if hasSection == False:
-                        sectionTags += 1
+                    if has_section == False:
+                        section_tags += 1
 
-                        sectionFlag = section
+                        section_flag = section
                         empty = False
-                        hasSection = True
+                        has_section = True
                     else:
                         error = 'Sections cannot be nested in other sections.'
                         raise ParseException(error)
-            elif line.lower().strip().startswith('endsection') == True:#End Section
-                sectionTags += 1
-                if hasSection == True and hasSubSection == False:
-                    globaliters[sectionFlag] += 1
+            elif line.lower().strip().startswith('endsection') == True:
+                #End Section
+                section_tags += 1
+                if has_section == True and has_subsection == False:
+                    global_iters[section_flag] += 1
                     
-                    sectionFlag = ''
-                    hasSection = False
+                    section_flag = ''
+                    has_section = False
                 else:
                     error = 'An EndSection is in the wrong place.'
                     raise ParseException(error)
-            elif line.lower().strip().startswith('subsection') == True:#Begin SubSection
-                subSectionTags += 1
+            elif line.lower().strip().startswith('subsection') == True:
+                #Begin SubSection
+                subsection_tags += 1
                 
-                if hasSection == True and hasSubSection == False:
-                    hasSubSection = True
-                    subSectionId = line[line.find('"')+1: line.rfind('"')].strip()
+                if has_section == True and has_subsection == False:
+                    has_subsection = True
+                    subsection_id = line[line.find('"') + 1:
+                                         line.rfind('"')].strip()
                     
                     self.globaldict.setdefault(self.subsection, {})
-                    curlength = globaliters[self.subsection]
+                    curlength = global_iters[self.subsection]
                     self.globaldict[self.subsection][curlength] = {}
                     '''self.globaldict - keys:
                     
@@ -259,50 +265,59 @@ class Parser(object):
                     identifier = e.g. 'Display' (in SubSection "Display")
                     options = a list of lines with the options'''
                     
-                    self.globaldict[self.subsection][curlength]['section'] = sectionFlag
+                    temp_dict = self.globaldict[self.subsection][curlength]
+                    temp_dict['section'] = section_flag
                     try:
-                        self.globaldict[self.subsection][curlength]['position'] = globaliters[sectionFlag]
+                        temp_dict['position'] = global_iters[section_flag]
                     except KeyError:
-                        error = 'SubSections can be nested only in well formed sections.'
+                        del temp_dict
+                        error = ('SubSections can be nested only in well '
+                                 'formed sections.')
                         raise ParseException(error)
-                    self.globaldict[self.subsection][curlength]['identifier'] = subSectionId
-                    self.globaldict[self.subsection][curlength]['options'] = []
-                
+                    temp_dict['identifier'] = subsection_id
+                    temp_dict['options'] = []
+                    del temp_dict
                 else:
-                    error = 'SubSections can be nested only in well formed sections.'
+                    error = ('SubSections can be nested only in well formed '
+                             'sections.')
                     raise ParseException(error)
                 
-            elif line.lower().strip().startswith('endsubsection') == True:#End SubSection
-                subSectionTags += 1
+            elif line.lower().strip().startswith('endsubsection') == True:
+                #End SubSection
+                subsection_tags += 1
                 
-                if hasSubSection == True:
-                    hasSubSection = False
-                    globaliters[self.subsection] += 1
+                if has_subsection == True:
+                    has_subsection = False
+                    global_iters[self.subsection] += 1
                 else:
-                    error = 'SubSections can be closed only after being previously opened.'
+                    error = ('SubSections can be closed only after being '
+                             'previously opened.')
                     raise ParseException(error)
             else:
-                if sectionFlag != '':#any other line
-                    if line.strip() != '':#options
-                        if hasSubSection == True:
+                if section_flag != '':
+                    #any other line
+                    if line.strip() != '':
+                        #options
+                        if has_subsection == True:
                             '''
                             section =  the section in which the subsection is
                                        located (e.g. "Screen")
                             position = e.g. in key 0 of the 
                                        self.globaldict['Screen']
-                            identifier = e.g. 'Display' (in SubSection "Display")
+                            identifier = e.g. 'Display' (in SubSection
+                                                         "Display")
                             options = a list of lines with the options
                             '''
                             self.globaldict[self.subsection][curlength]['options'].append('\t' + line.strip() + '\n')
                         else:
-                            self.globaldict.setdefault(sectionFlag, {})
-                            curlength = globaliters[sectionFlag]
-                            self.globaldict[sectionFlag].setdefault(curlength, []).append('\t' + line.strip() + '\n')
+                            self.globaldict.setdefault(section_flag, {})
+                            curlength = global_iters[section_flag]
+                            self.globaldict[section_flag].setdefault(curlength, []).append('\t' + line.strip() + '\n')
             it += 1
         
         if not empty:
             # If the last section is not complete
-            if sectionTags % 2 != 0 or subSectionTags % 2 != 0:
+            if section_tags % 2 != 0 or subsection_tags % 2 != 0:
                 error = 'The last section is incomplete.'
                 raise ParseException(error)
             
