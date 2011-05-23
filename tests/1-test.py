@@ -17,8 +17,8 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
-from XKit import xutils
-from XKit.xutils import *
+from xkit import xutils
+from xkit.xutils import *
 import sys
 import unittest
 import os

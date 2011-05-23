@@ -17,8 +17,8 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
-from XKit import xorgparser
-from XKit.xorgparser import *
+from xkit import xorgparser
+from xkit.xorgparser import *
 import sys
 import unittest
 import os
