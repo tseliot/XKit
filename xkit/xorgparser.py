@@ -38,7 +38,7 @@ class ParseException(Exception):
     '''Raise when a postion is not available.'''
     pass
 
-class Parser:
+class Parser(object):
     '''Only low-level methods here.
     
     See the xutils.XUtils subclass for higher-level methods.'''

@@ -27,7 +27,7 @@ class XUtils(Parser):
     See xorgparser.Parser for the low-level methods
     '''
     def __init__(self, source=None):
-        Parser.__init__(self, source)
+        super(XUtils, self).__init__(source)
     
     def checkNFixSection(self):
         '''
