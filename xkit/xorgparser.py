@@ -95,6 +95,7 @@ class Parser(object):
                     'SubSection',
                     'Comments')
         self.requireid = [
+                          'InputClass',
                           'InputDevice',
                           'Device',
                           'Monitor',
