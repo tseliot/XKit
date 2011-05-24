@@ -59,7 +59,7 @@ class Parser(object):
         globaldict['Comments'] = stores the commented lines located inside of
                                  the sections in the xorg.conf.
 
-        requireid = a list of the sections which require to have an
+        require_id = a list of the sections which require to have an
                     "Identifier" set in the xorg.conf (e.g. Device sections).
 
         identifiers = a dictionary of the sections which require identifiers.
@@ -98,7 +98,7 @@ class Parser(object):
         # "Comments" is not a valid section
         self.valid_sections = self.sections[:-1]
 
-        self.requireid = [
+        self.require_id = [
                           'InputClass',
                           'InputDevice',
                           'Device',
@@ -113,7 +113,7 @@ class Parser(object):
                            'Screen'
                           ]
         
-        self.identifiers = {}.fromkeys(self.requireid)
+        self.identifiers = {}.fromkeys(self.require_id)
         
         self.comments = []
         self.globaldict = {}.fromkeys(self.sections, 0)
@@ -404,7 +404,7 @@ class Parser(object):
         
         
         # If there are sections which don't have an identifier
-        # but they should (i.e. they are in self.requireid)
+        # but they should (i.e. they are in self.require_id)
         # 
         # NOTE: if there are empty sections without an identifier
         # e.g. Section "Device"
@@ -413,7 +413,7 @@ class Parser(object):
         #      they won't trigger the ParseException but won't
         #      cause any problem since they will be completely
         #      ignored and won't appear in the target file.
-        for section in self.requireid:
+        for section in self.require_id:
             if len(self.globaldict[section]) != len(self.identifiers[section]):
                 error = 'Not all the sections which require an identifier have an identifier.'
                 raise ParseException(error)
@@ -467,7 +467,7 @@ class Parser(object):
                                       ],
                            } '''
         
-        for sect in self.requireid:#identifiers.keys():
+        for sect in self.require_id:#identifiers.keys():
             self.identifiers[sect] = []
             it = 0
             for elem in self.globaldict[sect]:
@@ -719,7 +719,7 @@ class Parser(object):
         if len(self.globaldict[section]) == 0:
             self.globaldict[section] = {}
             self.globaldict[section][0] = []
-            if section in self.requireid:
+            if section in self.require_id:
                 identifier = '\tIdentifier\t"Default ' + section + '"\n'
                 self.globaldict[section][0].append(identifier)
         if position == None:
@@ -799,7 +799,7 @@ class Parser(object):
         
         position  = len(self.globaldict[section])
         
-        if section in self.requireid:
+        if section in self.require_id:
             if identifier != None:
                 option = 'Identifier'
                 # Don't create a new section if one of the same kind and with the same 
@@ -855,8 +855,8 @@ class Parser(object):
             toremove = {}.fromkeys(allkeys)
         
         # If the section has an identifier i.e. if the section
-        # is in self.requireid
-        if section in self.requireid:
+        # is in self.require_id
+        if section in self.require_id:
             # Get the references to remove from self.identifiers 
             it = 0
             for reference in self.identifiers[section]:
@@ -938,14 +938,14 @@ class Parser(object):
         section= the section (e.g. "Screen")
         position= e.g. 0 stands for the 1st Screen section
         reflist= a list of references which this function should look for.
-                 The default list of references is self.requireid but this
+                 The default list of references is self.require_id but this
                  list can be overridden by the reflist argument so that, for
                  example, if reflist is set to ['Device'], this function will
                  look for references to other devices only (references to, say,
                  screens, will be ignored).'''
         
         if reflist == None:
-            options = self.requireid
+            options = self.require_id
         else:
             # if the following operation fails
             # an AttributeError will be raised
@@ -1281,7 +1281,7 @@ class Parser(object):
                 try:
                     sect = ''
                     value = int(optbits[1].strip())
-                    for item in self.requireid:
+                    for item in self.require_id:
                         if optbits[0].lower().strip() == item.lower().strip():
                             sect = item
                             break
@@ -1510,7 +1510,7 @@ class Parser(object):
     
     def getBrokenReferences(self):
         '''Look for broken references (i.e. references to sections which don't exist)
-        and return a dictionary having the items of self.requireid as keys and
+        and return a dictionary having the items of self.require_id as keys and
         a dictionary of the identifiers of the sections which are referred to by the
         broken references.
         
@@ -1524,9 +1524,9 @@ class Parser(object):
                             'ServerLayout' {...}
                             }'''
         
-        brokenReferences = {}.fromkeys(self.requireid)
+        brokenReferences = {}.fromkeys(self.require_id)
         referencesTree = {}
-        for section in self.requireid:#['Screen', 'ServerLayout']
+        for section in self.require_id:#['Screen', 'ServerLayout']
             referencesTree[section] = {}
             brokenReferences[section] = {}
             for sect in self.globaldict[section]:
@@ -1772,8 +1772,8 @@ class Parser(object):
             toremove = {}.fromkeys(allkeys)
         
         # If the section has an identifier i.e. if the section
-        # is in self.requireid
-        if section in self.requireid:
+        # is in self.require_id
+        if section in self.require_id:
             # Get the references to remove from self.identifiers 
             it = 0
             for reference in self.identifiers[section]:

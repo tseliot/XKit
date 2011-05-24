@@ -26,7 +26,7 @@ class Accessories(XUtils):
     
     def printReferences(self):
         self.referencesTree = {}
-        for section in ['Screen', 'ServerLayout']:#self.requireid:
+        for section in ['Screen', 'ServerLayout']:
             self.referencesTree[section] = {}
             for sect in self.globaldict[section]:
                 self.referencesTree[section][sect] = self.getReferences(section, sect)
