@@ -49,31 +49,32 @@ class Parser(object):
         
         Public:
         
-        self.comments = stores the commented lines located outside of the
-                        sections in the xorg.conf.
-        
-        self.globaldict['Comments'] = stores the commented lines located
-                        inside of the sections in the xorg.conf.
-        
-        self.globaldict = a global dictionary containing all the sections
-                          and options. For further information on 
-                          self.globaldict, have a look at self.__check_sanity()
-                          and at getValue().
-        
-        self.requireid = a list of the sections which require to have an
-                         "Identifier" set in the xorg.conf (e.g. Device
-                         sections).
-        
-        self.identifiers = a dictionary of the sections which require identi
-                           fiers.
-        
-        self.sections = a tuple containing the names of all
-                        the sections which self.__check_sanity() will look for
-                        in the xorg.conf. Sections with other names
-                        will be ignored by self.__check_sanity().
-        
-        self.references = a list containing the names of all the possible
-                          references.'''
+        comments = name of the section which stores the commented lines
+                   located outside of the sections in the xorg.conf.
+
+        globaldict = a global dictionary containing all the sections and
+                     options. For further information on globaldict, have a
+                     look at __check_sanity() and at getValue().
+
+        globaldict['Comments'] = stores the commented lines located inside of
+                                 the sections in the xorg.conf.
+
+        requireid = a list of the sections which require to have an
+                    "Identifier" set in the xorg.conf (e.g. Device sections).
+
+        identifiers = a dictionary of the sections which require identifiers.
+
+        sections = a tuple containing the names of all the sections in
+                   globaldict. Their names are not guaranteed to be all legal
+                   in xorg.conf (see "valid_sections").
+
+        valid_sections = a tuple containing the names of all the sections
+                         which __check_sanity() will look for in the
+                         xorg.conf. Sections with other names will be ignored
+                         by self.__check_sanity().
+
+        references = a list containing the names of all the possible
+                     references.'''
         
         self.subsection = 'SubSection'
         self.commentsection = 'Comments'
@@ -145,6 +146,7 @@ class Parser(object):
             * == the name the current section
         
         section_tags = counter of the number of Section and EndSection strings
+        
         subsection_tags = counter of the number of SubSection and EndSubSection
                          strings
         
@@ -211,7 +213,7 @@ class Parser(object):
                 
                 
             # See if the name of the section is acceptable
-            # i.e. included in self.sections
+            # i.e. included in self.valid_sections
             elif line.lower().strip().startswith('section'):#Begin Section
                 test_line_found = False
                 for sect in self.valid_sections:
