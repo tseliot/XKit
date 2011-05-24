@@ -93,8 +93,8 @@ class Parser(object):
                          'VideoAdaptor',
                          'Vendor',
                          'Modes',
-                         'SubSection',
-                         'Comments')
+                         self.subsection,
+                         self.commentsection)
         # "Comments" is not a valid section
         self.valid_sections = self.sections[:-1]
 
