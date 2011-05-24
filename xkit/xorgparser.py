@@ -79,21 +79,24 @@ class Parser(object):
         self.commentsection = 'Comments'
         self.source = source
         self.sections = ('InputDevice',
-                    'Device',
-                    'Module',
-                    'Monitor',
-                    'Screen',
-                    'ServerLayout',
-                    'ServerFlags',
-                    'Extensions',
-                    'Files', 
-                    'InputClass',
-                    'DRI', 
-                    'VideoAdaptor', 
-                    'Vendor', 
-                    'Modes',
-                    'SubSection',
-                    'Comments')
+                         'Device',
+                         'Module',
+                         'Monitor',
+                         'Screen',
+                         'ServerLayout',
+                         'ServerFlags',
+                         'Extensions',
+                         'Files',
+                         'InputClass',
+                         'DRI',
+                         'VideoAdaptor',
+                         'Vendor',
+                         'Modes',
+                         'SubSection',
+                         'Comments')
+        # "Comments" is not a valid section
+        self.valid_sections = self.sections[:-1]
+
         self.requireid = [
                           'InputClass',
                           'InputDevice',
@@ -211,7 +214,7 @@ class Parser(object):
             # i.e. included in self.sections
             elif line.lower().strip().startswith('section'):#Begin Section
                 test_line_found = False
-                for sect in self.sections:
+                for sect in self.valid_sections:
                     if line.lower().find('"' + sect.lower() + '"') != -1:
                         test_line_found = True
                         section = sect
