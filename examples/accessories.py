@@ -95,7 +95,7 @@ class Accessories(XUtils):
         '''
         section = 'Screen'
         option = 'DefaultDepth'
-        self.addOption(section, option, depth, position=position, prefix='')
+        self.add_option(section, option, depth, position=position, prefix='')
     
     '''
     It would make a lot sense to move the following methods to another file
@@ -104,23 +104,23 @@ class Accessories(XUtils):
     def addArgbGlxVisuals(self, position):
         section = 'Screen'
         option = 'AddARGBGLXVisuals'
-        self.addOption(section, option, 'True', optiontype='Option', position=position)
+        self.add_option(section, option, 'True', option_type='Option', position=position)
 
     def removeArgbGlxVisuals(self, position):
         section = 'Screen'
         option = 'AddARGBGLXVisuals'
-        self.addOption(section, option, position=position)
+        self.add_option(section, option, position=position)
         
     def enableComposite(self, position=0):
         section = 'Extensions'
         option = 'Composite'
         if len(self.globaldict[section]) == 0:
             position = self.makeSection(section)
-        self.addOption(section, option, 'Enable', optiontype='Option', position=position)
+        self.add_option(section, option, 'Enable', option_type='Option', position=position)
         
     def disableComposite(self, position=0):
         section = 'Extensions'
         option = 'Composite'
         if len(self.globaldict[section]) == 0:
             position = self.makeSection(section)
-        self.addOption(section, option, 'Disable', optiontype='Option', position=position)
+        self.add_option(section, option, 'Disable', option_type='Option', position=position)

@@ -42,11 +42,11 @@ def main():
     '''
     Set the Defaultdepth to 24 bit in all sections
     '''
-    a.addOption('Screen', 'Defaultdepth', '24', prefix='')
+    a.add_option('Screen', 'Defaultdepth', '24', prefix='')
     '''
     Set the Defaultdepth to 24 bit in the 1st Screen section
     '''
-    a.addOption('Screen', 'Defaultdepth', '24', position=0, prefix='')
+    a.add_option('Screen', 'Defaultdepth', '24', position=0, prefix='')
     
     '''
     Get the value assigned to the AddARGBGLXVisuals option in the 1st Screen section
@@ -58,7 +58,7 @@ def main():
     '''
     Add an Option (with the Option prefix) to the 1st Screen section
     '''
-    a.addOption('Screen', 'AddARGBGLXVisuals', 'True', optiontype='Option', position=0)
+    a.add_option('Screen', 'AddARGBGLXVisuals', 'True', option_type='Option', position=0)
     
     '''
     Print the contents of all the Device sections
@@ -108,7 +108,7 @@ def main():
     '''
     a.addSubOption('Screen', 'Display', 'Depth', value='24', position=0, prefix='')
     a.addSubOption('Screen', 'Display', 'Virtual', value='1600 1200', position=0)
-    a.addSubOption('Screen', 'Display', 'Name', value='Whatever', optiontype='Option', position=None)
+    a.addSubOption('Screen', 'Display', 'Name', value='Whatever', option_type='Option', position=None)
     
     '''
     Remove options from the Display subsection of all or of the 1st Screen section
@@ -145,7 +145,7 @@ def main():
     and make a reference to it in the Screen section
     '''
     dev = a.makeSection('Device', 'My Device')
-    a.addOption('Device', 'BusID', 'PCI:1:0:0', position=dev)
+    a.add_option('Device', 'BusID', 'PCI:1:0:0', position=dev)
     a.addReference('Screen', 'Device', 'My Device', position=0)
     
     a.addReference('Device', 'Screen', 4, position=0)

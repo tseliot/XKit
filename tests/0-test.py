@@ -115,10 +115,10 @@ class XorgParserTestCase(unittest.TestCase):
         value2 = '1'
         position = self.parser.makeSection(section, identifier=identifier)
         
-        self.parser.addOption(section, option, value1, optiontype='Option', position=position)
+        self.parser.add_option(section, option, value1, option_type='Option', position=position)
         
         '''
-        addOption doesn't allow the creation of duplicates
+        add_option doesn't allow the creation of duplicates
         '''
         option2 = '\t' + 'Option' + '\t' + option + '\t\t"' + value2 + '"\n'
         self.parser.globaldict[section][position].append(option2)
@@ -142,12 +142,12 @@ class XorgParserTestCase(unittest.TestCase):
         value2 = '1'
         position = self.parser.makeSection(section, identifier=identifier)
         
-        self.parser.addOption(section, option, value1, optiontype='Option', position=position)
+        self.parser.add_option(section, option, value1, option_type='Option', position=position)
         
         option2 = '\t' + 'Option' + '\t' + option + '\t\t"' + value2 + '"\n'
         
         '''
-        addOption doesn't allow the creation of duplicates
+        add_option doesn't allow the creation of duplicates
         '''
         self.parser.globaldict[section][position].append(option2)
         
@@ -168,7 +168,7 @@ class XorgParserTestCase(unittest.TestCase):
         pos = self.parser.makeSection(section, identifier=identifier1)
         
         '''
-        create a duplicate section without using addOption()
+        create a duplicate section without using add_option()
         '''
         self.parser.globaldict[section][pos+1] = ['\tIdentifier\t\t"' + identifier1 + '"\n']
         self.parser.identifiers[section].append((identifier1, pos+1))#ADD to identifiers
@@ -219,9 +219,9 @@ class XorgParserTestCase(unittest.TestCase):
         self.failUnless(status2 == True and status1 == status2, 
                         'The existence of the section was not tested correctly')
 
-    def testAddOption1(self):
+    def test_add_option1(self):
         '''
-        def addOption(self, section, option, value, optiontype=None, position=None, reference=None):
+        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
         '''
         
         self.this_function_name = sys._getframe().f_code.co_name
@@ -230,7 +230,7 @@ class XorgParserTestCase(unittest.TestCase):
         value = 'Ok'
         #position = 0
         found = False
-        self.parser.addOption(section, option, value, optiontype=None, position=None, reference=None)
+        self.parser.add_option(section, option, value, option_type=None, position=None, reference=None)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
@@ -240,16 +240,16 @@ class XorgParserTestCase(unittest.TestCase):
             self.failUnless(found == True, 'Option not added!')
         
         
-    def testAddOption2(self):
+    def test_add_option2(self):
         '''
-        def addOption(self, section, option, value, optiontype=None, position=None, reference=None):
+        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         option = 'TestOption'
         value = 'Ok'
         #position = 0
         found = False
-        self.parser.addOption(section, option, value, optiontype="Option", position=None, reference=None)
+        self.parser.add_option(section, option, value, option_type="Option", position=None, reference=None)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
@@ -258,32 +258,32 @@ class XorgParserTestCase(unittest.TestCase):
                     #print line
             self.failUnless(found == True, 'Option not added!')
         
-    def testAddOption3(self):
+    def test_add_option3(self):
         '''
-        def addOption(self, section, option, value, optiontype=None, position=None, reference=None):
+        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         option = 'TestOption'
         value = 'Ok'
         position = 0
         found = False
-        self.parser.addOption(section, option, value, optiontype=None, position=None, reference=None)
+        self.parser.add_option(section, option, value, option_type=None, position=None, reference=None)
         lines = self.parser.globaldict[section][position]
         for line in lines:
             if line.find(option) != -1:
                 found = True
         self.failUnless(found == True, 'Option not added!')
         
-    def testAddOption4(self):
+    def test_add_option4(self):
         '''
-        def addOption(self, section, option, value, optiontype=None, position=None, reference=None):
+        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         option = 'TestOption'
         value = 'Ok'
         #position = 0
         found = False
-        self.parser.addOption(section, option, value, optiontype=None, position=None, reference=True)
+        self.parser.add_option(section, option, value, option_type=None, position=None, reference=True)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
@@ -292,9 +292,9 @@ class XorgParserTestCase(unittest.TestCase):
                     #print line
             self.failUnless(found == True, 'Option not added!')
         
-    def testAddOption5(self):
+    def test_add_option5(self):
         '''
-        def addOption(self, section, option, value, optiontype=None, position=None, reference=None):
+        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -305,7 +305,7 @@ class XorgParserTestCase(unittest.TestCase):
         
         screen = self.parser.makeSection('Screen', identifier='Xkit Screen Device 5')
         
-        self.parser.addOption(section, option, value, position=screen, prefix='')
+        self.parser.add_option(section, option, value, position=screen, prefix='')
         lines = self.parser.globaldict[section][screen]
         for line in lines:
             if line.find(option) != -1:
@@ -664,7 +664,7 @@ class XorgParserTestCase(unittest.TestCase):
     
     def testAddSubOption1(self):
         '''
-        def addSubOption(self, section, identifier, option, value, optiontype=None, position=None):
+        def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -693,7 +693,7 @@ class XorgParserTestCase(unittest.TestCase):
         
     def testAddSubOption2(self):
         '''
-        def addSubOption(self, section, identifier, option, value, optiontype=None, position=None):
+        def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -721,7 +721,7 @@ class XorgParserTestCase(unittest.TestCase):
         
     def testAddSubOption3(self):
         '''
-        def addSubOption(self, section, identifier, option, value, optiontype=None, position=None):
+        def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -729,14 +729,14 @@ class XorgParserTestCase(unittest.TestCase):
         #position = 0
         option = 'Virtual'
         value = '2048 2048'
-        optiontype = 'Option'
+        option_type = 'Option'
         
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.makeSubSection(section, identifier)
         
-        self.parser.addSubOption(section, identifier, option, value, optiontype=optiontype)
+        self.parser.addSubOption(section, identifier, option, value, option_type=option_type)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -746,7 +746,7 @@ class XorgParserTestCase(unittest.TestCase):
                 found = False
                 for line in lines:
                     if line.find(option) != -1 and line.find(value) != -1 and \
-                    line.find(optiontype) != -1:
+                    line.find(option_type) != -1:
                         found = True
                 self.failUnless(found == True, 'Option not added to all the Subsections')
     
@@ -761,14 +761,14 @@ class XorgParserTestCase(unittest.TestCase):
         #position = 0
         option = 'Virtual'
         value = '2048 2048'
-        optiontype = 'Option'
+        option_type = 'Option'
         
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.makeSubSection(section, identifier)
         
-        self.parser.addSubOption(section, identifier, option, value, optiontype=optiontype)
+        self.parser.addSubOption(section, identifier, option, value, option_type=option_type)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -872,10 +872,10 @@ class XorgParserTestCase(unittest.TestCase):
         option = 'TestOption'
         value = 'Ok'
         position = 0
-        optiontype = 'Option'
+        option_type = 'Option'
         
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.addOption(section, option, value, optiontype=optiontype, position=position)
+        self.parser.add_option(section, option, value, option_type=option_type, position=position)
         
         result = self.parser.getValue(section, option, position)
         self.failUnless(result == value, 'Incorrect value retrieved')
@@ -891,11 +891,11 @@ class XorgParserTestCase(unittest.TestCase):
         option = 'TestOption'
         value = 'Ok'
         position = 0
-        optiontype = None
+        option_type = None
         reference = True
         
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.addOption(section, option, value, optiontype=optiontype,
+        self.parser.add_option(section, option, value, option_type=option_type,
                               position=position, reference=reference)
         
         result = self.parser.getValue(section, option, position)
@@ -912,11 +912,11 @@ class XorgParserTestCase(unittest.TestCase):
         option = 'TestOption'
         value = 'Ok'
         position = 0
-        optiontype = 'Option'
+        option_type = 'Option'
         
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.addSubOption(section, identifier, option, value,
-                                 optiontype=optiontype, position=position)
+                                 option_type=option_type, position=position)
         
         sect = section
         section = 'SubSection'
@@ -1714,7 +1714,7 @@ EndSection
         x = xorgparser.Parser()
 
         device = x.makeSection('Device', identifier='Default Device')
-        x.addOption('Device', 'Driver', 'mydrv', position=device)
+        x.add_option('Device', 'Driver', 'mydrv', position=device)
         #x.setValue('Device', 'mydrv', device)
 
         oldDict = copy.deepcopy(x.globaldict)
@@ -1734,7 +1734,7 @@ EndSection
         x = xorgparser.Parser()
 
         device = x.makeSection('Device', identifier='Default Device')
-        x.addOption('Device', 'Driver', 'mydrv', position=device)
+        x.add_option('Device', 'Driver', 'mydrv', position=device)
         #x.setValue('Device', 'mydrv', device)
 
         oldDict = copy.deepcopy(x.globaldict)
@@ -1752,7 +1752,7 @@ EndSection
         x = xorgparser.Parser()
 
         device = x.makeSection('Device', identifier='Default Device')
-        x.addOption('Device', 'Driver', 'mydrv', position=device)
+        x.add_option('Device', 'Driver', 'mydrv', position=device)
         #x.setValue('Device', 'mydrv', device)
 
         oldDict = copy.deepcopy(x.globaldict)
@@ -3058,16 +3058,16 @@ EndSection
         
         section = 'ServerFlags'
         
-        y.addOption(section, 'OffTime', 1, optiontype='Option', prefix='')
+        y.add_option(section, 'OffTime', 1, option_type='Option', prefix='')
         self.assert_(y.globaldict[section][0][0] == '\tOption\t"OffTime"\t1\n')
 
-        y.addOption(section, 'OffTime', 1, optiontype='Option', prefix='"')
+        y.add_option(section, 'OffTime', 1, option_type='Option', prefix='"')
         self.assert_(y.globaldict[section][0][0] == '\tOption\t"OffTime"\t"1"\n')
         
-        y.addOption(section, 'OffTime', 1, optiontype=None, prefix='')
+        y.add_option(section, 'OffTime', 1, option_type=None, prefix='')
         self.assert_(y.globaldict[section][0][0] == '\tOffTime\t1\n')
         
-        y.addOption(section, 'OffTime', 1)
+        y.add_option(section, 'OffTime', 1)
         self.assert_(y.globaldict[section][0][0] == '\tOffTime\t"1"\n')
 
     

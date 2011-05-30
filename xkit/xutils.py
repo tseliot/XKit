@@ -54,7 +54,7 @@ class XUtils(Parser):
         Set the driver in use in a section.
         '''
         option = 'Driver'
-        self.addOption(section, option, driver, position=position)
+        self.add_option(section, option, driver, position=position)
 
 
 

@@ -662,7 +662,7 @@ class Parser(object):
         return duplicates
     
     
-    def addOption(self, section, option, value, optiontype=None, position=None, reference=None, prefix='"'):
+    def add_option(self, section, option, value, option_type=None, position=None, reference=None, prefix='"'):
         '''Add an option to a section
         
         section= the section which will have the option added
@@ -670,7 +670,7 @@ class Parser(object):
         value= the value which will be assigned to the option
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)
-        optiontype= if set to "Option" it will cause the option to look like
+        option_type= if set to "Option" it will cause the option to look like
                     the following:
                     Option "NameOfTheOption" "Value"
                     
@@ -696,13 +696,13 @@ class Parser(object):
                 #print 'Remove', option, 'from', section, 'position', position
             else:
                 # value has to be set to None, however there is no way to do so
-                # other than this since addOption() cannot be called with 
+                # other than this since add_option() cannot be called with 
                 # value=None. Hence the need for this ugly nested if-block.
                 self.removeOption(section, option, position=position)
         else:
             #print 'Remove', option, 'from all', section
             self.removeOption(section, option)
-        if optiontype == None:
+        if option_type == None:
             if reference == None:
                 toadd = '\t' + option + '\t' + prefix + str(value) + prefix + '\n'
             else:
@@ -714,7 +714,7 @@ class Parser(object):
                     # which is used for Xinerama setups in the Device section
                     toadd = '\t' + option + '\t' + str(value) + '\n'
         else:
-            toadd = '\t' + optiontype + '\t' + '"' + option + '"' + '\t' \
+            toadd = '\t' + option_type + '\t' + '"' + option + '"' + '\t' \
             + prefix + str(value) + prefix + '\n'
                     
         if len(self.globaldict[section]) == 0:
@@ -821,7 +821,7 @@ class Parser(object):
                 
                 if create:
                     self.globaldict[section][position] = []
-                    self.addOption(section, option, value=identifier, position=position)
+                    self.add_option(section, option, value=identifier, position=position)
                     self.identifiers[section].append((identifier, position))#ADD to identifiers
                     #print 'Created section', section, 'id =', identifier, 'position =', position
                 #else:
@@ -914,7 +914,7 @@ class Parser(object):
         NOTE: if position is set to None it will add such reference to any
         instance of the section (e.g. to any ServerLayout section)'''
         
-        self.addOption(section, reference, value=identifier, position=position, reference=True)
+        self.add_option(section, reference, value=identifier, position=position, reference=True)
         
     def removeReference(self, section, reference, identifier, position=None):
         '''Remove a reference to a section from another section.
@@ -1058,14 +1058,14 @@ class Parser(object):
         for item in toremove:
             del self.globaldict[self.subsection][item]
     
-    def addSubOption(self, section, identifier, option, value, optiontype=None, position=None):
+    def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
         '''Add an option to one or more subsections.
         
         section= the section which contains the subsection
         identifier= the identifier of the SubSection (e.g. Display)
         option= the option to add
         value= the value which will be assigned to the option
-        optiontype= if set to "Option" it will cause the option to look like
+        option_type= if set to "Option" it will cause the option to look like
                     the following:
                     Option "NameOfTheOption" "Value"
                     
@@ -1082,10 +1082,10 @@ class Parser(object):
             self.removeSubOption(section, identifier, option)
         else:
             self.removeSubOption(section, identifier, option, position=position)        
-        if optiontype == None:
+        if option_type == None:
             toadd = '\t' + option + '\t' + str(value) + '\n'
         else:
-            toadd = '\t' + optiontype + '\t' + prefix + option + prefix + '\t' \
+            toadd = '\t' + option_type + '\t' + prefix + option + prefix + '\t' \
             + prefix + str(value) + prefix + '\n'
         
         curlength = len(self.globaldict[self.subsection])

@@ -108,7 +108,7 @@ class XUtilsTestCase(unittest.TestCase):
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
         
-        self.parser.addOption(section, option, driver1, position=position)
+        self.parser.add_option(section, option, driver1, position=position)
         
         driver2 = self.parser.getDriver(section, position)
         
@@ -127,7 +127,7 @@ class XUtilsTestCase(unittest.TestCase):
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
         
-        self.parser.addOption(section, option, driver, position=position)
+        self.parser.add_option(section, option, driver, position=position)
         
         driver1 = self.parser.getDriver(section, position)
         
@@ -155,7 +155,7 @@ class XUtilsTestCase(unittest.TestCase):
         self.parser = xutils.XUtils()
         
         position = self.parser.makeSection(section, identifier=identifier)
-        self.parser.addOption(section, option, driver, position=position)
+        self.parser.add_option(section, option, driver, position=position)
         
         status = self.parser.isDriverInSection(driver, sectionsList=[position])
         
