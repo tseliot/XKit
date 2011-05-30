@@ -573,7 +573,8 @@ class Parser(object):
             for elem in self.globaldict[section]:
                 duplopt = self.get_duplicate_options(section, elem)
                 if len(duplopt) > 0:
-                    duplicates.setdefault(section, {}).setdefault(elem, duplopt)
+                    duplicates.setdefault(section, {}).setdefault(elem,
+                                                                  duplopt)
         
         return duplicates
         
@@ -657,12 +658,14 @@ class Parser(object):
                 temp.append(sect[0])
             for elem in temp:
                 if temp.count(elem) > 1:
-                    duplicates.setdefault(section, {}).setdefault(elem, temp.count(elem))
+                    duplicates.setdefault(section, {}).setdefault(elem,
+                                                       temp.count(elem))
 
         return duplicates
     
     
-    def add_option(self, section, option, value, option_type=None, position=None, reference=None, prefix='"'):
+    def add_option(self, section, option, value, option_type=None,
+                   position=None, reference=None, prefix='"'):
         '''Add an option to a section
         
         section= the section which will have the option added
@@ -678,12 +681,13 @@ class Parser(object):
                     NameOfTheOption "Value"
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)
-        reference= used only in a particular case of reference (see addReference)
+        reference= used only in a particular case of reference (see
+                   addReference)
         
         prefix= usually quotation marks are used for the values (e.g. "True")
                 however sometimes they don't have to be used
-                (e.g. DefaultDepth 24) and prefix should be set to '' instead of
-                '"'  '''
+                (e.g. DefaultDepth 24) and prefix should be set to '' instead
+                of '"'  '''
         refSections = ['device']
         #prefix = '"'#values are always in quotation marks
         if position != None:
@@ -692,11 +696,12 @@ class Parser(object):
             if reference:
                 # Remove an option if it has a certain assigned value. We want
                 # to do this when removing a reference.
-                self.removeOption(section, option, value=value, position=position)
+                self.removeOption(section, option, value=value,
+                                  position=position)
                 #print 'Remove', option, 'from', section, 'position', position
             else:
-                # value has to be set to None, however there is no way to do so
-                # other than this since add_option() cannot be called with 
+                # value has to be set to None, however there is no way to do
+                # so other than this since add_option() cannot be called with
                 # value=None. Hence the need for this ugly nested if-block.
                 self.removeOption(section, option, position=position)
         else:
@@ -704,18 +709,20 @@ class Parser(object):
             self.removeOption(section, option)
         if option_type == None:
             if reference == None:
-                toadd = '\t' + option + '\t' + prefix + str(value) + prefix + '\n'
+                toadd = ('\t' + option + '\t' + prefix + str(value) + prefix
+                         + '\n')
             else:
                 if section.strip().lower() not in refSections:
                     # e.g. Screen "New Screen"
-                    toadd = '\t' + option + '\t' + prefix + str(value) + prefix + '\n'
+                    toadd = ('\t' + option + '\t' + prefix + str(value)
+                             + prefix + '\n')
                 else:
                     # e.g. Screen 0
                     # which is used for Xinerama setups in the Device section
                     toadd = '\t' + option + '\t' + str(value) + '\n'
         else:
-            toadd = '\t' + option_type + '\t' + '"' + option + '"' + '\t' \
-            + prefix + str(value) + prefix + '\n'
+            toadd = ('\t' + option_type + '\t' + '"' + option + '"' + '\t'
+                     + prefix + str(value) + prefix + '\n')
                     
         if len(self.globaldict[section]) == 0:
             self.globaldict[section] = {}
@@ -729,7 +736,8 @@ class Parser(object):
         else:
             self.globaldict[section][position].append(toadd)
         
-    def _get_options_to_blacklist(self, section, option, value=None, position=None, reference=None):
+    def _get_options_to_blacklist(self, section, option, value=None,
+                                  position=None, reference=None):
         '''Private method shared by RemoveOption and CommentOutOption'''
         toremove = {}
         if len(self.globaldict[section]) != 0:#if the section exists
@@ -740,8 +748,10 @@ class Parser(object):
                     it = 0
                     for line in self.globaldict[section][elem]:
                         if value != None:
-                            #print 'line =', line, 'option=', option, 'value', value
-                            if line.lower().find(option.lower()) != -1 and line.lower().find(value.lower()) != -1:
+                            #print 'line =', line, 'option=', option, 'value',
+                            # value
+                            if (line.lower().find(option.lower()) != -1
+                            and line.lower().find(value.lower()) != -1):
                                 toremove.setdefault(elem, []).append(it)
                         else:
                             if line.lower().find(option.lower()) != -1:
@@ -751,25 +761,29 @@ class Parser(object):
                 if self.globaldict[section].get(position) == None:
                     return
                 else:
-                    #print 'Removing', option, 'from', section, 'position', position
+                    #print 'Removing', option, 'from', section, 'position',
+                    # position
                     it = 0
                     for line in self.globaldict[section][position]:
                         if value != None:
                             # Remove the option only if it has a certain value
-                            # assigned. This is useful in case we want to remove
-                            # a reference to a certain Section from another section:
+                            # assigned. This is useful in case we want to
+                            # remove a reference to a certain Section from
+                            # another section:
                             # e.g. Screen "Generic Screen".
-                            if line.lower().find(option.lower()) != -1 and line.lower().find(value.lower()) != -1:
+                            if (line.lower().find(option.lower()) != -1
+                            and line.lower().find(value.lower()) != -1):
                                 toremove.setdefault(position, []).append(it)
                         else:
-                            # Remove the option without caring about the assigned
-                            # value
+                            # Remove the option without caring about the
+                            # assigned value
                             if line.lower().find(option.lower()) != -1:
                                 toremove.setdefault(position, []).append(it)
                         it += 1
         return toremove
         
-    def removeOption(self, section, option, value=None, position=None, reference=None):
+    def removeOption(self, section, option, value=None, position=None,
+                     reference=None):
         '''Remove an option from a section.
         
         section= the section which will have the option removed
@@ -778,7 +792,8 @@ class Parser(object):
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)'''
         
-        toremove = self._get_options_to_blacklist(section, option, value, position, reference)
+        toremove = self._get_options_to_blacklist(section, option, value,
+                                                  position, reference)
         for part in toremove:
             modded = 0
             for line in toremove[part]:
