@@ -105,7 +105,7 @@ class XorgParserTestCase(unittest.TestCase):
 
     def testGetDuplicateOptions(self):
         '''
-        def getDuplicateOptions(self, section, position):
+        def get_duplicate_options(self, section, position):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
@@ -123,13 +123,13 @@ class XorgParserTestCase(unittest.TestCase):
         option2 = '\t' + 'Option' + '\t' + option + '\t\t"' + value2 + '"\n'
         self.parser.globaldict[section][position].append(option2)
         
-        duplicates = self.parser.getDuplicateOptions(section, position)
+        duplicates = self.parser.get_duplicate_options(section, position)
         
         self.failUnless(option in duplicates, 'Duplicates cannot be found!')
 
     def testCheckDuplicateOptions(self):
         '''
-        def checkDuplicateOptions(self):
+        def check_duplicate_options(self):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         
@@ -151,7 +151,7 @@ class XorgParserTestCase(unittest.TestCase):
         '''
         self.parser.globaldict[section][position].append(option2)
         
-        duplicates = self.parser.checkDuplicateOptions()
+        duplicates = self.parser.check_duplicate_options()
         
         self.failUnless(option in duplicates[section][position], 'Duplicates can still be found!')
     

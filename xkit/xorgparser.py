@@ -350,8 +350,8 @@ class Parser(object):
 #        e.g. Driver "nvidia" and Driver "intel" cannot coexist in the
 #        same Device section.
 #        '''
-#        if len(self.checkDuplicateOptions()) > 0:
-#            error = 'There cannot be Duplicate Options:\n%s' % (str(self.checkDuplicateOptions()))
+#        if len(self.check_duplicate_options()) > 0:
+#            error = 'There cannot be Duplicate Options:\n%s' % (str(self.check_duplicate_options()))
 #            raise ParseException(error)
             
         
@@ -518,7 +518,7 @@ class Parser(object):
                         if not optbits[0][0].isalpha():
                             raise ParseException(error)
     
-    def getDuplicateOptions(self, section, position):
+    def get_duplicate_options(self, section, position):
         '''See if there are duplicate options in a section (it is ok to have duplicated
         references) e.g. several Load options, or Screen, etc.'''
         
@@ -565,13 +565,13 @@ class Parser(object):
                 final[option] = option
         return duplicates
         
-    def checkDuplicateOptions(self):
+    def check_duplicate_options(self):
         '''Look for and return duplicate options in all sections'''
         
         duplicates = {}
         for section in self.globaldict:
             for elem in self.globaldict[section]:
-                duplopt = self.getDuplicateOptions(section, elem)
+                duplopt = self.get_duplicate_options(section, elem)
                 if len(duplopt) > 0:
                     duplicates.setdefault(section, {}).setdefault(elem, duplopt)
         
@@ -1352,7 +1352,7 @@ class Parser(object):
               Xinerama)
             - if the options are actually options and not references
               then there are duplicate options, which should be detected
-              in advance with xutils.XUtils.getDuplicateOptions()   
+              in advance with get_duplicate_options()   
           * None (if no value can be found) - Not always true -> See below.
         
         NOTE: Use-case for returning None

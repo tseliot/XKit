@@ -50,7 +50,7 @@ class Accessories(XUtils):
         '''
         Print the duplicate options
         '''
-        a = self.checkDuplicateOptions()
+        a = self.check_duplicate_options()
         if len(a) > 0:
             print('\nDuplicate Options:')
             for section in a:
