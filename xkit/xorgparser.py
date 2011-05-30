@@ -801,7 +801,7 @@ class Parser(object):
                 del self.globaldict[section][part][realpos]
                 modded += 1
 
-    def makeSection(self, section, identifier=None):
+    def make_section(self, section, identifier=None):
         '''Create a new section and return the position of the section in the list
         of sections of the same type (e.g. "Screen") so as to make it available
         in case the user wants to add some options to it.
@@ -1562,7 +1562,7 @@ class Parser(object):
                                 #print '*****WARNING:', refsect, 'Section', ref, 'does not exist!*****'
                                 brokenReferences[refsect].setdefault(ref)
                                 #print 'FIX: Creating', refsect, 'Section', ref
-                                #self.makeSection(refsect, identifier=ref)
+                                #self.make_section(refsect, identifier=ref)
         return brokenReferences
     
     

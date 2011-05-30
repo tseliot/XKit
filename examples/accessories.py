@@ -115,12 +115,12 @@ class Accessories(XUtils):
         section = 'Extensions'
         option = 'Composite'
         if len(self.globaldict[section]) == 0:
-            position = self.makeSection(section)
+            position = self.make_section(section)
         self.add_option(section, option, 'Enable', option_type='Option', position=position)
         
     def disableComposite(self, position=0):
         section = 'Extensions'
         option = 'Composite'
         if len(self.globaldict[section]) == 0:
-            position = self.makeSection(section)
+            position = self.make_section(section)
         self.add_option(section, option, 'Disable', option_type='Option', position=position)

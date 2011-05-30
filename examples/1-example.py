@@ -74,8 +74,8 @@ def main():
     '''
     Make a new Device and a Screen section with an identifier
     '''
-    a.makeSection('Device', identifier='Name of this new Device Section')
-    a.makeSection('Screen', identifier='Default Screen')
+    a.make_section('Device', identifier='Name of this new Device Section')
+    a.make_section('Screen', identifier='Default Screen')
     
     '''
     Add a reference to the Screen section identified as "New Default Screen" to
@@ -134,8 +134,8 @@ def main():
     print(a.getDriver('Device', 0))
     
     
-    a.makeSection('Screen', 'New Screen')
-    a.makeSection('Screen', 'New Screen')#this new section won't be created
+    a.make_section('Screen', 'New Screen')
+    a.make_section('Screen', 'New Screen')#this new section won't be created
     a.setDefaultDepth(24, 0)
     print(a.getDefaultDepth(0))
     
@@ -144,7 +144,7 @@ def main():
     add a new option to it
     and make a reference to it in the Screen section
     '''
-    dev = a.makeSection('Device', 'My Device')
+    dev = a.make_section('Device', 'My Device')
     a.add_option('Device', 'BusID', 'PCI:1:0:0', position=dev)
     a.addReference('Screen', 'Device', 'My Device', position=0)
     
@@ -178,12 +178,12 @@ def main():
     Create a new Device section and print the list of identifiers so as to see
     that the new identifier and position are included in identifiers
     '''
-    a.makeSection('Device', identifier='New Graphics Card')
-    a.makeSection('Screen', identifier='New Screeeeeeeeeen')
+    a.make_section('Device', identifier='New Graphics Card')
+    a.make_section('Screen', identifier='New Screeeeeeeeeen')
     print('\nIdentifiers after creating a new device section', a.identifiers)
     
     print('\nCreate Broken Screen section')
-    pos = a.makeSection('Screen', identifier='Broken Screen Section')
+    pos = a.make_section('Screen', identifier='Broken Screen Section')
     print('\nAdding References')
     a.addReference('Screen', 'Monitor', 'Broken Monitor Section', position=pos)
     a.addReference('Screen', 'Device', 'Broken Device Section', position=pos)

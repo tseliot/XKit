@@ -70,13 +70,13 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.parser = xutils.XUtils(None)
         
-        screen1 = self.parser.makeSection('Screen', identifier='Default Screen Device')
+        screen1 = self.parser.make_section('Screen', identifier='Default Screen Device')
         self.parser.addReference('Screen', 'Device', 'Yet Another Video Device', position=screen1)
         
-        screen2 = self.parser.makeSection('Screen', identifier='Another Screen Device')
+        screen2 = self.parser.make_section('Screen', identifier='Another Screen Device')
         self.parser.addReference('Screen', 'Device', 'Another Video Device', position=screen2)
         
-        layout = self.parser.makeSection('ServerLayout', identifier='A Layout')
+        layout = self.parser.make_section('ServerLayout', identifier='A Layout')
         
         self.parser.addReference('ServerLayout', 'Screen', 'Screen1', position=layout)
         
@@ -104,7 +104,7 @@ class XUtilsTestCase(unittest.TestCase):
         identifier = 'XKit Video Device'
         option = 'Driver'
         driver1 = 'xkit'
-        position = self.parser.makeSection(section, identifier=identifier)
+        position = self.parser.make_section(section, identifier=identifier)
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
         
@@ -123,7 +123,7 @@ class XUtilsTestCase(unittest.TestCase):
         identifier = 'XKit Video Device'
         option = 'Driver'
         driver = 'xkit'
-        position = self.parser.makeSection(section, identifier=identifier)
+        position = self.parser.make_section(section, identifier=identifier)
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
         
@@ -133,7 +133,7 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.setUp()
         
-        position = self.parser.makeSection(section, identifier=identifier)
+        position = self.parser.make_section(section, identifier=identifier)
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
         
@@ -154,7 +154,7 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.parser = xutils.XUtils()
         
-        position = self.parser.makeSection(section, identifier=identifier)
+        position = self.parser.make_section(section, identifier=identifier)
         self.parser.add_option(section, option, driver, position=position)
         
         status = self.parser.isDriverInSection(driver, sectionsList=[position])

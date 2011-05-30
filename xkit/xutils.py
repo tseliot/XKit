@@ -37,7 +37,7 @@ class XUtils(Parser):
         brokenReferences = self.getBrokenReferences()
         for section in brokenReferences:
             for reference in brokenReferences[section]:
-                self.makeSection(section, identifier=reference)
+                self.make_section(section, identifier=reference)
      
     def getDriver(self, section, position):
         '''

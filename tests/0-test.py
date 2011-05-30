@@ -54,7 +54,7 @@ class XorgParserTestCase(unittest.TestCase):
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
-        self.parser.makeSection(section, identifier)
+        self.parser.make_section(section, identifier)
         
         fullSection = self.parser.globaldict[section]
         found1 = False
@@ -83,7 +83,7 @@ class XorgParserTestCase(unittest.TestCase):
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier1 = 'XKit Screen'
-        position1 = self.parser.makeSection(section, identifier1)
+        position1 = self.parser.make_section(section, identifier1)
         identifier2 = self.parser.getIdentifier(section, position1)
         
         self.failUnless(identifier1 == identifier2, 
@@ -113,7 +113,7 @@ class XorgParserTestCase(unittest.TestCase):
         option = 'TestOption1'
         value1 = '0'
         value2 = '1'
-        position = self.parser.makeSection(section, identifier=identifier)
+        position = self.parser.make_section(section, identifier=identifier)
         
         self.parser.add_option(section, option, value1, option_type='Option', position=position)
         
@@ -140,7 +140,7 @@ class XorgParserTestCase(unittest.TestCase):
         option = 'TestOption1'
         value1 = '0'
         value2 = '1'
-        position = self.parser.makeSection(section, identifier=identifier)
+        position = self.parser.make_section(section, identifier=identifier)
         
         self.parser.add_option(section, option, value1, option_type='Option', position=position)
         
@@ -165,7 +165,7 @@ class XorgParserTestCase(unittest.TestCase):
         section = 'Screen'
         identifier1 = 'XKit Screen test1'
         
-        pos = self.parser.makeSection(section, identifier=identifier1)
+        pos = self.parser.make_section(section, identifier=identifier1)
         
         '''
         create a duplicate section without using add_option()
@@ -184,7 +184,7 @@ class XorgParserTestCase(unittest.TestCase):
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
-        position = self.parser.makeSection(section, identifier)
+        position = self.parser.make_section(section, identifier)
         
         status1 = self.parser.isSection(section, identifier)
         
@@ -205,7 +205,7 @@ class XorgParserTestCase(unittest.TestCase):
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
-        position = self.parser.makeSection(section, identifier)
+        position = self.parser.make_section(section, identifier)
         
         status1 = self.parser.isSection(section, position=position)
         
@@ -303,7 +303,7 @@ class XorgParserTestCase(unittest.TestCase):
         #position = 0
         found = False
         
-        screen = self.parser.makeSection('Screen', identifier='Xkit Screen Device 5')
+        screen = self.parser.make_section('Screen', identifier='Xkit Screen Device 5')
         
         self.parser.add_option(section, option, value, position=screen, prefix='')
         lines = self.parser.globaldict[section][screen]
@@ -367,26 +367,26 @@ class XorgParserTestCase(unittest.TestCase):
                     #print line
             self.failUnless(found == False, 'Option not removed!')
         
-    def testMakeSection1(self):
+    def test_make_section1(self):
         '''
-        def makeSection(self, section, identifier=None):
+        def make_section(self, section, identifier=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Extensions'
         before = len(self.parser.globaldict[section])
-        position = self.parser.makeSection(section, identifier=None)
+        position = self.parser.make_section(section, identifier=None)
         
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
     
-    def testMakeSection2(self):
+    def test_make_section2(self):
         '''
-        def makeSection(self, section, identifier=None):
+        def make_section(self, section, identifier=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         identifier = 'XKit Video Device'
-        position = self.parser.makeSection(section, identifier=identifier)
+        position = self.parser.make_section(section, identifier=identifier)
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
         
@@ -398,27 +398,27 @@ class XorgParserTestCase(unittest.TestCase):
                 #print line
         self.failUnless(found == True, 'Section not created correctly!')
 
-    def testMakeSection3(self):
+    def test_make_section3(self):
         '''
-        def makeSection(self, section, identifier=None):
+        def make_section(self, section, identifier=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Extensions'
-        position = self.parser.makeSection(section, identifier=None)
+        position = self.parser.make_section(section, identifier=None)
         
         sect = self.parser.globaldict[section].get(position)
         
         self.failUnless(sect != None, 
                         'The section was not created')
     
-    def testMakeSection4(self):
+    def test_make_section4(self):
         '''
-        def makeSection(self, section, identifier=None):
+        def make_section(self, section, identifier=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         identifier = 'XKit Video Device'
-        position = self.parser.makeSection(section, identifier=identifier)
+        position = self.parser.make_section(section, identifier=identifier)
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
         
@@ -470,7 +470,7 @@ class XorgParserTestCase(unittest.TestCase):
         position=0 #the first ServerLayout section
         
         if len(self.parser.globaldict[section]) == 0:
-            position = self.parser.makeSection(section, identifier='Default layout')
+            position = self.parser.make_section(section, identifier='Default layout')
             
         self.parser.addReference(section, reference, identifier, position=position)
         
@@ -493,7 +493,7 @@ class XorgParserTestCase(unittest.TestCase):
         #position=0 #the first ServerLayout section
         
         if len(self.parser.globaldict[section]) == 0:
-            position = self.parser.makeSection(section, identifier='Default layout')
+            position = self.parser.make_section(section, identifier='Default layout')
         
         self.parser.addReference(section, reference, identifier, position=None)
         self.parser.removeReference(section, reference, identifier, position=None)
@@ -518,7 +518,7 @@ class XorgParserTestCase(unittest.TestCase):
         position=0 #the first ServerLayout section
         
         if len(self.parser.globaldict[section]) == 0:
-            position = self.parser.makeSection(section, identifier='Default layout')
+            position = self.parser.make_section(section, identifier='Default layout')
         
         self.parser.addReference(section, reference, identifier, position=position)
         self.parser.removeReference(section, reference, identifier, position=position)
@@ -542,8 +542,8 @@ class XorgParserTestCase(unittest.TestCase):
         reference= 'Device'
         identifier = 'XKit Video Device'
         
-        screen = self.parser.makeSection('Screen', identifier=identifier.replace('Video', 'Screen'))
-        device = self.parser.makeSection(reference, identifier=identifier)
+        screen = self.parser.make_section('Screen', identifier=identifier.replace('Video', 'Screen'))
+        device = self.parser.make_section(reference, identifier=identifier)
         
         #if len(self.parser.globaldict[section].setdefault(position, [])) == 0:
         self.parser.addReference(section, reference, identifier, position=screen)
@@ -936,7 +936,7 @@ class XorgParserTestCase(unittest.TestCase):
     def testGetValue5(self):
         self.this_function_name = sys._getframe().f_code.co_name
         self.parser = xorgparser.Parser(None)
-        device = self.parser.makeSection('Device', identifier='Default Device')
+        device = self.parser.make_section('Device', identifier='Default Device')
         self.assertRaises(OptionException,
                       self.parser.getValue, 'Device', 'Driver', device)
     
@@ -1680,7 +1680,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
-        position1 = self.parser.makeSection(section, identifier)
+        position1 = self.parser.make_section(section, identifier)
         position2 = self.parser.getPosition(section, identifier)
         
         self.failUnless(position1 == position2, 
@@ -1713,7 +1713,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         x = xorgparser.Parser()
 
-        device = x.makeSection('Device', identifier='Default Device')
+        device = x.make_section('Device', identifier='Default Device')
         x.add_option('Device', 'Driver', 'mydrv', position=device)
         #x.setValue('Device', 'mydrv', device)
 
@@ -1733,7 +1733,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         x = xorgparser.Parser()
 
-        device = x.makeSection('Device', identifier='Default Device')
+        device = x.make_section('Device', identifier='Default Device')
         x.add_option('Device', 'Driver', 'mydrv', position=device)
         #x.setValue('Device', 'mydrv', device)
 
@@ -1751,7 +1751,7 @@ EndSection
         self.this_function_name = sys._getframe().f_code.co_name
         x = xorgparser.Parser()
 
-        device = x.makeSection('Device', identifier='Default Device')
+        device = x.make_section('Device', identifier='Default Device')
         x.add_option('Device', 'Driver', 'mydrv', position=device)
         #x.setValue('Device', 'mydrv', device)
 
