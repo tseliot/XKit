@@ -490,11 +490,11 @@ class Parser(object):
         '''One word entries are not acceptable as either options or references.
         If one is found, ParseException will be raised.'''
         
-        # Sections in sectionsWhitelist won't be validated
-        sectionsWhitelist = ['Files', 'Comments']
-        optionsWhitelist = ['endmode']
+        # Sections in sections_whitelist won't be validated
+        sections_whitelist = ['Files', 'Comments']
+        options_whitelist = ['endmode']
         for section in self.sections:
-            if section not in sectionsWhitelist:
+            if section not in sections_whitelist:
                 for position in self.globaldict[section]:
                     if section == self.subsection:#'SubSection':
                         options = self.globaldict[section][position]['options']
@@ -511,7 +511,7 @@ class Parser(object):
                         
                         optbits = self._clean_duplicates(option, includenull=True)
                         
-                        if len(optbits) == 1 and optbits[0].strip().lower() not in optionsWhitelist:#ERROR
+                        if len(optbits) == 1 and optbits[0].strip().lower() not in options_whitelist:#ERROR
                             
                             raise ParseException(error)
                         
