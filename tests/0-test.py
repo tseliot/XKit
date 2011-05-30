@@ -157,7 +157,7 @@ class XorgParserTestCase(unittest.TestCase):
     
     def testGetDuplicateSections(self):
         '''
-        def getDuplicateSections(self):
+        def get_duplicate_sections(self):
         
         '''
         self.this_function_name = sys._getframe().f_code.co_name
@@ -172,7 +172,7 @@ class XorgParserTestCase(unittest.TestCase):
         '''
         self.parser.globaldict[section][pos+1] = ['\tIdentifier\t\t"' + identifier1 + '"\n']
         self.parser.identifiers[section].append((identifier1, pos+1))#ADD to identifiers
-        duplicates = self.parser.getDuplicateSections()
+        duplicates = self.parser.get_duplicate_sections()
         
         self.failUnless(identifier1 in duplicates[section],
                         'Duplicates sections cannot be retrieved correctly!')

@@ -368,8 +368,9 @@ class Parser(object):
         # Section "Device"
         #     Identifier "My Device"
         # EndSection
-        if len(self.getDuplicateSections()) > 0:
-            error = 'There cannot be Duplicate Sections:\n%s' % (str(self.getDuplicateSections()))
+        if len(self.get_duplicate_sections()) > 0:
+            error = ('There cannot be Duplicate Sections:\n%s'
+                     % (str(self.get_duplicate_sections())))
             raise ParseException(error)
         
         
@@ -645,7 +646,7 @@ class Parser(object):
         
         return optbits
     
-    def getDuplicateSections(self):
+    def get_duplicate_sections(self):
         '''Return a dictionary with the duplicate sections i.e. sections
         of the same kind, with the same identifier'''
         
