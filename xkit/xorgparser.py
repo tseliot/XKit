@@ -696,17 +696,17 @@ class Parser(object):
             if reference:
                 # Remove an option if it has a certain assigned value. We want
                 # to do this when removing a reference.
-                self.removeOption(section, option, value=value,
+                self.remove_option(section, option, value=value,
                                   position=position)
                 #print 'Remove', option, 'from', section, 'position', position
             else:
                 # value has to be set to None, however there is no way to do
                 # so other than this since add_option() cannot be called with
                 # value=None. Hence the need for this ugly nested if-block.
-                self.removeOption(section, option, position=position)
+                self.remove_option(section, option, position=position)
         else:
             #print 'Remove', option, 'from all', section
-            self.removeOption(section, option)
+            self.remove_option(section, option)
         if option_type == None:
             if reference == None:
                 toadd = ('\t' + option + '\t' + prefix + str(value) + prefix
@@ -738,7 +738,7 @@ class Parser(object):
         
     def _get_options_to_blacklist(self, section, option, value=None,
                                   position=None, reference=None):
-        '''Private method shared by RemoveOption and CommentOutOption'''
+        '''Private method shared by remove_option and CommentOutOption'''
         toremove = {}
         if len(self.globaldict[section]) != 0:#if the section exists
 
@@ -782,7 +782,7 @@ class Parser(object):
                         it += 1
         return toremove
         
-    def removeOption(self, section, option, value=None, position=None,
+    def remove_option(self, section, option, value=None, position=None,
                      reference=None):
         '''Remove an option from a section.
         
@@ -946,7 +946,7 @@ class Parser(object):
         NOTE: if position is set to None it will remove such reference from any
         instance of the section (e.g. from any ServerLayout section)'''
         
-        self.removeOption(section, reference, value=identifier, position=position, reference=True)
+        self.remove_option(section, reference, value=identifier, position=position, reference=True)
     
     def getReferences(self, section, position, reflist=None):
         '''Get the references to other sections which are located in a section.
@@ -1150,7 +1150,7 @@ class Parser(object):
         
         See addSubOption() for an explanation on the arguments.
         
-        Used in both removeOption() and removeSubOption()
+        Used in both remove_option() and removeSubOption()
         '''
         toremove = {}
         if len(self.globaldict[section]) != 0:#if the section exists

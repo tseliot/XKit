@@ -34,12 +34,12 @@ def main():
     '''
     Remove the Defaultdepth from all the Screen sections
     '''
-    a.removeOption('Screen', 'DefaultDepth')
+    a.remove_option('Screen', 'DefaultDepth')
     
     '''
     Remove the Defaultdepth from the 1st Screen section
     '''
-    a.removeOption('Screen', 'DefaultDepth', position=0)
+    a.remove_option('Screen', 'DefaultDepth', position=0)
     
     '''
     Set the Defaultdepth to 24 bit in all sections

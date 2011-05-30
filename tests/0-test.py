@@ -314,15 +314,15 @@ class XorgParserTestCase(unittest.TestCase):
         self.failUnless(found == True, 'Option not added!')
         
         
-    def testRemoveOption1(self):
+    def test_remove_option1(self):
         '''
-        def removeOption(self, section, option, value=None, position=None, reference=None):
+        def remove_option(self, section, option, value=None, position=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         option = 'Identifier'
         found = False
-        self.parser.removeOption(section, option, value=None, position=None, reference=None)
+        self.parser.remove_option(section, option, value=None, position=None, reference=None)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
@@ -331,16 +331,16 @@ class XorgParserTestCase(unittest.TestCase):
                     #print line
             self.failUnless(found == False, 'Option not removed!')
     
-    def testRemoveOption2(self):
+    def test_remove_option2(self):
         '''
-        def removeOption(self, section, option, value=None, position=None, reference=None):
+        def remove_option(self, section, option, value=None, position=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         option = 'Identifier'
         value = 'Configured Video Device'
         found = False
-        self.parser.removeOption(section, option, value=None, position=None, reference=None)
+        self.parser.remove_option(section, option, value=None, position=None, reference=None)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
@@ -349,16 +349,16 @@ class XorgParserTestCase(unittest.TestCase):
                     #print line
             self.failUnless(found == False, 'Option not removed!')
     
-    def testRemoveOption3(self):
+    def test_remove_option3(self):
         '''
-        def removeOption(self, section, option, value=None, position=None, reference=None):
+        def remove_option(self, section, option, value=None, position=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         option = 'Identifier'
         reference = True
         found = False
-        self.parser.removeOption(section, option, value=None, position=None, reference=None)
+        self.parser.remove_option(section, option, value=None, position=None, reference=None)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
