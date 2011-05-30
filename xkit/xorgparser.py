@@ -739,7 +739,7 @@ class Parser(object):
     def _get_options_to_blacklist(self, section, option, value=None,
                                   position=None, reference=None):
         '''Private method shared by remove_option and CommentOutOption'''
-        toremove = {}
+        to_remove = {}
         if len(self.globaldict[section]) != 0:#if the section exists
 
             if position == None:
@@ -752,10 +752,10 @@ class Parser(object):
                             # value
                             if (line.lower().find(option.lower()) != -1
                             and line.lower().find(value.lower()) != -1):
-                                toremove.setdefault(elem, []).append(it)
+                                to_remove.setdefault(elem, []).append(it)
                         else:
                             if line.lower().find(option.lower()) != -1:
-                                toremove.setdefault(elem, []).append(it)
+                                to_remove.setdefault(elem, []).append(it)
                         it += 1
             else:
                 if self.globaldict[section].get(position) == None:
@@ -773,14 +773,14 @@ class Parser(object):
                             # e.g. Screen "Generic Screen".
                             if (line.lower().find(option.lower()) != -1
                             and line.lower().find(value.lower()) != -1):
-                                toremove.setdefault(position, []).append(it)
+                                to_remove.setdefault(position, []).append(it)
                         else:
                             # Remove the option without caring about the
                             # assigned value
                             if line.lower().find(option.lower()) != -1:
-                                toremove.setdefault(position, []).append(it)
+                                to_remove.setdefault(position, []).append(it)
                         it += 1
-        return toremove
+        return to_remove
         
     def remove_option(self, section, option, value=None, position=None,
                      reference=None):
@@ -792,11 +792,11 @@ class Parser(object):
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)'''
         
-        toremove = self._get_options_to_blacklist(section, option, value,
+        to_remove = self._get_options_to_blacklist(section, option, value,
                                                   position, reference)
-        for part in toremove:
+        for part in to_remove:
             modded = 0
-            for line in toremove[part]:
+            for line in to_remove[part]:
                 realpos = line - modded
                 del self.globaldict[section][part][realpos]
                 modded += 1
@@ -852,23 +852,23 @@ class Parser(object):
         # Remove any section of "section" type with the same identifier
         # currently sections of the same type cannot have the same id
         # for obvious reasons
-        toremove = {}
+        to_remove = {}
         if identifier:
             try:
                 pos = self.getPosition(section, identifier)
-                toremove.setdefault(pos, None)
+                to_remove.setdefault(pos, None)
             except IdentifierException:
                 pass
                     
         # Comment the section of "section" type at position "position"
         elif position != None:
             if self.isSection(section, position=position):
-                toremove.setdefault(position, None)
+                to_remove.setdefault(position, None)
         
         # Comment any section of "section" type
         else:
             allkeys = list(self.globaldict[section].keys())
-            toremove = {}.fromkeys(allkeys)
+            to_remove = {}.fromkeys(allkeys)
         
         # If the section has an identifier i.e. if the section
         # is in self.require_id
@@ -877,17 +877,17 @@ class Parser(object):
             it = 0
             for reference in self.identifiers[section]:
                 try:
-                    ref = list(toremove.keys()).index(reference[1])
-                    toremove[list(toremove.keys())[ref]] = it
+                    ref = list(to_remove.keys()).index(reference[1])
+                    to_remove[list(to_remove.keys())[ref]] = it
                 except ValueError:
                     pass
                 it += 1
         
-        sortedRemove = list(toremove.keys())
-        sortedRemove.sort()
+        sorted_remove = list(to_remove.keys())
+        sorted_remove.sort()
         
         modded = 0
-        for sect in sortedRemove:
+        for sect in sorted_remove:
             subsections = self.getSubSections(section, sect)
             
             # Remove all its SubSections from SubSection
@@ -906,7 +906,7 @@ class Parser(object):
             
             # Remove the reference from identifiers
             # if such reference exists
-            identref = toremove[sect]
+            identref = to_remove[sect]
             if identref != None:
                 realpos = identref - modded
 
@@ -1057,20 +1057,20 @@ class Parser(object):
              the said section (e.g. in all the "Screen" sections)'''
         
         curlength = len(self.globaldict[self.subsection])
-        toremove = []
+        to_remove = []
         if position == None:
             for elem in self.globaldict[self.subsection]:
                 if self.globaldict[self.subsection][elem].get('section') == section \
                 and self.globaldict[self.subsection][elem].get('identifier') == identifier:
-                    toremove.append(elem)
+                    to_remove.append(elem)
                 
         else:
             for elem in self.globaldict[self.subsection]:
                 if self.globaldict[self.subsection][elem].get('section') == section \
                 and self.globaldict[self.subsection][elem].get('identifier') == identifier \
                 and self.globaldict[self.subsection][elem].get('position') == position:
-                    toremove.append(elem)
-        for item in toremove:
+                    to_remove.append(elem)
+        for item in to_remove:
             del self.globaldict[self.subsection][item]
     
     def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
@@ -1152,7 +1152,7 @@ class Parser(object):
         
         Used in both remove_option() and removeSubOption()
         '''
-        toremove = {}
+        to_remove = {}
         if len(self.globaldict[section]) != 0:#if the section exists
             if len(self.globaldict[self.subsection]) != 0:
                 for elem in self.globaldict[self.subsection]:
@@ -1162,7 +1162,7 @@ class Parser(object):
                             it = 0
                             for opt in self.globaldict[self.subsection][elem]['options']:
                                 if opt.strip().lower().find(option.strip().lower()) != -1:
-                                    toremove.setdefault(elem, []).append(it)
+                                    to_remove.setdefault(elem, []).append(it)
                                 it += 1
                     else:
                         if self.globaldict[self.subsection][elem].get('section') == section \
@@ -1171,18 +1171,18 @@ class Parser(object):
                             it = 0
                             for opt in self.globaldict[self.subsection][elem]['options']:
                                 if opt.strip().lower().find(option.strip().lower()) != -1:
-                                    toremove.setdefault(elem, []).append(it)
+                                    to_remove.setdefault(elem, []).append(it)
                                 it += 1
-        return toremove
+        return to_remove
 
 
     def removeSubOption(self, section, identifier, option, position=None):
         '''Remove an option from a subsection.'''
         
-        toremove = self._get_suboptions_to_blacklist(section, identifier, option, position)
-        for elem in toremove:
+        to_remove = self._get_suboptions_to_blacklist(section, identifier, option, position)
+        for elem in to_remove:
             modded = 0
-            for part in toremove[elem]:
+            for part in to_remove[elem]:
                 realpos = part - modded
                 del self.globaldict[self.subsection][elem]['options'][realpos]
                 modded += 1
@@ -1769,23 +1769,23 @@ class Parser(object):
         # Comment any section of "section" type with the same identifier
         #   currently sections of the same type cannot have the same id
         #   for obvious reasons
-        toremove = {}
+        to_remove = {}
         if identifier:
             try:
                 pos = self.getPosition(section, identifier)
-                toremove.setdefault(pos, None)
+                to_remove.setdefault(pos, None)
             except IdentifierException:
                 pass
                     
         # Comment the section of "section" type at position "position"
         elif position != None:
             if self.isSection(section, position=position):
-                toremove.setdefault(position, None)
+                to_remove.setdefault(position, None)
         
         # Comment any section of "section" type
         else:
             allkeys = list(self.globaldict[section].keys())
-            toremove = {}.fromkeys(allkeys)
+            to_remove = {}.fromkeys(allkeys)
         
         # If the section has an identifier i.e. if the section
         # is in self.require_id
@@ -1794,19 +1794,19 @@ class Parser(object):
             it = 0
             for reference in self.identifiers[section]:
                 try:
-                    ref = list(toremove.keys()).index(reference[1])
-                    toremove[list(toremove.keys())[ref]] = it
+                    ref = list(to_remove.keys()).index(reference[1])
+                    to_remove[list(to_remove.keys())[ref]] = it
                 except ValueError:
                     pass
                 it += 1
         
         
-        sortedRemove = list(toremove.keys())
-        sortedRemove.sort()
+        sorted_remove = list(to_remove.keys())
+        sorted_remove.sort()
         
         
         modded = 0
-        for sect in sortedRemove:
+        for sect in sorted_remove:
             self.comments.append(startSection)
             for option in self.globaldict[section][sect]:
                 commentedOption = '#\t%s\n' % (option.strip())
@@ -1826,7 +1826,7 @@ class Parser(object):
             
             # Remove the reference from identifiers
             # if such reference exists
-            identref = toremove[sect]
+            identref = to_remove[sect]
             if identref != None:
                 realpos = identref - modded
 
@@ -1861,10 +1861,10 @@ class Parser(object):
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)'''
         
-        toremove = self._get_options_to_blacklist(section, option, value, position, reference)
-        for part in toremove:
+        to_remove = self._get_options_to_blacklist(section, option, value, position, reference)
+        for part in to_remove:
             modded = 0
-            for line in toremove[part]:
+            for line in to_remove[part]:
                 realpos = line - modded
                 self.globaldict[section][part][realpos] = '#%s' % (self.globaldict[section][part][realpos].strip())
                 
@@ -1894,10 +1894,10 @@ class Parser(object):
                   e.g. 0 (i.e. the first element in the list of Screen
                   sections)'''
         
-        toremove = self._get_suboptions_to_blacklist(section, identifier, option, position)
-        for elem in toremove:
+        to_remove = self._get_suboptions_to_blacklist(section, identifier, option, position)
+        for elem in to_remove:
             modded = 0
-            for part in toremove[elem]:
+            for part in to_remove[elem]:
                 realpos = part - modded
                 
                 self.globaldict[self.subsection][part]['options'][realpos] = \
