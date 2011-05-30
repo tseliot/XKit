@@ -375,7 +375,7 @@ class Parser(object):
         
         # One word entries are not acceptable as either options or references.
         # If one is found, ParseException will be raised.
-        self.validateOptions()
+        self._validate_options()
         
         
         # Raise an exception if there are broken references i.e. references
@@ -485,7 +485,7 @@ class Parser(object):
                 self.identifiers[sect].append((identifier, it))
                 it += 1
     
-    def validateOptions(self):
+    def _validate_options(self):
         '''One word entries are not acceptable as either options or references.
         If one is found, ParseException will be raised.'''
         
@@ -579,7 +579,7 @@ class Parser(object):
     def _clean_duplicates(self, option, includenull=None):
         '''Clean the option and return all its components in a list
         
-        includenull - is used only by validateOptions() and makes
+        includenull - is used only by _validate_options() and makes
         sure that options with a null value assigned in quotation
         marks are not considered as one-word options'''
         
