@@ -802,47 +802,58 @@ class Parser(object):
                 modded += 1
 
     def make_section(self, section, identifier=None):
-        '''Create a new section and return the position of the section in the list
-        of sections of the same type (e.g. "Screen") so as to make it available
-        in case the user wants to add some options to it.
+        '''Create a new section and return the position of the section
+
+        The position is relative to the list of sections of the same type
+        (e.g. "Screen") so as to make it available in case the user wants
+        to add some options to it.
         
         The identifier and the position of the new section is added to 
         self.identifiers[section]
         
         section= the section to create
-        identifier= the identifier of a section (if the section requires an
-                    identifier)'''
+        identifier= the identifier of a section (if the section requires
+                    an identifier)'''
         
         position  = len(self.globaldict[section])
         
         if section in self.require_id:
             if identifier != None:
                 option = 'Identifier'
-                # Don't create a new section if one of the same kind and with the same 
-                # 'Identifier' is found
+                # Don't create a new section if one of the same kind and
+                # with the same 'Identifier' is found
                 create = True
                 for sub in self.globaldict[section]:
                     if self.getValue(section, option, sub):
                         try:
-                            if self.getValue(section, option, sub).strip().lower() == identifier.strip().lower():
+                            if (self.getValue(section,
+                                              option,
+                                              sub).strip().lower()
+                                              == identifier.strip().lower()):
                                 create = False
                                 break
                         except AttributeError:
                             for elem in self.getValue(section, option, sub):
                                 #print 'elem=', elem, 'id=', identifier
-                                if elem.strip().lower() == identifier.strip().lower():
+                                if (elem.strip().lower()
+                                    == identifier.strip().lower()):
                                     create = False
                                     break
                 
                 if create:
                     self.globaldict[section][position] = []
-                    self.add_option(section, option, value=identifier, position=position)
-                    self.identifiers[section].append((identifier, position))#ADD to identifiers
-                    #print 'Created section', section, 'id =', identifier, 'position =', position
+                    self.add_option(section, option, value=identifier,
+                                    position=position)
+                    # Add to identifiers
+                    self.identifiers[section].append((identifier, position))
+                    #print 'Created section', section, 'id =', identifier,
+                    #      'position =', position
                 #else:
-                    #print section, 'Section labelled as', identifier, 'already exists. None will be created.'
+                    #print section, 'Section labelled as', identifier,
+                    #'already exists. None will be created.'
             else:
-                raise IdentifierException('%s Section requires an identifier' %(section))
+                raise IdentifierException(('%s Section requires an identifier'
+                                           %(section)))
         else:
             self.globaldict[section][position] = []
         return position
