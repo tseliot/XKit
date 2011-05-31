@@ -974,7 +974,7 @@ class Parser(object):
                            position=position, reference=True)
     
     def get_references(self, section, position, reflist=None):
-        '''Get the references to other sections which are located in a section.
+        '''Get references to other sections which are located in a section.
         
         section= the section (e.g. "Screen")
         position= e.g. 0 stands for the 1st Screen section
@@ -982,8 +982,8 @@ class Parser(object):
                  The default list of references is self.require_id but this
                  list can be overridden by the reflist argument so that, for
                  example, if reflist is set to ['Device'], this function will
-                 look for references to other devices only (references to, say,
-                 screens, will be ignored).'''
+                 look for references to other devices only (references to,
+                 say, screens, will be ignored).'''
         
         if reflist == None:
             options = self.require_id
