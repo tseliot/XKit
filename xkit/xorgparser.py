@@ -1257,22 +1257,24 @@ class Parser(object):
 
 
     def _clean_option(self, option, optname, reference=None, section=None):
-        '''Clean the option and return the value (i.e. the last item of the list
-        which this method generates).
-        
+        '''Clean the option and return the value
+
+        This returns the last item of the list which this method generates.
+
         If no value can be found, return False.'''
-        
+
         if reference:
             # If it's a reference to another section then options such as
-            # Option	"Device"	"/dev/psaux" should not be taken into
+            # Option  "Device"  "/dev/psaux" should not be taken into
             # account.
             if 'option' in option.strip().lower():
                 return False
-            
-            # Do not confuse Device "Configure device" with InputDevice "device"
+
+            # Do not confuse Device "Configure device" with InputDevice
+            # "device"
             if not option.strip().lower().startswith(optname.strip().lower()):
                 return False
-                
+
         optbits = []
         optbit = ''
         it = 0
@@ -1312,7 +1314,7 @@ class Parser(object):
                                 optbits.append(optbit)
                                 #print 'i=', i, 'optbit=', optbit
                                 optbit = ''
-                        
+
                 if it == len(option) - 1:
                     if optbit != '':
                         optbits.append(optbit)
@@ -1334,17 +1336,19 @@ class Parser(object):
                         optbits.append(optbit)
                         #print 'i=END', 'optbit=', optbit
                 it += 1
-        
+
         optlen = len(optbits)
 
         if optlen > 1:
             # Let's make sure that the option is the one we're looking for
             # e.g. if we're looking for a reference to Device we are not
             # interested in getting references to InputDevice
-            
+
             referencesList = [x.lower().strip() for x in self.references]
-            
-            if section != 'ServerLayout' and quotation == 0 and optlen == 2 and optbits[0].lower().strip() in referencesList:
+
+            if (section != 'ServerLayout' and
+                quotation == 0 and optlen == 2 and
+                optbits[0].lower().strip() in referencesList):
                 # e.g. Screen 1 -> 1 stands for the position, therefore the 
                 # identifier of the section at position 1 should be returned
                 # instead of the number (if possible).
@@ -1364,7 +1368,7 @@ class Parser(object):
                         return False
                 except ValueError:
                     pass
-            
+
             if optcount != 4 and section != 'ServerLayout':
                 status = False
                 for elem in optbits:
@@ -1372,32 +1376,33 @@ class Parser(object):
                         status = True
                 if status == False:
                     return False
-                
+
             if optlen == 2 and optbits[0].lower().strip() == 'option':
                 # e.g. Option "AddARGBGLXVisuals"
                 # (The value was omitted but it will be interpreted as True by
                 # Xorg)
                 return 'True'
-            
+
             sections = [sect.strip().lower() for sect in self.sections]
-            
-            
+
 #            if optlen == 2 and optbits[0].lower().strip() in sections:
 #                '''
 #                Do not confuse Device "Configure device" with InputDevice "device"
 #                '''
 #                if optbits[0].lower().strip() != optname.strip().lower():
 #                    return False
-            
+
             if optcount == 4 and section == 'ServerLayout':
                 #If it's something like InputDevice "stylus" "SendCoreEvents"
-                if optname.lower().strip() == 'inputdevice' and len(optbits) == 2:
+                if (optname.lower().strip() == 'inputdevice' and
+                    len(optbits) == 2):
                     del optbits[1]
-                serverDict = {}
+                server_dict = {}
                 for elem in optbits:
-                    serverDict.setdefault(elem)
-                return list(serverDict.keys())
-            elif optcount > 0 and optcount <= 4:#dealing with a section option
+                    server_dict.setdefault(elem)
+                return list(server_dict.keys())
+            elif optcount > 0 and optcount <= 4:
+                #dealing with a section option
                 return optbits[optlen -1]
             elif optcount > 4:
                 del optbits[0]
