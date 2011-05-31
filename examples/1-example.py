@@ -159,7 +159,7 @@ def main():
     '''
     Get the identifier of the first Device section
     '''
-    print('ID of the 1st Device Section =', a.getIdentifier('Device', 0))
+    print('ID of the 1st Device Section =', a.get_identifier('Device', 0))
     
     '''
     Get the position of the Device section identified as 'Configured Video Device'

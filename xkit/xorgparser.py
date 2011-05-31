@@ -1242,7 +1242,7 @@ class Parser(object):
                 del self._gdict[self.subsection][elem]['options'][real_pos]
                 modded += 1
 
-    def getIdentifier(self, section, position):
+    def get_identifier(self, section, position):
         '''Get the identifier of a specific section from its position.'''
         
         errorMsg = 'No identifier can be found for section "%s" No %d' %(section, position)
@@ -1357,7 +1357,7 @@ class Parser(object):
                             sect = item
                             break
                     try:                     
-                        identifier = self.getIdentifier(sect, value)
+                        identifier = self.get_identifier(sect, value)
                         return [identifier]
                     except (IdentifierException):
                         return False

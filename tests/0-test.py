@@ -76,22 +76,22 @@ class XorgParserTestCase(unittest.TestCase):
         
         self.failUnless(found1 == True and found2 == True, 'Not all the identifiers were returned')
 
-    def testGetIdentifier1(self):
+    def test_get_identifier1(self):
         '''
-        def getIdentifier(self, section, position):
+        def get_identifier(self, section, position):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier1 = 'XKit Screen'
         position1 = self.parser.make_section(section, identifier1)
-        identifier2 = self.parser.getIdentifier(section, position1)
+        identifier2 = self.parser.get_identifier(section, position1)
         
         self.failUnless(identifier1 == identifier2, 
                         'The identifier was not correctly retrieved')
     
-    def testGetIdentifier2(self):
+    def test_get_identifier2(self):
         '''
-        def getIdentifier(self, section, position):
+        def get_identifier(self, section, position):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         self.parser = xorgparser.Parser(None)
@@ -101,7 +101,7 @@ class XorgParserTestCase(unittest.TestCase):
                       self.parser.getValue, 'Device', 'Identifier', 1)
         
         self.assertRaises(IdentifierException,
-                      self.parser.getIdentifier, 'Device', 0)
+                      self.parser.get_identifier, 'Device', 0)
 
     def testGetDuplicateOptions(self):
         '''
@@ -1356,7 +1356,7 @@ EndSection
 
     def testIntegrity12(self):
         '''
-        def getIdentifier(self, section, position):
+        def get_identifier(self, section, position):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         

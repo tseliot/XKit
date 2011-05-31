@@ -36,7 +36,7 @@ class Accessories(XUtils):
                 #print 'ELEMENT', elem
                 for refsect in self.referencesTree[section][elem]:
                     if len(self.referencesTree[section][elem][refsect]) > 0:
-                        print('\n', section, 'Section', '"' + self.getIdentifier(section, elem) + '"', 'depends on', \
+                        print('\n', section, 'Section', '"' + self.get_identifier(section, elem) + '"', 'depends on', \
                         'Section', refsect, ':\n', \
                         self.referencesTree[section][elem][refsect])
                         for ref in self.referencesTree[section][elem][refsect]:
