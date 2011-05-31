@@ -1195,34 +1195,38 @@ class Parser(object):
             self._gdict[self.subsection][elem]['options'].append(toadd)
         
     
-    def _get_suboptions_to_blacklist(self, section, identifier, option, position=None):
+    def _get_suboptions_to_blacklist(self, section, identifier, option,
+                                     position=None):
         '''Get a dictionay of the suboptions to blacklist.
         
         See add_suboption() for an explanation on the arguments.
         
-        Used in both remove_option() and removeSubOption()
-        '''
+        Used in both remove_option() and removeSubOption()'''
         to_remove = {}
         if len(self._gdict[section]) != 0:#if the section exists
             if len(self._gdict[self.subsection]) != 0:
                 for elem in self._gdict[self.subsection]:
+                    temp_elem = self._gdict[self.subsection][elem]
                     if position == None:
-                        if self._gdict[self.subsection][elem].get('section') == section \
-                        and self._gdict[self.subsection][elem].get('identifier') == identifier:
+                        if (temp_elem.get('section') == section and
+                            temp_elem.get('identifier') == identifier):
                             it = 0
-                            for opt in self._gdict[self.subsection][elem]['options']:
-                                if opt.strip().lower().find(option.strip().lower()) != -1:
+                            for opt in temp_elem['options']:
+                                if (opt.strip().lower()
+                                    .find(option.strip().lower()) != -1):
                                     to_remove.setdefault(elem, []).append(it)
                                 it += 1
                     else:
-                        if self._gdict[self.subsection][elem].get('section') == section \
-                        and self._gdict[self.subsection][elem].get('identifier') == identifier \
-                        and self._gdict[self.subsection][elem].get('position') == position:
+                        if (temp_elem.get('section') == section and
+                            temp_elem.get('identifier') == identifier and
+                            temp_elem.get('position') == position):
                             it = 0
-                            for opt in self._gdict[self.subsection][elem]['options']:
-                                if opt.strip().lower().find(option.strip().lower()) != -1:
+                            for opt in temp_elem['options']:
+                                if (opt.strip().lower()
+                                    .find(option.strip().lower()) != -1):
                                     to_remove.setdefault(elem, []).append(it)
                                 it += 1
+                    del temp_elem
         return to_remove
 
 
