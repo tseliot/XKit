@@ -1080,7 +1080,7 @@ class Parser(object):
                 temp_dict['position'] = position
                 del temp_dict
 
-    def removeSubSection(self, section, identifier, position=None):
+    def remove_subsection(self, section, identifier, position=None):
         '''Remove a subsection from one or more sections.
         
         section= the section to which the subsection belongs

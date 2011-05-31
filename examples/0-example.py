@@ -102,7 +102,7 @@ def main():
     '''
     Remove a "Display" SubSection inside all the Screen sections
     '''
-    #a.removeSubSection('Screen', 'Display')#, position=0)
+    #a.remove_subsection('Screen', 'Display')#, position=0)
     
     '''
     Add an option to the Display subsection of the 1st Screen section

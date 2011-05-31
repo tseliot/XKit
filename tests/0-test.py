@@ -620,9 +620,9 @@ class XorgParserTestCase(unittest.TestCase):
         self.failUnless(found == True, 'The subsection was not created!')
     
     
-    def testRemoveSubSection1(self):
+    def test_remove_subsection1(self):
         '''
-        def removeSubSection(self, section, identifier, position=None):
+        def remove_subsection(self, section, identifier, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -633,7 +633,7 @@ class XorgParserTestCase(unittest.TestCase):
             self.parser.globaldict[section].setdefault(pos, [])
             self.parser.make_subsection(section, identifier, position=pos)
         
-        self.parser.removeSubSection(section, identifier)
+        self.parser.remove_subsection(section, identifier)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -641,9 +641,9 @@ class XorgParserTestCase(unittest.TestCase):
             subsection.get('section') != section,
             'The subsections were not removed!')
     
-    def testRemoveSubSection2(self):
+    def test_remove_subsection2(self):
         '''
-        def removeSubSection(self, section, identifier, position=None):
+        def remove_subsection(self, section, identifier, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -651,7 +651,7 @@ class XorgParserTestCase(unittest.TestCase):
         position = 0
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.make_subsection(section, identifier, position=position)
-        self.parser.removeSubSection(section, identifier, position=position)
+        self.parser.remove_subsection(section, identifier, position=position)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
