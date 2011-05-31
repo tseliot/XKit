@@ -43,7 +43,7 @@ class Accessories(XUtils):
                             for sect in self.sections:
                                 if sect.lower() == refsect.strip().lower():
                                     refsect = sect
-                            if not self.isSection(refsect, ref):
+                            if not self.is_section(refsect, ref):
                                 print('*****WARNING:', refsect, 'Section', ref, 'does not exist!*****')
     
     def printDuplicateOptions(self):

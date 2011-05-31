@@ -449,7 +449,7 @@ class Parser(object):
                          'specified in the ServerFlags section.')
                 raise ParseException(error)
             
-            if not self.isSection('ServerLayout', position=default_layout[0]):
+            if not self.is_section('ServerLayout', position=default_layout[0]):
                 error = 'The default ServerLayout does not exist'
                 raise ParseException(error)
         
@@ -885,7 +885,7 @@ class Parser(object):
                     
         # Comment the section of "section" type at position "position"
         elif position != None:
-            if self.isSection(section, position=position):
+            if self.is_section(section, position=position):
                 to_remove.setdefault(position, None)
         
         # Comment any section of "section" type
@@ -1561,7 +1561,7 @@ class Parser(object):
             except KeyError:#not found
                 raise OptionException
 
-    def isSection(self, section, identifier=None, position=None):
+    def is_section(self, section, identifier=None, position=None):
         '''See if a section with a certain identifier exists.
         
         NOTE: either identifier or position must be provided.'''
@@ -1625,7 +1625,7 @@ class Parser(object):
                             for sect in self.sections:
                                 if sect.lower() == refsect.strip().lower():
                                     refsect = sect
-                            if not self.isSection(refsect, ref):
+                            if not self.is_section(refsect, ref):
                                 #print '*****WARNING:', refsect, 'Section', ref, 'does not exist!*****'
                                 brokenReferences[refsect].setdefault(ref)
                                 #print 'FIX: Creating', refsect, 'Section', ref
@@ -1846,7 +1846,7 @@ class Parser(object):
                     
         # Comment the section of "section" type at position "position"
         elif position != None:
-            if self.isSection(section, position=position):
+            if self.is_section(section, position=position):
                 to_remove.setdefault(position, None)
         
         # Comment any section of "section" type

@@ -171,8 +171,8 @@ def main():
     '''
     See if a section exists
     '''
-    print('Section Device "Configured Video Device" exists =', a.isSection('Device', 'Configured Video Device'))
-    print('Section Device "Whatever" exists =', a.isSection('Device', 'Whatever'))
+    print('Section Device "Configured Video Device" exists =', a.is_section('Device', 'Configured Video Device'))
+    print('Section Device "Whatever" exists =', a.is_section('Device', 'Whatever'))
     
     '''
     Create a new Device section and print the list of identifiers so as to see

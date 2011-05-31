@@ -177,16 +177,16 @@ class XorgParserTestCase(unittest.TestCase):
         self.failUnless(identifier1 in duplicates[section],
                         'Duplicates sections cannot be retrieved correctly!')
 
-    def testIsSection1(self):
+    def test_is_section1(self):
         '''
-        def isSection(self, section, identifier):
+        def is_section(self, section, identifier):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
         position = self.parser.make_section(section, identifier)
         
-        status1 = self.parser.isSection(section, identifier)
+        status1 = self.parser.is_section(section, identifier)
         
         status2 = False
         sect = self.parser.globaldict[section][position]
@@ -198,16 +198,16 @@ class XorgParserTestCase(unittest.TestCase):
         self.failUnless(status2 == True and status1 == status2, 
                         'The existence of the section was not tested correctly')
 
-    def testIsSection2(self):
+    def test_is_section2(self):
         '''
-        def isSection(self, section, identifier):
+        def is_section(self, section, identifier):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
         position = self.parser.make_section(section, identifier)
         
-        status1 = self.parser.isSection(section, position=position)
+        status1 = self.parser.is_section(section, position=position)
         
         status2 = False
         sect = self.parser.globaldict[section][position]
