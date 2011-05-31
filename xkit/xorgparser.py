@@ -1593,48 +1593,52 @@ class Parser(object):
         raise IdentifierException(error_msg)
     
     def get_broken_references(self):
-        '''Look for broken references (i.e. references to sections which don't exist)
-        and return a dictionary having the items of self.require_id as keys and
-        a dictionary of the identifiers of the sections which are referred to by the
-        broken references.
-        
+        '''Look for references to sections which don't exist
+
+        This returns a dictionary having the items of self.require_id as keys
+        and a dictionary with the identifiers of the sections which are
+        being referred to by the broken references.
+
         For example:
-        
-        brokenReferences = {
-                            'InputDevice': {'InputDevice 1': None, 'Another input device': None},
+
+        broken_references = {
+                            'InputDevice': {'InputDevice 1': None,
+                                            'Another input device': None},
                             'Device': {...},
                             'Monitor' {...},
                             'Screen' {...},
                             'ServerLayout' {...}
                             }'''
-        
-        brokenReferences = {}.fromkeys(self.require_id)
-        referencesTree = {}
+
+        broken_references = {}.fromkeys(self.require_id)
+        references_tree = {}
         for section in self.require_id:#['Screen', 'ServerLayout']
-            referencesTree[section] = {}
-            brokenReferences[section] = {}
+            references_tree[section] = {}
+            broken_references[section] = {}
             for sect in self._gdict[section]:
-                referencesTree[section][sect] = self.get_references(section, sect)
-        #print >> stderr, 'REFERENCES = %s' % (str(referencesTree))
-        for section in referencesTree:
-            for elem in referencesTree[section]:
-                for refsect in referencesTree[section][elem]:
-                    
-                    if len(referencesTree[section][elem][refsect]) > 0:
-                        #referencesTree[section][elem][refsect]
-                        for ref in referencesTree[section][elem][refsect]:
+                references_tree[section][sect] = self.get_references(section,
+                                                                     sect)
+        #print >> stderr, 'REFERENCES = %s' % (str(references_tree))
+        for section in references_tree:
+            for elem in references_tree[section]:
+                for refsect in references_tree[section][elem]:
+
+                    if len(references_tree[section][elem][refsect]) > 0:
+                        #references_tree[section][elem][refsect]
+                        for ref in references_tree[section][elem][refsect]:
                             for sect in self.sections:
                                 if sect.lower() == refsect.strip().lower():
                                     refsect = sect
                             if not self.is_section(refsect, ref):
-                                #print '*****WARNING:', refsect, 'Section', ref, 'does not exist!*****'
-                                brokenReferences[refsect].setdefault(ref)
-                                #print 'FIX: Creating', refsect, 'Section', ref
-                                #self.make_section(refsect, identifier=ref)
-        return brokenReferences
-    
-    
-    
+                                #print '*****WARNING:', refsect, 'Section',
+                                # ref, 'does not exist!*****'
+                                broken_references[refsect].setdefault(ref)
+                                #print 'FIX: Creating', refsect, 'Section',
+                                # ref self.make_section(refsect,
+                                # identifier=ref)
+        return broken_references
+
+
     def getDefaultServerLayout(self):
         '''See if one or more ServerLayout sections are set as default and return their
         position in a list
