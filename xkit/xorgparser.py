@@ -1113,7 +1113,8 @@ class Parser(object):
         for item in to_remove:
             del self._gdict[self.subsection][item]
     
-    def add_suboption(self, section, identifier, option, value, option_type=None, position=None):
+    def add_suboption(self, section, identifier, option, value,
+                      option_type=None, position=None):
         '''Add an option to one or more subsections.
         
         section= the section which contains the subsection
@@ -1121,27 +1122,28 @@ class Parser(object):
         option= the option to add
         value= the value which will be assigned to the option
         option_type= if set to "Option" it will cause the option to look like
-                    the following:
-                    Option "NameOfTheOption" "Value"
+                     the following:
+                     Option "NameOfTheOption" "Value"
                     
-                    Otherwise it will look like the following:
-                    NameOfTheOption "Value"
+                     Otherwise it will look like the following:
+                     NameOfTheOption "Value"
         position= e.g. 0 (i.e. the option will be added to a subsection which
                   is located in the first element in the list of Screen
                   sections)'''
         
         prefix = '"'
-        donotcreate = []
-        tomodify = []
+        not_to_create = []
+        to_modify = []
         if position == None:
             self.removeSubOption(section, identifier, option)
         else:
-            self.removeSubOption(section, identifier, option, position=position)        
+            self.removeSubOption(section, identifier, option,
+                                 position=position)
         if option_type == None:
             toadd = '\t' + option + '\t' + str(value) + '\n'
         else:
-            toadd = '\t' + option_type + '\t' + prefix + option + prefix + '\t' \
-            + prefix + str(value) + prefix + '\n'
+            toadd = ('\t' + option_type + '\t' + prefix + option + prefix +
+                     '\t' + prefix + str(value) + prefix + '\n')
         
         curlength = len(self._gdict[self.subsection])
         if curlength == 0:
@@ -1151,37 +1153,45 @@ class Parser(object):
         if position == None:
             # if there is not a subsection for each selected section then
             # create it
-            cursectlength = len(self._gdict[section])
+            cursect_length = len(self._gdict[section])
             it = 0
-            while it < cursectlength:
+            while it < cursect_length:
                 for elem in self._gdict[self.subsection]:
-                    if self._gdict[self.subsection][elem].get("position") == it and \
-                    self._gdict[self.subsection][elem].get("section") == section and \
-                    self._gdict[self.subsection][elem].get("identifier") == identifier:
-                        donotcreate.append(it)
+                    if (self._gdict[self.subsection][elem].get("position") ==
+                        it and
+                        self._gdict[self.subsection][elem].get("section") ==
+                        section and
+                        self._gdict[self.subsection][elem].get("identifier") ==
+                        identifier):
+                        not_to_create.append(it)
                 it += 1
-            for i in range(cursectlength+1):
-                if i not in donotcreate:
+            for i in range(cursect_length + 1):
+                if i not in not_to_create:
                     self.make_subsection(section, identifier, position=i)
 
             for elem in self._gdict[self.subsection]:
-                if self._gdict[self.subsection][elem].get("identifier") == identifier and \
-                self._gdict[self.subsection][elem].get("section") == section:
-                    tomodify.append(elem)
+                if (self._gdict[self.subsection][elem].get("identifier") ==
+                    identifier and
+                    self._gdict[self.subsection][elem].get("section") ==
+                    section):
+                    to_modify.append(elem)
                     
         else:
             for elem in self._gdict[self.subsection]:
-                if self._gdict[self.subsection][elem].get("position") == position and \
-                self._gdict[self.subsection][elem].get("identifier") == identifier:
-                    tomodify.append(elem)
-            if len(tomodify) == 0:
+                if (self._gdict[self.subsection][elem].get("position") ==
+                    position and
+                    self._gdict[self.subsection][elem].get("identifier") ==
+                    identifier):
+                    to_modify.append(elem)
+            if len(to_modify) == 0:
                 curlength = len(self._gdict[self.subsection])
-                self._gdict[self.subsection][len(self._gdict[self.subsection])] = \
+                self._gdict[self.subsection][
+                len(self._gdict[self.subsection])] = \
                 {'section': section, 'identifier': identifier,
-                     'options': [], 'position': position}
-                tomodify.append(curlength)
+                 'options': [], 'position': position}
+                to_modify.append(curlength)
         
-        for elem in tomodify:
+        for elem in to_modify:
             self._gdict[self.subsection][elem]['options'].append(toadd)
         
     
