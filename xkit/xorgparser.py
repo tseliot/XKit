@@ -1245,14 +1245,15 @@ class Parser(object):
     def get_identifier(self, section, position):
         '''Get the identifier of a specific section from its position.'''
         
-        errorMsg = 'No identifier can be found for section "%s" No %d' %(section, position)
+        error_msg = ('No identifier can be found for section "%s" No %d'
+                    % (section, position))
         try:
             for sect in self.identifiers[section]:
                 if sect[1] == position:
                     return sect[0]
         except KeyError:
             raise SectionException
-        raise IdentifierException(errorMsg)
+        raise IdentifierException(error_msg)
 
 
     def _clean_option(self, option, optname, reference=None, section=None):
@@ -1564,20 +1565,20 @@ class Parser(object):
             return self._gdict[section].get(position) != None
         
         else:
-            errorMsg = 'Either identifier or position must be provided'
-            raise Exception(errorMsg)
+            error_msg = 'Either identifier or position must be provided'
+            raise Exception(error_msg)
     
     def getPosition(self, section, identifier):
         '''Get the position of a specific section from its identifier.'''
         
-        errorMsg = 'No %s section named "%s" can be found' %(section, identifier)
+        error_msg = 'No %s section named "%s" can be found' %(section, identifier)
         for sect in self.identifiers[section]:
             try:
                 if sect[0].strip().lower() == identifier.strip().lower():
                     return sect[1]
             except AttributeError:
                 pass
-        raise IdentifierException(errorMsg)
+        raise IdentifierException(error_msg)
     
     def getBrokenReferences(self):
         '''Look for broken references (i.e. references to sections which don't exist)
