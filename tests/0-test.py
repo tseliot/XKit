@@ -662,9 +662,9 @@ class XorgParserTestCase(unittest.TestCase):
     
     
     
-    def testAddSubOption1(self):
+    def test_add_suboption1(self):
         '''
-        def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
+        def add_suboption(self, section, identifier, option, value, option_type=None, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -678,7 +678,7 @@ class XorgParserTestCase(unittest.TestCase):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.make_subsection(section, identifier)
         
-        self.parser.addSubOption(section, identifier, option, value)
+        self.parser.add_suboption(section, identifier, option, value)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -691,9 +691,9 @@ class XorgParserTestCase(unittest.TestCase):
                         found = True
                 self.failUnless(found == True, 'Option not added to all the Subsections')
         
-    def testAddSubOption2(self):
+    def test_add_suboption2(self):
         '''
-        def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
+        def add_suboption(self, section, identifier, option, value, option_type=None, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -705,7 +705,7 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.make_subsection(section, identifier, position=position)
         
-        self.parser.addSubOption(section, identifier, option, value, position=position)
+        self.parser.add_suboption(section, identifier, option, value, position=position)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -719,9 +719,9 @@ class XorgParserTestCase(unittest.TestCase):
                         found = True
                 self.failUnless(found == True, 'Option not added to the Subsection')
         
-    def testAddSubOption3(self):
+    def test_add_suboption3(self):
         '''
-        def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
+        def add_suboption(self, section, identifier, option, value, option_type=None, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -736,7 +736,7 @@ class XorgParserTestCase(unittest.TestCase):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.make_subsection(section, identifier)
         
-        self.parser.addSubOption(section, identifier, option, value, option_type=option_type)
+        self.parser.add_suboption(section, identifier, option, value, option_type=option_type)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -768,7 +768,7 @@ class XorgParserTestCase(unittest.TestCase):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.make_subsection(section, identifier)
         
-        self.parser.addSubOption(section, identifier, option, value, option_type=option_type)
+        self.parser.add_suboption(section, identifier, option, value, option_type=option_type)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -812,7 +812,7 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.make_subsection(section, identifier, position=position)
         
-        self.parser.addSubOption(section, identifier, option, value, position=position)
+        self.parser.add_suboption(section, identifier, option, value, position=position)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -915,7 +915,7 @@ class XorgParserTestCase(unittest.TestCase):
         option_type = 'Option'
         
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.addSubOption(section, identifier, option, value,
+        self.parser.add_suboption(section, identifier, option, value,
                                  option_type=option_type, position=position)
         
         sect = section

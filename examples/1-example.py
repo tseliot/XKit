@@ -106,9 +106,9 @@ def main():
     '''
     Add an option to the Display subsection of the 1st Screen section
     '''
-    a.addSubOption('Screen', 'Display', 'Depth', value='24', position=0, prefix='')
-    a.addSubOption('Screen', 'Display', 'Virtual', value='1600 1200', position=0)
-    a.addSubOption('Screen', 'Display', 'Name', value='Whatever', option_type='Option', position=None)
+    a.add_suboption('Screen', 'Display', 'Depth', value='24', position=0, prefix='')
+    a.add_suboption('Screen', 'Display', 'Virtual', value='1600 1200', position=0)
+    a.add_suboption('Screen', 'Display', 'Name', value='Whatever', option_type='Option', position=None)
     
     '''
     Remove options from the Display subsection of all or of the 1st Screen section

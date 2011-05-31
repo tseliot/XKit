@@ -1113,7 +1113,7 @@ class Parser(object):
         for item in to_remove:
             del self._gdict[self.subsection][item]
     
-    def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
+    def add_suboption(self, section, identifier, option, value, option_type=None, position=None):
         '''Add an option to one or more subsections.
         
         section= the section which contains the subsection
@@ -1188,7 +1188,7 @@ class Parser(object):
     def _get_suboptions_to_blacklist(self, section, identifier, option, position=None):
         '''Get a dictionay of the suboptions to blacklist.
         
-        See addSubOption() for an explanation on the arguments.
+        See add_suboption() for an explanation on the arguments.
         
         Used in both remove_option() and removeSubOption()
         '''
