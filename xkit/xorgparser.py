@@ -1030,9 +1030,10 @@ class Parser(object):
         section= the section to which the subsection will belong
         identifier= the name of the subsection
         position= the position of the section in the dictionary with the
-             sections (e.g. the 1st "Screen" section would be 0). If set to
-             None it will create a new subsection in all the instances of
-             the said section (e.g. in all the "Screen" sections)'''
+                  sections (e.g. the 1st "Screen" section would be 0).
+                  If set to None, it will create a new subsection in all
+                  the instances of the said section (e.g. in all the
+                  "Screen" sections)'''
         
         curlength = len(self._gdict[self.subsection])
         
@@ -1042,35 +1043,43 @@ class Parser(object):
                 # and 'position' is found
                 create = True
                 for sub in self._gdict[self.subsection]:
-                    if self._gdict[self.subsection][sub].get('section') == section and \
-                    self._gdict[self.subsection][sub].get('identifier') == identifier and\
-                    self._gdict[self.subsection][sub].get('position') == elem:
+                    if (self._gdict[self.subsection][sub].get('section')  ==
+                        section and 
+                        self._gdict[self.subsection][sub].get('identifier') ==
+                        identifier and
+                        self._gdict[self.subsection][sub].get('position') ==
+                        elem):
                         create = False
                 
                 if create:
-                    self._gdict[self.subsection][curlength] = {}
-                    self._gdict[self.subsection][curlength]['section'] = section
-                    self._gdict[self.subsection][curlength]['identifier'] = identifier
-                    self._gdict[self.subsection][curlength]['options'] = []
-                    self._gdict[self.subsection][curlength]['position'] = elem
+                    temp_dict = self._gdict[self.subsection][curlength] = {}
+                    temp_dict['section'] = section
+                    temp_dict['identifier'] = identifier
+                    temp_dict['options'] = []
+                    temp_dict['position'] = elem
+                    del temp_dict
                     curlength += 1
         else:
             # don't create a new subsection if one with the same 'section', 'identifier'
             # and 'position' is found
             create = True
             for sub in self._gdict[self.subsection]:
-                if self._gdict[self.subsection][sub].get('section') == section and \
-                self._gdict[self.subsection][sub].get('identifier') == identifier and\
-                self._gdict[self.subsection][sub].get('position') == position:
+                if (self._gdict[self.subsection][sub].get('section') ==
+                    section and
+                    self._gdict[self.subsection][sub].get('identifier') ==
+                    identifier and
+                    self._gdict[self.subsection][sub].get('position') ==
+                    position):
                     create = False
             
             if create:
-                self._gdict[self.subsection][curlength] = {}
-                self._gdict[self.subsection][curlength]['section'] = section
-                self._gdict[self.subsection][curlength]['identifier'] = identifier
-                self._gdict[self.subsection][curlength]['options'] = []
-                self._gdict[self.subsection][curlength]['position'] = position
-    
+                temp_dict = self._gdict[self.subsection][curlength] = {}
+                temp_dict['section'] = section
+                temp_dict['identifier'] = identifier
+                temp_dict['options'] = []
+                temp_dict['position'] = position
+                del temp_dict
+
     def removeSubSection(self, section, identifier, position=None):
         '''Remove a subsection from one or more sections.
         
