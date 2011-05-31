@@ -113,8 +113,8 @@ def main():
     '''
     Remove options from the Display subsection of all or of the 1st Screen section
     '''
-    a.removeSubOption('Screen', 'Display', 'Depth')
-    a.removeSubOption('Screen', 'Martin', 'Virtual', position=0)
+    a.remove_suboption('Screen', 'Display', 'Depth')
+    a.remove_suboption('Screen', 'Martin', 'Virtual', position=0)
     
     
     '''

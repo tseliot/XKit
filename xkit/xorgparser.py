@@ -1135,9 +1135,9 @@ class Parser(object):
         not_to_create = []
         to_modify = []
         if position == None:
-            self.removeSubOption(section, identifier, option)
+            self.remove_suboption(section, identifier, option)
         else:
-            self.removeSubOption(section, identifier, option,
+            self.remove_suboption(section, identifier, option,
                                  position=position)
         if option_type == None:
             toadd = '\t' + option + '\t' + str(value) + '\n'
@@ -1201,7 +1201,7 @@ class Parser(object):
         
         See add_suboption() for an explanation on the arguments.
         
-        Used in both remove_option() and removeSubOption()'''
+        Used in both remove_option() and remove_suboption()'''
         to_remove = {}
         if len(self._gdict[section]) != 0:#if the section exists
             if len(self._gdict[self.subsection]) != 0:
@@ -1230,7 +1230,7 @@ class Parser(object):
         return to_remove
 
 
-    def removeSubOption(self, section, identifier, option, position=None):
+    def remove_suboption(self, section, identifier, option, position=None):
         '''Remove an option from a subsection.'''
         
         to_remove = self._get_suboptions_to_blacklist(section, identifier, option, position)

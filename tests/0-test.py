@@ -751,9 +751,9 @@ class XorgParserTestCase(unittest.TestCase):
                 self.failUnless(found == True, 'Option not added to all the Subsections')
     
     
-    def testRemoveSubOption1(self):
+    def test_remove_suboption1(self):
         '''
-        def removeSubOption(self, section, identifier, option, position=None):
+        def remove_suboption(self, section, identifier, option, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -783,7 +783,7 @@ class XorgParserTestCase(unittest.TestCase):
         
         #self.parser.writeFile(sys.stderr)
         
-        self.parser.removeSubOption(section, identifier, option)
+        self.parser.remove_suboption(section, identifier, option)
         
         #self.parser.writeFile(sys.stderr)
         
@@ -798,9 +798,9 @@ class XorgParserTestCase(unittest.TestCase):
                         found = True
                 self.failUnless(found == False, 'Option not removed from all the Subsections')
 
-    def testRemoveSubOption2(self):
+    def test_remove_suboption2(self):
         '''
-        def removeSubOption(self, section, identifier, option, position=None):
+        def remove_suboption(self, section, identifier, option, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -826,7 +826,7 @@ class XorgParserTestCase(unittest.TestCase):
                         found = True
                 self.failUnless(found == True, 'Option not added to the Subsection')
         
-        self.parser.removeSubOption(section, identifier, option, position=position)
+        self.parser.remove_suboption(section, identifier, option, position=position)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
