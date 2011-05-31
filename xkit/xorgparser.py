@@ -401,7 +401,7 @@ class Parser(object):
         # 
         # There would be no Device section which has "My Device" as an
         # identifier
-        broken = self.getBrokenReferences()
+        broken = self.get_broken_references()
         
         it = 0
         for section in broken:
@@ -1592,7 +1592,7 @@ class Parser(object):
                 pass
         raise IdentifierException(error_msg)
     
-    def getBrokenReferences(self):
+    def get_broken_references(self):
         '''Look for broken references (i.e. references to sections which don't exist)
         and return a dictionary having the items of self.require_id as keys and
         a dictionary of the identifiers of the sections which are referred to by the

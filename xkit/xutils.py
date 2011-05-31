@@ -34,7 +34,7 @@ class XUtils(Parser):
         Gathers information on one or more sections and try to fix 
         broken references to other sections.
         '''
-        brokenReferences = self.getBrokenReferences()
+        brokenReferences = self.get_broken_references()
         for section in brokenReferences:
             for reference in brokenReferences[section]:
                 self.make_section(section, identifier=reference)
