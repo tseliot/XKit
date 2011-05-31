@@ -428,7 +428,7 @@ class Parser(object):
         # section
         if len(self._gdict['ServerLayout']) > 0:
             for section in self._gdict['ServerLayout']:
-                screenReferences = self.getReferences('ServerLayout', section, reflist=['Screen'])
+                screenReferences = self.get_references('ServerLayout', section, reflist=['Screen'])
                 if len(screenReferences['Screen']) == 0:
                     error = 'The ServerLayout section must have at least 1 reference to a "Screen" section.'
                     raise ParseException(error)
@@ -965,7 +965,7 @@ class Parser(object):
         
         self.remove_option(section, reference, value=identifier, position=position, reference=True)
     
-    def getReferences(self, section, position, reflist=None):
+    def get_references(self, section, position, reflist=None):
         '''Get the references to other sections which are located in a section.
         
         section= the section (e.g. "Screen")
@@ -1413,7 +1413,7 @@ class Parser(object):
                 option= the option
                 position= e.g. 0 (i.e. the first element in the list of Screen
                           sections)
-                reference= used only by getReferences()
+                reference= used only by get_references()
             
             * When dealing with a SubSection:
                 section= 'SubSection' (this is mandatory)
@@ -1563,7 +1563,7 @@ class Parser(object):
             referencesTree[section] = {}
             brokenReferences[section] = {}
             for sect in self._gdict[section]:
-                referencesTree[section][sect] = self.getReferences(section, sect)
+                referencesTree[section][sect] = self.get_references(section, sect)
         #print >> stderr, 'REFERENCES = %s' % (str(referencesTree))
         for section in referencesTree:
             for elem in referencesTree[section]:

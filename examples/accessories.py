@@ -29,8 +29,8 @@ class Accessories(XUtils):
         for section in ['Screen', 'ServerLayout']:
             self.referencesTree[section] = {}
             for sect in self.globaldict[section]:
-                self.referencesTree[section][sect] = self.getReferences(section, sect)
-                print(sect, 'Section - references:', self.getReferences(section, sect))
+                self.referencesTree[section][sect] = self.get_references(section, sect)
+                print(sect, 'Section - references:', self.get_references(section, sect))
         for section in self.referencesTree:
             for elem in self.referencesTree[section]:
                 #print 'ELEMENT', elem

@@ -86,7 +86,7 @@ class XUtils(Parser):
         Return a list of references to the relevant Device sections
         '''
         devicesToCheck = []
-        references = self.getReferences('ServerLayout', position, ['Screen'])
+        references = self.get_references('ServerLayout', position, ['Screen'])
         if len(references['Screen']) > 0:
             '''
             Check all the device sections related to these Screen sections
@@ -102,7 +102,7 @@ class XUtils(Parser):
                 get references to the Device sections in the Screen sections
                 '''
                 try:
-                    deviceReferences = self.getReferences('Screen', screenPosition, ['Device'])
+                    deviceReferences = self.get_references('Screen', screenPosition, ['Device'])
                     for device in deviceReferences['Device']:
                         devicePosition = self.getPosition('Device', device)#device[1]
                         devicesToCheck.append(devicePosition)
@@ -182,7 +182,7 @@ class XUtils(Parser):
         relationships = {}
         it = 0
         for screen in self.globaldict['Screen']:
-            references = self.getReferences('Screen', it, reflist=['Device'])
+            references = self.get_references('Screen', it, reflist=['Device'])
             device = references['Device'][0]
             device = self.getPosition('Device', device)
             relationships.setdefault(device)

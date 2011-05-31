@@ -149,7 +149,7 @@ def main():
     a.add_reference('Screen', 'Device', 'My Device', position=0)
     
     a.add_reference('Device', 'Screen', 4, position=0)
-    print(a.getReferences('Screen', 0, reflist=['Device']))
+    print(a.get_references('Screen', 0, reflist=['Device']))
     a.enableComposite()
     a.addArgbGlxVisuals(0)
     

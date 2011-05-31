@@ -532,9 +532,9 @@ class XorgParserTestCase(unittest.TestCase):
         self.failUnless(found == False, 'Reference not removed!')
     
     
-    def testGetReferences1(self):
+    def test_get_references1(self):
         '''
-        def getReferences(self, section, position, reflist=None):
+        def get_references(self, section, position, reflist=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section='Screen'
@@ -548,12 +548,12 @@ class XorgParserTestCase(unittest.TestCase):
         #if len(self.parser.globaldict[section].setdefault(position, [])) == 0:
         self.parser.add_reference(section, reference, identifier, position=screen)
             
-        references = self.parser.getReferences(section, screen, reflist=None)
+        references = self.parser.get_references(section, screen, reflist=None)
         self.failUnless(len(references) > 0, 'No list of References can be retrieved!')
     
-    def testGetReferences2(self):
+    def test_get_references2(self):
         '''
-        def getReferences(self, section, position, reflist=None):
+        def get_references(self, section, position, reflist=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section='Screen'
@@ -563,7 +563,7 @@ class XorgParserTestCase(unittest.TestCase):
         reflist=['Device']
         if len(self.parser.globaldict[section].setdefault(position, [])) == 0:
             self.parser.add_reference(section, reference, identifier, position=position)
-        references = self.parser.getReferences(section, position, reflist=reflist)
+        references = self.parser.get_references(section, position, reflist=reflist)
         self.failUnless(len(references) > 0, 'No list of References can be retrieved!')
     
     def testMakeSubSection1(self):
@@ -849,7 +849,7 @@ class XorgParserTestCase(unittest.TestCase):
                 option= the option
                 position= e.g. 0 (i.e. the first element in the list of Screen
                           sections)
-                reference= used only by getReferences()
+                reference= used only by get_references()
             
             * When dealing with a SubSection:
                 section= 'SubSection' (this is mandatory)
