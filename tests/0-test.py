@@ -482,9 +482,9 @@ class XorgParserTestCase(unittest.TestCase):
                 #print line
         self.failUnless(found == True, 'Reference not added!')
     
-    def testRemoveReference1(self):
+    def test_remove_reference1(self):
         '''
-        def removeReference(self, section, reference, identifier, position=None):
+        def remove_reference(self, section, reference, identifier, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section='ServerLayout'
@@ -496,7 +496,7 @@ class XorgParserTestCase(unittest.TestCase):
             position = self.parser.make_section(section, identifier='Default layout')
         
         self.parser.add_reference(section, reference, identifier, position=None)
-        self.parser.removeReference(section, reference, identifier, position=None)
+        self.parser.remove_reference(section, reference, identifier, position=None)
         
         found = False
         for pos in self.parser.globaldict[section]:
@@ -507,9 +507,9 @@ class XorgParserTestCase(unittest.TestCase):
                     #print line
             self.failUnless(found == False, 'Reference not removed!')
     
-    def testRemoveReference2(self):
+    def test_remove_reference2(self):
         '''
-        def removeReference(self, section, reference, identifier, position=None):
+        def remove_reference(self, section, reference, identifier, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section='ServerLayout'
@@ -521,7 +521,7 @@ class XorgParserTestCase(unittest.TestCase):
             position = self.parser.make_section(section, identifier='Default layout')
         
         self.parser.add_reference(section, reference, identifier, position=position)
-        self.parser.removeReference(section, reference, identifier, position=position)
+        self.parser.remove_reference(section, reference, identifier, position=position)
         
         found = False
         lines = self.parser.globaldict[section][position]

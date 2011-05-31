@@ -948,7 +948,7 @@ class Parser(object):
         self.add_option(section, reference, value=identifier,
                         position=position, reference=True)
         
-    def removeReference(self, section, reference, identifier, position=None):
+    def remove_reference(self, section, reference, identifier, position=None):
         '''Remove a reference to a section from another section.
         
         For example:

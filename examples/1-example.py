@@ -92,7 +92,7 @@ def main():
     Remove a reference to the Screen section identified as "New Default Screen"
     from all the ServerLayout sections
     '''
-    a.removeReference('ServerLayout', 'Screen', 'New Default Screen')#, position=0)
+    a.remove_reference('ServerLayout', 'Screen', 'New Default Screen')#, position=0)
     
     '''
     Create a new "Display" SubSection inside all the Screen sections

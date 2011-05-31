@@ -82,7 +82,7 @@ def main():
     print('\nNew Default Screen in progress')
     a.add_reference('ServerLayout', 'Screen', 'New Default Screen', position=0)
     a.add_reference('ServerLayout', 'InputDevice', 'New Device', position=0)
-    a.removeReference('ServerLayout', 'InputDevice', 'New Device', position=0)
+    a.remove_reference('ServerLayout', 'InputDevice', 'New Device', position=0)
     '''
     Add a reference to the Screen section identified as "New Default Screen" to
     all the ServerLayout sections
@@ -93,7 +93,7 @@ def main():
     Remove a reference to the Screen section identified as "New Default Screen"
     from all the ServerLayout sections
     '''
-    #a.removeReference('ServerLayout', 'Screen', 'New Default Screen')#, position=0)
+    #a.remove_reference('ServerLayout', 'Screen', 'New Default Screen')#, position=0)
     
     '''
     Create a new "Display" SubSection inside all the Screen sections
