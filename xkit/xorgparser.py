@@ -996,7 +996,7 @@ class Parser(object):
         references = {}.fromkeys(options)
         for option in options:
             references[option] = []
-            referenceDict = {}
+            reference_dict = {}
             try:
                 ref = self.getValue(section, option, position, reference=True)
             except OptionException:
@@ -1012,14 +1012,14 @@ class Parser(object):
                             del elem[-1]
                             for extref in elem:
                                 if elem:
-                                    referenceDict.setdefault(extref)
+                                    reference_dict.setdefault(extref)
                         except AttributeError:# if ref is a string
                             if elem:
-                                referenceDict.setdefault(elem)
+                                reference_dict.setdefault(elem)
                 except AttributeError:# if ref is a string
                     if ref:
-                        referenceDict.setdefault(ref)
-                for reference in list(referenceDict.keys()):
+                        reference_dict.setdefault(ref)
+                for reference in list(reference_dict.keys()):
                     references[option].append(reference)
         return references
     
