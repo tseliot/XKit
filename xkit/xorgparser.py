@@ -356,7 +356,8 @@ class Parser(object):
 #        same Device section.
 #        '''
 #        if len(self.check_duplicate_options()) > 0:
-#            error = 'There cannot be Duplicate Options:\n%s' % (str(self.check_duplicate_options()))
+#            error = ('There cannot be Duplicate Options:\n%s' %
+#                     (str(self.check_duplicate_options())))
 #            raise ParseException(error)
             
         
@@ -398,7 +399,8 @@ class Parser(object):
         #     Device "My Device"
         # EndSection
         # 
-        # There would be no Device section which has "My Device" as an identifier
+        # There would be no Device section which has "My Device" as an
+        # identifier
         broken = self.getBrokenReferences()
         
         it = 0
@@ -421,28 +423,33 @@ class Parser(object):
         #      ignored and won't appear in the target file.
         for section in self.require_id:
             if len(self._gdict[section]) != len(self.identifiers[section]):
-                error = 'Not all the sections which require an identifier have an identifier.'
+                error = ('Not all the sections which require an identifier '
+                         'have an identifier.')
                 raise ParseException(error)
         
-        # The ServerLayout section must have at least 1 reference to a "Screen"
-        # section
+        # The ServerLayout section must have at least 1 reference to a
+        # "Screen" section
         if len(self._gdict['ServerLayout']) > 0:
             for section in self._gdict['ServerLayout']:
-                screenReferences = self.get_references('ServerLayout', section, reflist=['Screen'])
-                if len(screenReferences['Screen']) == 0:
-                    error = 'The ServerLayout section must have at least 1 reference to a "Screen" section.'
+                screen_references = self.get_references('ServerLayout',
+                                                        section,
+                                                        reflist=['Screen'])
+                if len(screen_references['Screen']) == 0:
+                    error = ('The ServerLayout section must have at '
+                             'least 1 reference to a "Screen" section.')
                     raise ParseException(error)
             
         
         # No more than one default ServerLayout can be specified in the
         # ServerFlags section
-        defaultLayout = self.getDefaultServerLayout()
-        if len(defaultLayout) > 0:
-            if len(defaultLayout) > 1:
-                error = 'No more than one default ServerLayout can be specified in the ServerFlags section.'
+        default_layout = self.getDefaultServerLayout()
+        if len(default_layout) > 0:
+            if len(default_layout) > 1:
+                error = ('No more than one default ServerLayout can be '
+                         'specified in the ServerFlags section.')
                 raise ParseException(error)
             
-            if not self.isSection('ServerLayout', position=defaultLayout[0]):
+            if not self.isSection('ServerLayout', position=default_layout[0]):
                 error = 'The default ServerLayout does not exist'
                 raise ParseException(error)
         
