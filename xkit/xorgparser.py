@@ -1024,7 +1024,7 @@ class Parser(object):
                     references[option].append(reference)
         return references
     
-    def makeSubSection(self, section, identifier, position=None):
+    def make_subsection(self, section, identifier, position=None):
         '''Create a new subsection inside of a section.
         
         section= the section to which the subsection will belong
@@ -1147,7 +1147,7 @@ class Parser(object):
                 it += 1
             for i in range(cursectlength+1):
                 if i not in donotcreate:
-                    self.makeSubSection(section, identifier, position=i)
+                    self.make_subsection(section, identifier, position=i)
 
             for elem in self._gdict[self.subsection]:
                 if self._gdict[self.subsection][elem].get("identifier") == identifier and \

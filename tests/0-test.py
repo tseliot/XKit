@@ -566,9 +566,9 @@ class XorgParserTestCase(unittest.TestCase):
         references = self.parser.get_references(section, position, reflist=reflist)
         self.failUnless(len(references) > 0, 'No list of References can be retrieved!')
     
-    def testMakeSubSection1(self):
+    def test_make_subsection1(self):
         '''
-        def makeSubSection(self, section, identifier, position=None):
+        def make_subsection(self, section, identifier, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -576,7 +576,7 @@ class XorgParserTestCase(unittest.TestCase):
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
-        self.parser.makeSubSection(section, identifier)
+        self.parser.make_subsection(section, identifier)
         '''
         self.globaldict['SubSection'] =
                     {0: {'section': 'Screen', 'identifier': 'Display', 
@@ -594,16 +594,16 @@ class XorgParserTestCase(unittest.TestCase):
         #print 'found =', found, '; times =', times
         self.failUnless(found >= times, 'The subsections were not created!')
     
-    def testMakeSubSection2(self):
+    def test_make_subsection2(self):
         '''
-        def makeSubSection(self, section, identifier, position=None):
+        def make_subsection(self, section, identifier, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
         position = 0
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.makeSubSection(section, identifier, position=position)
+        self.parser.make_subsection(section, identifier, position=position)
         '''
         self.globaldict['SubSection'] =
                     {0: {'section': 'Screen', 'identifier': 'Display', 
@@ -631,7 +631,7 @@ class XorgParserTestCase(unittest.TestCase):
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
-            self.parser.makeSubSection(section, identifier, position=pos)
+            self.parser.make_subsection(section, identifier, position=pos)
         
         self.parser.removeSubSection(section, identifier)
         
@@ -650,7 +650,7 @@ class XorgParserTestCase(unittest.TestCase):
         identifier = 'XKitDisplay'
         position = 0
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.makeSubSection(section, identifier, position=position)
+        self.parser.make_subsection(section, identifier, position=position)
         self.parser.removeSubSection(section, identifier, position=position)
         
         for pos in self.parser.globaldict['SubSection']:
@@ -676,7 +676,7 @@ class XorgParserTestCase(unittest.TestCase):
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
-        self.parser.makeSubSection(section, identifier)
+        self.parser.make_subsection(section, identifier)
         
         self.parser.addSubOption(section, identifier, option, value)
         
@@ -703,7 +703,7 @@ class XorgParserTestCase(unittest.TestCase):
         value = '2048 2048'
         
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.makeSubSection(section, identifier, position=position)
+        self.parser.make_subsection(section, identifier, position=position)
         
         self.parser.addSubOption(section, identifier, option, value, position=position)
         
@@ -734,7 +734,7 @@ class XorgParserTestCase(unittest.TestCase):
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
-        self.parser.makeSubSection(section, identifier)
+        self.parser.make_subsection(section, identifier)
         
         self.parser.addSubOption(section, identifier, option, value, option_type=option_type)
         
@@ -766,7 +766,7 @@ class XorgParserTestCase(unittest.TestCase):
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
-        self.parser.makeSubSection(section, identifier)
+        self.parser.make_subsection(section, identifier)
         
         self.parser.addSubOption(section, identifier, option, value, option_type=option_type)
         
@@ -810,7 +810,7 @@ class XorgParserTestCase(unittest.TestCase):
         value = '2048 2048'
         
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.makeSubSection(section, identifier, position=position)
+        self.parser.make_subsection(section, identifier, position=position)
         
         self.parser.addSubOption(section, identifier, option, value, position=position)
         

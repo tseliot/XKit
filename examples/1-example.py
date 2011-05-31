@@ -97,7 +97,7 @@ def main():
     '''
     Create a new "Display" SubSection inside all the Screen sections
     '''
-    a.makeSubSection('Screen', 'Display')#, position=0)
+    a.make_subsection('Screen', 'Display')#, position=0)
     '''
     Remove a "Display" SubSection inside all the Screen sections
     '''
