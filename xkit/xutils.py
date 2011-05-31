@@ -140,7 +140,7 @@ class XUtils(Parser):
                     '''
                     
                     #See if it has a default ServerLayout
-                    default = self.getDefaultServerLayout()
+                    default = self.get_default_serverlayout()
                     
                     if len(default) == 1:
                         devicesToCheck = self.getDevicesFromServerLayout(default[0])

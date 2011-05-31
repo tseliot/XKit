@@ -442,7 +442,7 @@ class Parser(object):
         
         # No more than one default ServerLayout can be specified in the
         # ServerFlags section
-        default_layout = self.getDefaultServerLayout()
+        default_layout = self.get_default_serverlayout()
         if len(default_layout) > 0:
             if len(default_layout) > 1:
                 error = ('No more than one default ServerLayout can be '
@@ -1639,7 +1639,7 @@ class Parser(object):
         return broken_references
 
 
-    def getDefaultServerLayout(self):
+    def get_default_serverlayout(self):
         '''See if one or more ServerLayout sections are set as default and return their
         position in a list
         
