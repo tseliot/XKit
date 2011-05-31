@@ -165,7 +165,7 @@ def main():
     Get the position of the Device section identified as 'Configured Video Device'
     '''
     try:
-        print('Position of "Configured Video Device" =', a.getPosition('Device', 'Configured Video Device'))
+        print('Position of "Configured Video Device" =', a.get_position('Device', 'Configured Video Device'))
     except IdentifierException as e:
         print(e)
     '''

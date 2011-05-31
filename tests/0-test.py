@@ -1673,22 +1673,22 @@ EndSection
         self.assertRaises(ParseException,
                       xorgparser.Parser, tempFile)
 
-    def testGetPosition1(self):
+    def test_get_position1(self):
         '''
-        def getPosition(self, section, identifier):
+        def get_position(self, section, identifier):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
         position1 = self.parser.make_section(section, identifier)
-        position2 = self.parser.getPosition(section, identifier)
+        position2 = self.parser.get_position(section, identifier)
         
         self.failUnless(position1 == position2, 
                         'The position was not correctly retrieved')
 
-    def testGetPosition2(self):
+    def test_get_position2(self):
         '''
-        def getPosition(self, section, identifier):
+        def get_position(self, section, identifier):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         confFile = open(tempFile, 'w')
@@ -1704,7 +1704,7 @@ EndSection
         confFile.close() 
         self.parser = xorgparser.Parser(tempFile)
         self.assertRaises(IdentifierException,
-                      self.parser.getPosition, 'Screen', 'Default')
+                      self.parser.get_position, 'Screen', 'Default')
     
     def testWriteFile1(self):
         '''

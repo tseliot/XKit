@@ -95,7 +95,7 @@ class XUtils(Parser):
             '''
             for reference in references['Screen']:
                 try:
-                    screenPosition = self.getPosition('Screen', reference)#reference[1]
+                    screenPosition = self.get_position('Screen', reference)#reference[1]
                 except IdentifierException:
                     continue
                 '''
@@ -104,7 +104,7 @@ class XUtils(Parser):
                 try:
                     deviceReferences = self.get_references('Screen', screenPosition, ['Device'])
                     for device in deviceReferences['Device']:
-                        devicePosition = self.getPosition('Device', device)#device[1]
+                        devicePosition = self.get_position('Device', device)#device[1]
                         devicesToCheck.append(devicePosition)
                 except OptionException:#no references to the Device section
                     pass
@@ -184,7 +184,7 @@ class XUtils(Parser):
         for screen in self.globaldict['Screen']:
             references = self.get_references('Screen', it, reflist=['Device'])
             device = references['Device'][0]
-            device = self.getPosition('Device', device)
+            device = self.get_position('Device', device)
             relationships.setdefault(device)
             relationships[device] = {}
             relationships[device]['Screen'] = it

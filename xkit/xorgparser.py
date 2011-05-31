@@ -878,7 +878,7 @@ class Parser(object):
         to_remove = {}
         if identifier:
             try:
-                pos = self.getPosition(section, identifier)
+                pos = self.get_position(section, identifier)
                 to_remove.setdefault(pos, None)
             except IdentifierException:
                 pass
@@ -1568,7 +1568,7 @@ class Parser(object):
         
         if identifier != None:
             try:
-                self.getPosition(section, identifier)
+                self.get_position(section, identifier)
                 return True
             except IdentifierException:
                 return False
@@ -1579,7 +1579,7 @@ class Parser(object):
             error_msg = 'Either identifier or position must be provided'
             raise Exception(error_msg)
     
-    def getPosition(self, section, identifier):
+    def get_position(self, section, identifier):
         '''Get the position of a specific section from its identifier.'''
         
         error_msg = 'No %s section named "%s" can be found' %(section, identifier)
@@ -1839,7 +1839,7 @@ class Parser(object):
         to_remove = {}
         if identifier:
             try:
-                pos = self.getPosition(section, identifier)
+                pos = self.get_position(section, identifier)
                 to_remove.setdefault(pos, None)
             except IdentifierException:
                 pass
