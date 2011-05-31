@@ -116,13 +116,20 @@ class Parser(object):
         self.identifiers = {}.fromkeys(self.require_id)
         
         self.comments = []
-        self.globaldict = {}.fromkeys(self.sections, 0)
-        for elem in self.globaldict:
-            self.globaldict[elem] = {}
+        self._gdict = {}.fromkeys(self.sections, 0)
+        for elem in self._gdict:
+            self._gdict[elem] = {}
         
         self._check_sanity()
         
-        
+    def _get_global(self):
+        return self._gdict
+
+    def _set_global(self, global_dict):
+        self._gdict = global_dict
+
+    # Property to expose _gdict as globaldict
+    globaldict = property(_get_global, _set_global)
             
     def _check_sanity(self):
         '''Perform a sanity check of the file and fill self.globaldict with
@@ -191,8 +198,8 @@ class Parser(object):
                 else:#has_section == True
                     section_pos = global_iters[section_flag]
                     if has_subsection == False:
-                        self.globaldict[self.commentsection].setdefault(section_flag, {})
-                        temp_dict = self.globaldict[self.commentsection][section_flag]
+                        self._gdict[self.commentsection].setdefault(section_flag, {})
+                        temp_dict = self._gdict[self.commentsection][section_flag]
                         temp_dict.setdefault(section_pos, {})
                         temp_dict[section_pos].setdefault('identifier', None)
                         temp_dict[section_pos].setdefault('position', section_pos)
@@ -201,8 +208,8 @@ class Parser(object):
                         temp_dict[section_pos]['options'].append(line.strip())
                     else:#has_subsection == True
                         curlength = global_iters[self.subsection]
-                        self.globaldict[self.commentsection].setdefault(self.subsection, {})
-                        temp_dict = self.globaldict[self.commentsection][self.subsection]
+                        self._gdict[self.commentsection].setdefault(self.subsection, {})
+                        temp_dict = self._gdict[self.commentsection][self.subsection]
                         temp_dict.setdefault(curlength, {})
                         temp_dict[curlength].setdefault('identifier', subsection_id)
                         temp_dict[curlength].setdefault('position', section_pos)
@@ -258,19 +265,19 @@ class Parser(object):
                     subsection_id = line[line.find('"') + 1:
                                          line.rfind('"')].strip()
                     
-                    self.globaldict.setdefault(self.subsection, {})
+                    self._gdict.setdefault(self.subsection, {})
                     curlength = global_iters[self.subsection]
-                    self.globaldict[self.subsection][curlength] = {}
-                    '''self.globaldict - keys:
+                    self._gdict[self.subsection][curlength] = {}
+                    # self._gdict - keys:
+                    #
+                    # section =  the section in which the subsection is
+                    #            located (e.g. "Screen")
+                    # position = e.g. in key 0 of the
+                    #            self._gdict['Screen']
+                    # identifier = e.g. 'Display' (in SubSection "Display")
+                    # options = a list of lines with the options 
                     
-                    section =  the section in which the subsection is
-                                located (e.g. "Screen")
-                    position = e.g. in key 0 of the 
-                                self.globaldict['Screen']
-                    identifier = e.g. 'Display' (in SubSection "Display")
-                    options = a list of lines with the options'''
-                    
-                    temp_dict = self.globaldict[self.subsection][curlength]
+                    temp_dict = self._gdict[self.subsection][curlength]
                     temp_dict['section'] = section_flag
                     try:
                         temp_dict['position'] = global_iters[section_flag]
@@ -304,20 +311,18 @@ class Parser(object):
                     if line.strip() != '':
                         #options
                         if has_subsection == True:
-                            '''
-                            section =  the section in which the subsection is
-                                       located (e.g. "Screen")
-                            position = e.g. in key 0 of the 
-                                       self.globaldict['Screen']
-                            identifier = e.g. 'Display' (in SubSection
-                                                         "Display")
-                            options = a list of lines with the options
-                            '''
-                            self.globaldict[self.subsection][curlength]['options'].append('\t' + line.strip() + '\n')
+                            # section =  the section in which the subsection is
+                            #            located (e.g. "Screen")
+                            # position = e.g. in key 0 of the
+                            #            self._gdict['Screen']
+                            # identifier = e.g. 'Display' (in SubSection
+                            #                             "Display")
+                            # options = a list of lines with the options
+                            self._gdict[self.subsection][curlength]['options'].append('\t' + line.strip() + '\n')
                         else:
-                            self.globaldict.setdefault(section_flag, {})
+                            self._gdict.setdefault(section_flag, {})
                             curlength = global_iters[section_flag]
-                            self.globaldict[section_flag].setdefault(curlength, []).append('\t' + line.strip() + '\n')
+                            self._gdict[section_flag].setdefault(curlength, []).append('\t' + line.strip() + '\n')
             it += 1
         
         if not empty:
@@ -415,14 +420,14 @@ class Parser(object):
         #      cause any problem since they will be completely
         #      ignored and won't appear in the target file.
         for section in self.require_id:
-            if len(self.globaldict[section]) != len(self.identifiers[section]):
+            if len(self._gdict[section]) != len(self.identifiers[section]):
                 error = 'Not all the sections which require an identifier have an identifier.'
                 raise ParseException(error)
         
         # The ServerLayout section must have at least 1 reference to a "Screen"
         # section
-        if len(self.globaldict['ServerLayout']) > 0:
-            for section in self.globaldict['ServerLayout']:
+        if len(self._gdict['ServerLayout']) > 0:
+            for section in self._gdict['ServerLayout']:
                 screenReferences = self.getReferences('ServerLayout', section, reflist=['Screen'])
                 if len(screenReferences['Screen']) == 0:
                     error = 'The ServerLayout section must have at least 1 reference to a "Screen" section.'
@@ -471,7 +476,7 @@ class Parser(object):
         for sect in self.require_id:#identifiers.keys():
             self.identifiers[sect] = []
             it = 0
-            for elem in self.globaldict[sect]:
+            for elem in self._gdict[sect]:
                 try:
                     identifier = self.getValue(sect, 'Identifier', it)
                 except (OptionException, SectionException):#if no identifier can be found
@@ -495,11 +500,11 @@ class Parser(object):
         options_whitelist = ['endmode']
         for section in self.sections:
             if section not in sections_whitelist:
-                for position in self.globaldict[section]:
+                for position in self._gdict[section]:
                     if section == self.subsection:#'SubSection':
-                        options = self.globaldict[section][position]['options']
+                        options = self._gdict[section][position]['options']
                     else:
-                        options = self.globaldict[section][position]
+                        options = self._gdict[section][position]
                     
                     
                     for option in options:
@@ -527,9 +532,9 @@ class Parser(object):
         duplicates = []
         
         if section == 'SubSection':
-            options = self.globaldict[section][position]['options']
+            options = self._gdict[section][position]['options']
         else:
-            options = self.globaldict[section][position]
+            options = self._gdict[section][position]
         
         
         for option in options:
@@ -569,8 +574,8 @@ class Parser(object):
         '''Look for and return duplicate options in all sections'''
         
         duplicates = {}
-        for section in self.globaldict:
-            for elem in self.globaldict[section]:
+        for section in self._gdict:
+            for elem in self._gdict[section]:
                 duplopt = self.get_duplicate_options(section, elem)
                 if len(duplopt) > 0:
                     duplicates.setdefault(section, {}).setdefault(elem,
@@ -691,7 +696,7 @@ class Parser(object):
         refSections = ['device']
         #prefix = '"'#values are always in quotation marks
         if position != None:
-            if self.globaldict[section].get(position) == None:
+            if self._gdict[section].get(position) == None:
                 raise SectionException
             if reference:
                 # Remove an option if it has a certain assigned value. We want
@@ -724,29 +729,29 @@ class Parser(object):
             toadd = ('\t' + option_type + '\t' + '"' + option + '"' + '\t'
                      + prefix + str(value) + prefix + '\n')
                     
-        if len(self.globaldict[section]) == 0:
-            self.globaldict[section] = {}
-            self.globaldict[section][0] = []
+        if len(self._gdict[section]) == 0:
+            self._gdict[section] = {}
+            self._gdict[section][0] = []
             if section in self.require_id:
                 identifier = '\tIdentifier\t"Default ' + section + '"\n'
-                self.globaldict[section][0].append(identifier)
+                self._gdict[section][0].append(identifier)
         if position == None:
-            for elem in self.globaldict[section]:
-                self.globaldict[section][elem].append(toadd)
+            for elem in self._gdict[section]:
+                self._gdict[section][elem].append(toadd)
         else:
-            self.globaldict[section][position].append(toadd)
+            self._gdict[section][position].append(toadd)
         
     def _get_options_to_blacklist(self, section, option, value=None,
                                   position=None, reference=None):
         '''Private method shared by remove_option and CommentOutOption'''
         to_remove = {}
-        if len(self.globaldict[section]) != 0:#if the section exists
+        if len(self._gdict[section]) != 0:#if the section exists
 
             if position == None:
                 #print 'Removing', option, 'from all', section, 'sections'
-                for elem in self.globaldict[section]:
+                for elem in self._gdict[section]:
                     it = 0
-                    for line in self.globaldict[section][elem]:
+                    for line in self._gdict[section][elem]:
                         if value != None:
                             #print 'line =', line, 'option=', option, 'value',
                             # value
@@ -758,13 +763,13 @@ class Parser(object):
                                 to_remove.setdefault(elem, []).append(it)
                         it += 1
             else:
-                if self.globaldict[section].get(position) == None:
+                if self._gdict[section].get(position) == None:
                     return
                 else:
                     #print 'Removing', option, 'from', section, 'position',
                     # position
                     it = 0
-                    for line in self.globaldict[section][position]:
+                    for line in self._gdict[section][position]:
                         if value != None:
                             # Remove the option only if it has a certain value
                             # assigned. This is useful in case we want to
@@ -798,7 +803,7 @@ class Parser(object):
             modded = 0
             for line in to_remove[part]:
                 realpos = line - modded
-                del self.globaldict[section][part][realpos]
+                del self._gdict[section][part][realpos]
                 modded += 1
 
     def make_section(self, section, identifier=None):
@@ -815,7 +820,7 @@ class Parser(object):
         identifier= the identifier of a section (if the section requires
                     an identifier)'''
         
-        position  = len(self.globaldict[section])
+        position  = len(self._gdict[section])
         
         if section in self.require_id:
             if identifier != None:
@@ -823,7 +828,7 @@ class Parser(object):
                 # Don't create a new section if one of the same kind and
                 # with the same 'Identifier' is found
                 create = True
-                for sub in self.globaldict[section]:
+                for sub in self._gdict[section]:
                     if self.getValue(section, option, sub):
                         try:
                             if (self.getValue(section,
@@ -841,7 +846,7 @@ class Parser(object):
                                     break
                 
                 if create:
-                    self.globaldict[section][position] = []
+                    self._gdict[section][position] = []
                     self.add_option(section, option, value=identifier,
                                     position=position)
                     # Add to identifiers
@@ -855,7 +860,7 @@ class Parser(object):
                 raise IdentifierException(('%s Section requires an identifier'
                                            %(section)))
         else:
-            self.globaldict[section][position] = []
+            self._gdict[section][position] = []
         return position
     
     def removeSection(self, section, identifier=None, position=None):
@@ -878,7 +883,7 @@ class Parser(object):
         
         # Comment any section of "section" type
         else:
-            allkeys = list(self.globaldict[section].keys())
+            allkeys = list(self._gdict[section].keys())
             to_remove = {}.fromkeys(allkeys)
         
         # If the section has an identifier i.e. if the section
@@ -904,7 +909,7 @@ class Parser(object):
             # Remove all its SubSections from SubSection
             for sub in subsections:
                 try:#remove subsection
-                    del self.globaldict[self.subsection][sub]
+                    del self._gdict[self.subsection][sub]
                 except KeyError:
                     pass
             
@@ -912,8 +917,8 @@ class Parser(object):
             # section
             self._remove_comment_entries(section, sect)
         
-            # Remove the section from globaldict
-            del self.globaldict[section][sect]
+            # Remove the section from _gdict
+            del self._gdict[section][sect]
             
             # Remove the reference from identifiers
             # if such reference exists
@@ -1020,42 +1025,42 @@ class Parser(object):
              None it will create a new subsection in all the instances of
              the said section (e.g. in all the "Screen" sections)'''
         
-        curlength = len(self.globaldict[self.subsection])
+        curlength = len(self._gdict[self.subsection])
         
         if position == None:
-            for elem in self.globaldict[section]:
+            for elem in self._gdict[section]:
                 # don't create a new subsection if one with the same 'section', 'identifier'
                 # and 'position' is found
                 create = True
-                for sub in self.globaldict[self.subsection]:
-                    if self.globaldict[self.subsection][sub].get('section') == section and \
-                    self.globaldict[self.subsection][sub].get('identifier') == identifier and\
-                    self.globaldict[self.subsection][sub].get('position') == elem:
+                for sub in self._gdict[self.subsection]:
+                    if self._gdict[self.subsection][sub].get('section') == section and \
+                    self._gdict[self.subsection][sub].get('identifier') == identifier and\
+                    self._gdict[self.subsection][sub].get('position') == elem:
                         create = False
                 
                 if create:
-                    self.globaldict[self.subsection][curlength] = {}
-                    self.globaldict[self.subsection][curlength]['section'] = section
-                    self.globaldict[self.subsection][curlength]['identifier'] = identifier
-                    self.globaldict[self.subsection][curlength]['options'] = []
-                    self.globaldict[self.subsection][curlength]['position'] = elem
+                    self._gdict[self.subsection][curlength] = {}
+                    self._gdict[self.subsection][curlength]['section'] = section
+                    self._gdict[self.subsection][curlength]['identifier'] = identifier
+                    self._gdict[self.subsection][curlength]['options'] = []
+                    self._gdict[self.subsection][curlength]['position'] = elem
                     curlength += 1
         else:
             # don't create a new subsection if one with the same 'section', 'identifier'
             # and 'position' is found
             create = True
-            for sub in self.globaldict[self.subsection]:
-                if self.globaldict[self.subsection][sub].get('section') == section and \
-                self.globaldict[self.subsection][sub].get('identifier') == identifier and\
-                self.globaldict[self.subsection][sub].get('position') == position:
+            for sub in self._gdict[self.subsection]:
+                if self._gdict[self.subsection][sub].get('section') == section and \
+                self._gdict[self.subsection][sub].get('identifier') == identifier and\
+                self._gdict[self.subsection][sub].get('position') == position:
                     create = False
             
             if create:
-                self.globaldict[self.subsection][curlength] = {}
-                self.globaldict[self.subsection][curlength]['section'] = section
-                self.globaldict[self.subsection][curlength]['identifier'] = identifier
-                self.globaldict[self.subsection][curlength]['options'] = []
-                self.globaldict[self.subsection][curlength]['position'] = position
+                self._gdict[self.subsection][curlength] = {}
+                self._gdict[self.subsection][curlength]['section'] = section
+                self._gdict[self.subsection][curlength]['identifier'] = identifier
+                self._gdict[self.subsection][curlength]['options'] = []
+                self._gdict[self.subsection][curlength]['position'] = position
     
     def removeSubSection(self, section, identifier, position=None):
         '''Remove a subsection from one or more sections.
@@ -1067,22 +1072,22 @@ class Parser(object):
              None it will remove a subsection from all the instances of
              the said section (e.g. in all the "Screen" sections)'''
         
-        curlength = len(self.globaldict[self.subsection])
+        curlength = len(self._gdict[self.subsection])
         to_remove = []
         if position == None:
-            for elem in self.globaldict[self.subsection]:
-                if self.globaldict[self.subsection][elem].get('section') == section \
-                and self.globaldict[self.subsection][elem].get('identifier') == identifier:
+            for elem in self._gdict[self.subsection]:
+                if self._gdict[self.subsection][elem].get('section') == section \
+                and self._gdict[self.subsection][elem].get('identifier') == identifier:
                     to_remove.append(elem)
                 
         else:
-            for elem in self.globaldict[self.subsection]:
-                if self.globaldict[self.subsection][elem].get('section') == section \
-                and self.globaldict[self.subsection][elem].get('identifier') == identifier \
-                and self.globaldict[self.subsection][elem].get('position') == position:
+            for elem in self._gdict[self.subsection]:
+                if self._gdict[self.subsection][elem].get('section') == section \
+                and self._gdict[self.subsection][elem].get('identifier') == identifier \
+                and self._gdict[self.subsection][elem].get('position') == position:
                     to_remove.append(elem)
         for item in to_remove:
-            del self.globaldict[self.subsection][item]
+            del self._gdict[self.subsection][item]
     
     def addSubOption(self, section, identifier, option, value, option_type=None, position=None):
         '''Add an option to one or more subsections.
@@ -1114,46 +1119,46 @@ class Parser(object):
             toadd = '\t' + option_type + '\t' + prefix + option + prefix + '\t' \
             + prefix + str(value) + prefix + '\n'
         
-        curlength = len(self.globaldict[self.subsection])
+        curlength = len(self._gdict[self.subsection])
         if curlength == 0:
-            self.globaldict[self.subsection][0] = {'section': section,
+            self._gdict[self.subsection][0] = {'section': section,
             'identifier': identifier, 'options': []}
         
         if position == None:
             # if there is not a subsection for each selected section then
             # create it
-            cursectlength = len(self.globaldict[section])
+            cursectlength = len(self._gdict[section])
             it = 0
             while it < cursectlength:
-                for elem in self.globaldict[self.subsection]:
-                    if self.globaldict[self.subsection][elem].get("position") == it and \
-                    self.globaldict[self.subsection][elem].get("section") == section and \
-                    self.globaldict[self.subsection][elem].get("identifier") == identifier:
+                for elem in self._gdict[self.subsection]:
+                    if self._gdict[self.subsection][elem].get("position") == it and \
+                    self._gdict[self.subsection][elem].get("section") == section and \
+                    self._gdict[self.subsection][elem].get("identifier") == identifier:
                         donotcreate.append(it)
                 it += 1
             for i in range(cursectlength+1):
                 if i not in donotcreate:
                     self.makeSubSection(section, identifier, position=i)
 
-            for elem in self.globaldict[self.subsection]:
-                if self.globaldict[self.subsection][elem].get("identifier") == identifier and \
-                self.globaldict[self.subsection][elem].get("section") == section:
+            for elem in self._gdict[self.subsection]:
+                if self._gdict[self.subsection][elem].get("identifier") == identifier and \
+                self._gdict[self.subsection][elem].get("section") == section:
                     tomodify.append(elem)
                     
         else:
-            for elem in self.globaldict[self.subsection]:
-                if self.globaldict[self.subsection][elem].get("position") == position and \
-                self.globaldict[self.subsection][elem].get("identifier") == identifier:
+            for elem in self._gdict[self.subsection]:
+                if self._gdict[self.subsection][elem].get("position") == position and \
+                self._gdict[self.subsection][elem].get("identifier") == identifier:
                     tomodify.append(elem)
             if len(tomodify) == 0:
-                curlength = len(self.globaldict[self.subsection])
-                self.globaldict[self.subsection][len(self.globaldict[self.subsection])] = \
+                curlength = len(self._gdict[self.subsection])
+                self._gdict[self.subsection][len(self._gdict[self.subsection])] = \
                 {'section': section, 'identifier': identifier,
                      'options': [], 'position': position}
                 tomodify.append(curlength)
         
         for elem in tomodify:
-            self.globaldict[self.subsection][elem]['options'].append(toadd)
+            self._gdict[self.subsection][elem]['options'].append(toadd)
         
     
     def _get_suboptions_to_blacklist(self, section, identifier, option, position=None):
@@ -1164,23 +1169,23 @@ class Parser(object):
         Used in both remove_option() and removeSubOption()
         '''
         to_remove = {}
-        if len(self.globaldict[section]) != 0:#if the section exists
-            if len(self.globaldict[self.subsection]) != 0:
-                for elem in self.globaldict[self.subsection]:
+        if len(self._gdict[section]) != 0:#if the section exists
+            if len(self._gdict[self.subsection]) != 0:
+                for elem in self._gdict[self.subsection]:
                     if position == None:
-                        if self.globaldict[self.subsection][elem].get('section') == section \
-                        and self.globaldict[self.subsection][elem].get('identifier') == identifier:
+                        if self._gdict[self.subsection][elem].get('section') == section \
+                        and self._gdict[self.subsection][elem].get('identifier') == identifier:
                             it = 0
-                            for opt in self.globaldict[self.subsection][elem]['options']:
+                            for opt in self._gdict[self.subsection][elem]['options']:
                                 if opt.strip().lower().find(option.strip().lower()) != -1:
                                     to_remove.setdefault(elem, []).append(it)
                                 it += 1
                     else:
-                        if self.globaldict[self.subsection][elem].get('section') == section \
-                        and self.globaldict[self.subsection][elem].get('identifier') == identifier \
-                        and self.globaldict[self.subsection][elem].get('position') == position:
+                        if self._gdict[self.subsection][elem].get('section') == section \
+                        and self._gdict[self.subsection][elem].get('identifier') == identifier \
+                        and self._gdict[self.subsection][elem].get('position') == position:
                             it = 0
-                            for opt in self.globaldict[self.subsection][elem]['options']:
+                            for opt in self._gdict[self.subsection][elem]['options']:
                                 if opt.strip().lower().find(option.strip().lower()) != -1:
                                     to_remove.setdefault(elem, []).append(it)
                                 it += 1
@@ -1195,7 +1200,7 @@ class Parser(object):
             modded = 0
             for part in to_remove[elem]:
                 realpos = part - modded
-                del self.globaldict[self.subsection][elem]['options'][realpos]
+                del self._gdict[self.subsection][elem]['options'][realpos]
                 modded += 1
 
     def getIdentifier(self, section, position):
@@ -1440,7 +1445,7 @@ class Parser(object):
         
         values = []
         
-        if self.globaldict[section].get(position) == None:
+        if self._gdict[section].get(position) == None:
             raise SectionException
             
             #if len(values) == 0:
@@ -1453,16 +1458,16 @@ class Parser(object):
                 # see if it's a dictionary (e.g. in case of a subsection)
                 # or a list (in case of a normal section) and act
                 # accordingly
-                self.globaldict[section][position].index('foo')
+                self._gdict[section][position].index('foo')
             except AttributeError:#dict
                 if identifier == None:
                     raise Exception('An identifier is required for subsections')
                 else:
-                    for elem in self.globaldict[section]:
-                        if self.globaldict[section][elem].get('identifier') == identifier and \
-                        self.globaldict[section][elem].get('position') == position and \
-                        self.globaldict[section][elem].get('section') == sect:
-                            for opt in self.globaldict[section][elem]['options']:
+                    for elem in self._gdict[section]:
+                        if self._gdict[section][elem].get('identifier') == identifier and \
+                        self._gdict[section][elem].get('position') == position and \
+                        self._gdict[section][elem].get('section') == sect:
+                            for opt in self._gdict[section][elem]['options']:
                                 if option.strip().lower() in opt.strip().lower():
                                     if opt.strip().find('#') != -1:
                                         stropt = opt.strip()[0: opt.strip().find('#')]
@@ -1483,7 +1488,7 @@ class Parser(object):
                             return None
 
             except ValueError:#list
-                for elem in self.globaldict[section][position]:
+                for elem in self._gdict[section][position]:
                     if option.strip().lower() in elem.strip().lower():
                         # clean the option and return the value
                         if elem.strip().find('#') != -1:
@@ -1517,7 +1522,7 @@ class Parser(object):
             except IdentifierException:
                 return False
         elif position != None:
-            return self.globaldict[section].get(position) != None
+            return self._gdict[section].get(position) != None
         
         else:
             errorMsg = 'Either identifier or position must be provided'
@@ -1556,7 +1561,7 @@ class Parser(object):
         for section in self.require_id:#['Screen', 'ServerLayout']
             referencesTree[section] = {}
             brokenReferences[section] = {}
-            for sect in self.globaldict[section]:
+            for sect in self._gdict[section]:
                 referencesTree[section][sect] = self.getReferences(section, sect)
         #print >> stderr, 'REFERENCES = %s' % (str(referencesTree))
         for section in referencesTree:
@@ -1586,7 +1591,7 @@ class Parser(object):
               it will raise a ParseException.'''
         
         default = []
-        serverFlags = self.globaldict['ServerFlags']
+        serverFlags = self._gdict['ServerFlags']
         it = 0
         for flag in serverFlags:
             try:
@@ -1640,7 +1645,7 @@ class Parser(object):
         NOTE: global dict's state is not altered.'''
         
         # Create self.tempdict
-        self.tempdict = copy.deepcopy(self.globaldict)
+        self.tempdict = copy.deepcopy(self._gdict)
         
         # Commented options must be dealt with first
         self._merge_commented_options()
@@ -1674,9 +1679,9 @@ class Parser(object):
         # loop through subsections and see what subsections match
         # the section
         subsections = []
-        for sub in self.globaldict[self.subsection]:
-            if self.globaldict[self.subsection][sub]['section'] == section \
-            and self.globaldict[self.subsection][sub]['position'] == position:
+        for sub in self._gdict[self.subsection]:
+            if self._gdict[self.subsection][sub]['section'] == section \
+            and self._gdict[self.subsection][sub]['position'] == position:
                 subsections.append(sub)
         
         return subsections
@@ -1690,10 +1695,10 @@ class Parser(object):
         subsections = the list of the indices subsections to merge and remove'''
         
         for sect in subsections:
-            section = self.globaldict[self.subsection][sect]['section']
-            identifier = self.globaldict[self.subsection][sect]['identifier']
-            position = self.globaldict[self.subsection][sect].get('position')
-            options = self.globaldict[self.subsection][sect]['options']
+            section = self._gdict[self.subsection][sect]['section']
+            identifier = self._gdict[self.subsection][sect]['identifier']
+            position = self._gdict[self.subsection][sect].get('position')
+            options = self._gdict[self.subsection][sect]['options']
             self.comments.append('#\tSubSection ' + '"' + identifier + '"' + '\n')
 
             for option in options:
@@ -1702,7 +1707,7 @@ class Parser(object):
                 self.comments.append('#\tEndSubSection\n')
 
             try:#remove subsection since it was merged
-                del self.globaldict[self.subsection][sect]
+                del self._gdict[self.subsection][sect]
             except KeyError:
                 pass
     
@@ -1710,9 +1715,9 @@ class Parser(object):
         '''Return the index of the comment entry in the Comments section for a section'''
         
         comments = []
-        if self.globaldict[self.commentsection].get(section):
-            for sect in self.globaldict[self.commentsection][section]:
-                if self.globaldict[self.commentsection][section][sect].get('position') == position:
+        if self._gdict[self.commentsection].get(section):
+            for sect in self._gdict[self.commentsection][section]:
+                if self._gdict[self.commentsection][section][sect].get('position') == position:
                     comments.append(sect)
         
         return comments
@@ -1729,24 +1734,24 @@ class Parser(object):
         endSubSection = '#\tEndSubSection\n'
         
         for sect in subsections:
-            section = self.globaldict[self.subsection][sect]['section']
-            identifier = self.globaldict[self.subsection][sect]['identifier']
-            position = self.globaldict[self.subsection][sect].get('position')
-            options = self.globaldict[self.subsection][sect]['options']
+            section = self._gdict[self.subsection][sect]['section']
+            identifier = self._gdict[self.subsection][sect]['identifier']
+            position = self._gdict[self.subsection][sect].get('position')
+            options = self._gdict[self.subsection][sect]['options']
             
             startSubSection = '#\tSubSection "%s"\n' % (identifier)
             
             comments = self._get_comments(section, position)
             if not comments:
-                self.globaldict[self.commentsection][section] = {}
-                self.globaldict[self.commentsection][section][position] = {}
-                self.globaldict[self.commentsection][section][position]['identifier'] = None
-                self.globaldict[self.commentsection][section][position]['position'] = position
-                self.globaldict[self.commentsection][section][position]['section'] = None
-                self.globaldict[self.commentsection][section][position]['options'] = []
+                self._gdict[self.commentsection][section] = {}
+                self._gdict[self.commentsection][section][position] = {}
+                self._gdict[self.commentsection][section][position]['identifier'] = None
+                self._gdict[self.commentsection][section][position]['position'] = position
+                self._gdict[self.commentsection][section][position]['section'] = None
+                self._gdict[self.commentsection][section][position]['options'] = []
                 
                 
-            comments_options = self.globaldict[self.commentsection][section][position]['options']
+            comments_options = self._gdict[self.commentsection][section][position]['options']
             
             comments_options.append(startSubSection)
             for option in options:
@@ -1756,7 +1761,7 @@ class Parser(object):
             comments_options.append(endSubSection)
             
             #remove subsection since it was merged
-            del self.globaldict[self.subsection][sect]
+            del self._gdict[self.subsection][sect]
     
     def _comment_out_subsections(self, section, position):
         '''Comment out all the subsections of a section.'''
@@ -1769,7 +1774,7 @@ class Parser(object):
         
         comments = self._get_comments(section, position)
         for commentSection in comments:
-            del self.globaldict['Comments'][section][commentSection]
+            del self._gdict['Comments'][section][commentSection]
     
     def commentOutSection(self, section, identifier=None, position=None):
         '''Comment out a section and all its subsections.'''
@@ -1795,7 +1800,7 @@ class Parser(object):
         
         # Comment any section of "section" type
         else:
-            allkeys = list(self.globaldict[section].keys())
+            allkeys = list(self._gdict[section].keys())
             to_remove = {}.fromkeys(allkeys)
         
         # If the section has an identifier i.e. if the section
@@ -1819,7 +1824,7 @@ class Parser(object):
         modded = 0
         for sect in sorted_remove:
             self.comments.append(startSection)
-            for option in self.globaldict[section][sect]:
+            for option in self._gdict[section][sect]:
                 commentedOption = '#\t%s\n' % (option.strip())
                 self.comments.append(commentedOption)
 
@@ -1832,8 +1837,8 @@ class Parser(object):
             # section
             self._remove_comment_entries(section, sect)
         
-            # Remove the section from globaldict
-            del self.globaldict[section][sect]
+            # Remove the section from _gdict
+            del self._gdict[section][sect]
             
             # Remove the reference from identifiers
             # if such reference exists
@@ -1853,10 +1858,10 @@ class Parser(object):
         position= the position of the section'''
         
         subsections = []
-        for subsection in self.globaldict[self.subsection]:
-            if self.globaldict[self.subsection][subsection]['section'] == section \
-            and self.globaldict[self.subsection][subsection]['identifier'] == identifier \
-            and self.globaldict[self.subsection][subsection]['position'] == position:
+        for subsection in self._gdict[self.subsection]:
+            if self._gdict[self.subsection][subsection]['section'] == section \
+            and self._gdict[self.subsection][subsection]['identifier'] == identifier \
+            and self._gdict[self.subsection][subsection]['position'] == position:
                 subsections.append(subsection)
                 break
         # Add the subsection to the Comments section
@@ -1877,20 +1882,20 @@ class Parser(object):
             modded = 0
             for line in to_remove[part]:
                 realpos = line - modded
-                self.globaldict[section][part][realpos] = '#%s' % (self.globaldict[section][part][realpos].strip())
+                self._gdict[section][part][realpos] = '#%s' % (self._gdict[section][part][realpos].strip())
                 
-                self.globaldict[self.commentsection].setdefault(section, {})
-                curlength = len(self.globaldict[self.commentsection][section])
-                self.globaldict[self.commentsection][section].setdefault(part, {})
-                self.globaldict[self.commentsection][section][part].setdefault('identifier', None)
-                self.globaldict[self.commentsection][section][part].setdefault('position', part)
-                self.globaldict[self.commentsection][section][part].setdefault('section', None)
-                self.globaldict[self.commentsection][section][part].setdefault('options', [])
+                self._gdict[self.commentsection].setdefault(section, {})
+                curlength = len(self._gdict[self.commentsection][section])
+                self._gdict[self.commentsection][section].setdefault(part, {})
+                self._gdict[self.commentsection][section][part].setdefault('identifier', None)
+                self._gdict[self.commentsection][section][part].setdefault('position', part)
+                self._gdict[self.commentsection][section][part].setdefault('section', None)
+                self._gdict[self.commentsection][section][part].setdefault('options', [])
                 # Copy the option to the Comments section
-                self.globaldict[self.commentsection][section][part]['options'].append(self.globaldict[section][part][realpos])
+                self._gdict[self.commentsection][section][part]['options'].append(self._gdict[section][part][realpos])
 
-                #Remove it from its section in globaldict
-                del self.globaldict[section][part][realpos]
+                #Remove it from its section in _gdict
+                del self._gdict[section][part][realpos]
                 
                 modded += 1
 
@@ -1911,23 +1916,23 @@ class Parser(object):
             for part in to_remove[elem]:
                 realpos = part - modded
                 
-                self.globaldict[self.subsection][part]['options'][realpos] = \
-                '#%s' % (self.globaldict[self.subsection][part]['options'][realpos].strip())
+                self._gdict[self.subsection][part]['options'][realpos] = \
+                '#%s' % (self._gdict[self.subsection][part]['options'][realpos].strip())
                 
-                self.globaldict[self.commentsection].setdefault(self.subsection, {})
-                curlength = len(self.globaldict[self.commentsection][self.subsection])
-                self.globaldict[self.commentsection][self.subsection].setdefault(part, {})
-                self.globaldict[self.commentsection][self.subsection][part].setdefault('identifier', identifier)
-                self.globaldict[self.commentsection][self.subsection][part].setdefault('position', part)
-                self.globaldict[self.commentsection][self.subsection][part].setdefault('section', section)
-                self.globaldict[self.commentsection][self.subsection][part].setdefault('options', [])
+                self._gdict[self.commentsection].setdefault(self.subsection, {})
+                curlength = len(self._gdict[self.commentsection][self.subsection])
+                self._gdict[self.commentsection][self.subsection].setdefault(part, {})
+                self._gdict[self.commentsection][self.subsection][part].setdefault('identifier', identifier)
+                self._gdict[self.commentsection][self.subsection][part].setdefault('position', part)
+                self._gdict[self.commentsection][self.subsection][part].setdefault('section', section)
+                self._gdict[self.commentsection][self.subsection][part].setdefault('options', [])
                 # Copy the option to the Comments section
-                commentsOptions = self.globaldict[self.commentsection][self.subsection][part]['options']
-                commentedOption = self.globaldict[self.subsection][part]['options'][realpos]
+                commentsOptions = self._gdict[self.commentsection][self.subsection][part]['options']
+                commentedOption = self._gdict[self.subsection][part]['options'][realpos]
                 commentsOptions.append(commentedOption)
                 
-                #Remove the option from its section in globaldict
-                del self.globaldict[self.subsection][elem]['options'][realpos]
+                #Remove the option from its section in _gdict
+                del self._gdict[self.subsection][elem]['options'][realpos]
                 modded += 1
     
     def _merge_commented_options(self):
