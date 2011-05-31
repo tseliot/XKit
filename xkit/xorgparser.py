@@ -1582,7 +1582,8 @@ class Parser(object):
     def get_position(self, section, identifier):
         '''Get the position of a specific section from its identifier.'''
         
-        error_msg = 'No %s section named "%s" can be found' %(section, identifier)
+        error_msg = ('No %s section named "%s" can be found' %
+                     (section, identifier))
         for sect in self.identifiers[section]:
             try:
                 if sect[0].strip().lower() == identifier.strip().lower():
