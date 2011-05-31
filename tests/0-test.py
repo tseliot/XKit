@@ -2707,8 +2707,8 @@ EndSection
         y = xorgparser.Parser(tempFile)
         #y.writeFile(sys.stderr)
 
-    def testRemoveSection1(self):
-        '''by identifier def removeSection(self, section, identifier=None, position=None)'''
+    def test_remove_section1(self):
+        '''by identifier def remove_section(self, section, identifier=None, position=None)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -2780,7 +2780,7 @@ EndSection
         self.assert_(hasIdentifier1)
         
         # Remove Screen "My Screen 1"
-        y.removeSection('Screen', identifier='My Screen1')
+        y.remove_section('Screen', identifier='My Screen1')
         
         # the Device section doesn't have subsections
         deviceSub = y.getSubSections('Device', 0)
@@ -2820,8 +2820,8 @@ EndSection
         #y.writeFile(sys.stderr)
         
         
-    def testRemoveSection2(self):
-        '''by position def removeSection(self, section, identifier=None, position=None)'''
+    def test_remove_section2(self):
+        '''by position def remove_section(self, section, identifier=None, position=None)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -2893,7 +2893,7 @@ EndSection
         self.assert_(hasIdentifier1)
         
         # Remove Screen section 1
-        y.removeSection('Screen', position=1)
+        y.remove_section('Screen', position=1)
         
         # the Device section doesn't have subsections
         deviceSub = y.getSubSections('Device', 0)
@@ -2932,8 +2932,8 @@ EndSection
         y = xorgparser.Parser(tempFile)
         #y.writeFile(sys.stderr)
     
-    def testRemoveSection3(self):
-        '''by type def removeSection(self, section, identifier=None, position=None)'''
+    def test_remove_section3(self):
+        '''by type def remove_section(self, section, identifier=None, position=None)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -3007,7 +3007,7 @@ EndSection
         self.assert_(hasIdentifier1)
         
         # Remove any Screen section
-        y.removeSection('Screen')
+        y.remove_section('Screen')
         
         # the Device section doesn't have subsections
         deviceSub = y.getSubSections('Device', 0)

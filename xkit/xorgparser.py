@@ -863,7 +863,7 @@ class Parser(object):
             self._gdict[section][position] = []
         return position
     
-    def removeSection(self, section, identifier=None, position=None):
+    def remove_section(self, section, identifier=None, position=None):
         '''Remove Sections by identifier, position or type'''
         # Remove any section of "section" type with the same identifier
         # currently sections of the same type cannot have the same id
