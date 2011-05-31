@@ -967,10 +967,11 @@ class Parser(object):
         identifier='Default Screen'
         position=0 #the first ServerLayout section
                 
-        NOTE: if position is set to None it will remove such reference from any
-        instance of the section (e.g. from any ServerLayout section)'''
+        NOTE: if position is set to None it will remove such reference from
+        any instance of the section (e.g. from any ServerLayout section)'''
         
-        self.remove_option(section, reference, value=identifier, position=position, reference=True)
+        self.remove_option(section, reference, value=identifier,
+                           position=position, reference=True)
     
     def get_references(self, section, position, reflist=None):
         '''Get the references to other sections which are located in a section.
