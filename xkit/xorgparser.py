@@ -1233,12 +1233,13 @@ class Parser(object):
     def remove_suboption(self, section, identifier, option, position=None):
         '''Remove an option from a subsection.'''
         
-        to_remove = self._get_suboptions_to_blacklist(section, identifier, option, position)
+        to_remove = self._get_suboptions_to_blacklist(section, identifier,
+                                                      option, position)
         for elem in to_remove:
             modded = 0
             for part in to_remove[elem]:
-                realpos = part - modded
-                del self._gdict[self.subsection][elem]['options'][realpos]
+                real_pos = part - modded
+                del self._gdict[self.subsection][elem]['options'][real_pos]
                 modded += 1
 
     def getIdentifier(self, section, position):
