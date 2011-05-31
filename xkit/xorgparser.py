@@ -1430,74 +1430,73 @@ class Parser(object):
               then there are duplicate options, which should be detected
               in advance with get_duplicate_options()   
           * None (if no value can be found) - Not always true -> See below.
-        
-        NOTE: Use-case for returning None
-            * When dealing with incomplete references. For example:
-                  Screen "Configured Screen"
-                is different from:
-                  Screen
-                  (which is an incomplete reference)
-            * When dealing with incomplete options. For example:
-                  Depth 24
-                is different from:
-                  Depth
-                  (which is an incomplete option)
-            * Exception:
-                Some options (with the "Option" prefix) (not references)
-                can be used with no value (explicitly) assigned and are
-                considered as True by the Xserver. In such case get_value()
-                will return "True". For example:
-                  Option "AddARGBGLXVisuals" 
-                is the same as:
-                  Option "AddARGBGLXVisuals" "True"
-        
-        NOTE: Meaning of keys in Sections and SubSections:
-            * When dealing with a Section:
-                section= e.g. 'Screen', 'Device', etc.
-                option= the option
-                position= e.g. 0 (i.e. the first element in the list of Screen
-                          sections)
-                reference= used only by get_references()
-            
-            * When dealing with a SubSection:
-                section= 'SubSection' (this is mandatory)
-                option= the option
-                position= e.g. 0 would mean that the subsection belongs to 
-                          the 1st item of the list of, say, "Screen" sections.
-                          (i.e. the first element in the list of Screen 
-                          sections)
-                          ["position" is a key of an item of the list of 
-                          subsections see below]
-                
-                identifier= the name of the subsection e.g. 'Display'
-                sect = the 'section' key of an item of the list of 
-                       subsections e.g. the "Display" subsection can be 
-                       found in the "Screen" section ('sect' is the latter)
-            
-        NOTE: Anatomy of Sections and SubSections:
-            * Anatomy of subsections:
-                self.globaldict['SubSection'] =
-                    {0: {'section': 'Screen', 'identifier': 'Display', 
-                    'position': 0, 'options': [option1, option2, etc.], 
-                    etc.}
-                    In this case we refer to the 'Display' subsection 
-                    which is located in the first 'Screen' section.
-            
-            * Anatomy of a section:
-                self.globaldict['Screen'] =
-                    {0: [option1, option2, etc.], 1: [...], ...}
-                0, 1, etc. is the position '''
-        
+
+        Use-case for returning None
+          * When dealing with incomplete references. For example:
+                Screen "Configured Screen"
+              is different from:
+                Screen
+                (which is an incomplete reference)
+          * When dealing with incomplete options. For example:
+                Depth 24
+              is different from:
+                Depth
+                (which is an incomplete option)
+          * Exception:
+              Some options (with the "Option" prefix) (not references)
+              can be used with no value (explicitly) assigned and are
+              considered as True by the Xserver. In such case get_value()
+              will return "True". For example:
+                Option "AddARGBGLXVisuals" 
+              is the same as:
+                Option "AddARGBGLXVisuals" "True"
+
+        Meaning of keys in Sections and SubSections:
+          * When dealing with a Section:
+              section= e.g. 'Screen', 'Device', etc.
+              option= the option
+              position= e.g. 0 (i.e. the first element in the list of Screen
+                        sections)
+              reference= used only by get_references()
+
+          * When dealing with a SubSection:
+              section= 'SubSection' (this is mandatory)
+              option= the option
+              position= e.g. 0 would mean that the subsection belongs to 
+                        the 1st item of the list of, say, "Screen" sections.
+                        (i.e. the first element in the list of Screen 
+                        sections)
+                        ["position" is a key of an item of the list of 
+                        subsections see below]
+              identifier= the name of the subsection e.g. 'Display'
+              sect = the 'section' key of an item of the list of 
+                     subsections e.g. the "Display" subsection can be 
+                     found in the "Screen" section ('sect' is the latter)
+
+        Anatomy of Sections and SubSections:
+          * Anatomy of subsections:
+              self.globaldict['SubSection'] =
+                  {0: {'section': 'Screen', 'identifier': 'Display', 
+                   'position': 0, 'options': [option1, option2, etc.], 
+                   etc.}
+                  In this case we refer to the 'Display' subsection 
+                  which is located in the first 'Screen' section.
+
+          * Anatomy of a section:
+              self.globaldict['Screen'] =
+                  {0: [option1, option2, etc.], 1: [...], ...}
+              0, 1, etc. is the position '''
+
         values = []
-        
+
         if self._gdict[section].get(position) == None:
             raise SectionException
-            
+
             #if len(values) == 0:
                 #raise OptionException
-            
+
             #return values
-        
+
         else:
             try:
                 # see if it's a dictionary (e.g. in case of a subsection)
@@ -1506,24 +1505,30 @@ class Parser(object):
                 self._gdict[section][position].index('foo')
             except AttributeError:#dict
                 if identifier == None:
-                    raise Exception('An identifier is required for subsections')
+                    raise Exception('An identifier is required for '
+                                    'subsections')
                 else:
                     for elem in self._gdict[section]:
-                        if self._gdict[section][elem].get('identifier') == identifier and \
-                        self._gdict[section][elem].get('position') == position and \
-                        self._gdict[section][elem].get('section') == sect:
+                        if (self._gdict[section][elem].get('identifier') ==
+                            identifier and
+                            self._gdict[section][elem].get('position') ==
+                            position and
+                            self._gdict[section][elem].get('section') == sect):
                             for opt in self._gdict[section][elem]['options']:
-                                if option.strip().lower() in opt.strip().lower():
+                                if (option.strip().lower() in
+                                    opt.strip().lower()):
                                     if opt.strip().find('#') != -1:
-                                        stropt = opt.strip()[0: opt.strip().find('#')]
+                                        stropt = opt.strip()[0: opt
+                                                            .strip().find('#')]
                                     else:
                                         stropt = opt.strip()
                                     # clean the option and return the value
-                                    values.append(self._clean_option(stropt, option, reference=reference))
-                    
+                                    values.append(self._clean_option(stropt,
+                                                  option, reference=reference))
+
                     if len(values) == 0:
                         raise OptionException
-                    
+
                     if len(values) > 1:
                         return values
                     else:
@@ -1540,11 +1545,12 @@ class Parser(object):
                             stropt = elem.strip()[0: elem.strip().find('#')]
                         else:
                             stropt = elem.strip()
-                        values.append(self._clean_option(stropt, option, reference=reference, section=section))
-                
+                        values.append(self._clean_option(stropt, option,
+                                      reference=reference, section=section))
+
                 if len(values) == 0:
                     raise OptionException
-                
+
                 if len(values) > 1:
                     return values
                 else:
@@ -1554,7 +1560,7 @@ class Parser(object):
                         return None
             except KeyError:#not found
                 raise OptionException
-    
+
     def isSection(self, section, identifier=None, position=None):
         '''See if a section with a certain identifier exists.
         
