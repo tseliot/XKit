@@ -1039,8 +1039,8 @@ class Parser(object):
         
         if position == None:
             for elem in self._gdict[section]:
-                # don't create a new subsection if one with the same 'section', 'identifier'
-                # and 'position' is found
+                # don't create a new subsection if one with the same
+                # 'section', 'identifier' and 'position' is found
                 create = True
                 for sub in self._gdict[self.subsection]:
                     if (self._gdict[self.subsection][sub].get('section')  ==
@@ -1060,8 +1060,8 @@ class Parser(object):
                     del temp_dict
                     curlength += 1
         else:
-            # don't create a new subsection if one with the same 'section', 'identifier'
-            # and 'position' is found
+            # don't create a new subsection if one with the same
+            # 'section', 'identifier' and 'position' is found
             create = True
             for sub in self._gdict[self.subsection]:
                 if (self._gdict[self.subsection][sub].get('section') ==
@@ -1086,16 +1086,19 @@ class Parser(object):
         section= the section to which the subsection belongs
         identifier= the name of the subsection
         position= the position of the section in the dictionary with the
-             sections (e.g. the 1st "Screen" section would be 0). If set to
-             None it will remove a subsection from all the instances of
-             the said section (e.g. in all the "Screen" sections)'''
+                  sections (e.g. the 1st "Screen" section would be 0).
+                  If set to None it will remove a subsection from all the
+                  instances of the said section (e.g. in all the "Screen"
+                  sections)'''
         
         curlength = len(self._gdict[self.subsection])
         to_remove = []
         if position == None:
             for elem in self._gdict[self.subsection]:
-                if self._gdict[self.subsection][elem].get('section') == section \
-                and self._gdict[self.subsection][elem].get('identifier') == identifier:
+                if (self._gdict[self.subsection][elem].get('section') ==
+                    section and
+                    self._gdict[self.subsection][elem].get('identifier') ==
+                    identifier):
                     to_remove.append(elem)
                 
         else:
