@@ -71,16 +71,16 @@ class XUtilsTestCase(unittest.TestCase):
         self.parser = xutils.XUtils(None)
         
         screen1 = self.parser.make_section('Screen', identifier='Default Screen Device')
-        self.parser.addReference('Screen', 'Device', 'Yet Another Video Device', position=screen1)
+        self.parser.add_reference('Screen', 'Device', 'Yet Another Video Device', position=screen1)
         
         screen2 = self.parser.make_section('Screen', identifier='Another Screen Device')
-        self.parser.addReference('Screen', 'Device', 'Another Video Device', position=screen2)
+        self.parser.add_reference('Screen', 'Device', 'Another Video Device', position=screen2)
         
         layout = self.parser.make_section('ServerLayout', identifier='A Layout')
         
-        self.parser.addReference('ServerLayout', 'Screen', 'Screen1', position=layout)
+        self.parser.add_reference('ServerLayout', 'Screen', 'Screen1', position=layout)
         
-        self.parser.addReference('ServerLayout', 'InputDevice', 'Mouse 1', position=layout)
+        self.parser.add_reference('ServerLayout', 'InputDevice', 'Mouse 1', position=layout)
         
         self.parser.checkNFixSection()
         

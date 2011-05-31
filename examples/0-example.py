@@ -80,14 +80,14 @@ def main():
     the 1st ServerLayout section
     '''
     print('\nNew Default Screen in progress')
-    a.addReference('ServerLayout', 'Screen', 'New Default Screen', position=0)
-    a.addReference('ServerLayout', 'InputDevice', 'New Device', position=0)
+    a.add_reference('ServerLayout', 'Screen', 'New Default Screen', position=0)
+    a.add_reference('ServerLayout', 'InputDevice', 'New Device', position=0)
     a.removeReference('ServerLayout', 'InputDevice', 'New Device', position=0)
     '''
     Add a reference to the Screen section identified as "New Default Screen" to
     all the ServerLayout sections
     '''
-    #a.addReference('ServerLayout', 'Screen', 'New Default Screen', position=0)
+    #a.add_reference('ServerLayout', 'Screen', 'New Default Screen', position=0)
     
     '''
     Remove a reference to the Screen section identified as "New Default Screen"
@@ -135,9 +135,9 @@ def main():
     '''
     dev = a.make_section('Device', 'My Device')
     a.add_option('Device', 'BusID', 'PCI:1:0:0', position=dev)
-    a.addReference('Screen', 'Device', 'My Device', position=0)
+    a.add_reference('Screen', 'Device', 'My Device', position=0)
     
-    a.addReference('Device', 'Screen', 4, position=0)
+    a.add_reference('Device', 'Screen', 4, position=0)
     print(a.getReferences('Screen', 0, reflist=['Device']))
     
     print('Virtual', a.getValue('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen'))
@@ -152,8 +152,8 @@ def main():
     print('\nCreate Broken Screen section')
     pos = a.make_section('Screen', identifier='Broken Screen Section')
     print('\nAdding References')
-    a.addReference('Screen', 'Monitor', 'Broken Monitor Section', position=pos)
-    a.addReference('Screen', 'Device', 'Broken Device Section', position=pos)
+    a.add_reference('Screen', 'Monitor', 'Broken Monitor Section', position=pos)
+    a.add_reference('Screen', 'Device', 'Broken Device Section', position=pos)
     
     try:
         print('Horizsync value is', a.getValue('Monitor', 'Horizsync', 0))

@@ -687,7 +687,7 @@ class Parser(object):
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)
         reference= used only in a particular case of reference (see
-                   addReference)
+                   add_reference)
         
         prefix= usually quotation marks are used for the values (e.g. "True")
                 however sometimes they don't have to be used
@@ -930,7 +930,7 @@ class Parser(object):
                 modded += 1
 
     
-    def addReference(self, section, reference, identifier, position=None):
+    def add_reference(self, section, reference, identifier, position=None):
         '''Add a reference to a section from another section.
         
         For example:
@@ -945,7 +945,8 @@ class Parser(object):
         NOTE: if position is set to None it will add such reference to any
         instance of the section (e.g. to any ServerLayout section)'''
         
-        self.add_option(section, reference, value=identifier, position=position, reference=True)
+        self.add_option(section, reference, value=identifier,
+                        position=position, reference=True)
         
     def removeReference(self, section, reference, identifier, position=None):
         '''Remove a reference to a section from another section.

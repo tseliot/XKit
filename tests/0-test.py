@@ -439,16 +439,16 @@ class XorgParserTestCase(unittest.TestCase):
         
         self.failUnless(found == True, 'Identifiers list not updated!')
 
-    def testAddReference1(self):
+    def test_add_reference1(self):
         '''
-        def addReference(self, section, reference, identifier, position=None):
+        def add_reference(self, section, reference, identifier, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section='ServerLayout'
         reference='Screen'
         identifier = 'XKit Screen Device'
         #position=0 #the first ServerLayout section
-        self.parser.addReference(section, reference, identifier, position=None)
+        self.parser.add_reference(section, reference, identifier, position=None)
         
         found = False
         for pos in self.parser.globaldict[section]:
@@ -459,9 +459,9 @@ class XorgParserTestCase(unittest.TestCase):
                     #print line
             self.failUnless(found == True, 'Reference not added!')
     
-    def testAddReference2(self):
+    def test_add_reference2(self):
         '''
-        def addReference(self, section, reference, identifier, position=None):
+        def add_reference(self, section, reference, identifier, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section='ServerLayout'
@@ -472,7 +472,7 @@ class XorgParserTestCase(unittest.TestCase):
         if len(self.parser.globaldict[section]) == 0:
             position = self.parser.make_section(section, identifier='Default layout')
             
-        self.parser.addReference(section, reference, identifier, position=position)
+        self.parser.add_reference(section, reference, identifier, position=position)
         
         found = False
         lines = self.parser.globaldict[section][position]
@@ -495,7 +495,7 @@ class XorgParserTestCase(unittest.TestCase):
         if len(self.parser.globaldict[section]) == 0:
             position = self.parser.make_section(section, identifier='Default layout')
         
-        self.parser.addReference(section, reference, identifier, position=None)
+        self.parser.add_reference(section, reference, identifier, position=None)
         self.parser.removeReference(section, reference, identifier, position=None)
         
         found = False
@@ -520,7 +520,7 @@ class XorgParserTestCase(unittest.TestCase):
         if len(self.parser.globaldict[section]) == 0:
             position = self.parser.make_section(section, identifier='Default layout')
         
-        self.parser.addReference(section, reference, identifier, position=position)
+        self.parser.add_reference(section, reference, identifier, position=position)
         self.parser.removeReference(section, reference, identifier, position=position)
         
         found = False
@@ -546,7 +546,7 @@ class XorgParserTestCase(unittest.TestCase):
         device = self.parser.make_section(reference, identifier=identifier)
         
         #if len(self.parser.globaldict[section].setdefault(position, [])) == 0:
-        self.parser.addReference(section, reference, identifier, position=screen)
+        self.parser.add_reference(section, reference, identifier, position=screen)
             
         references = self.parser.getReferences(section, screen, reflist=None)
         self.failUnless(len(references) > 0, 'No list of References can be retrieved!')
@@ -562,7 +562,7 @@ class XorgParserTestCase(unittest.TestCase):
         identifier = 'XKit Video Device'
         reflist=['Device']
         if len(self.parser.globaldict[section].setdefault(position, [])) == 0:
-            self.parser.addReference(section, reference, identifier, position=position)
+            self.parser.add_reference(section, reference, identifier, position=position)
         references = self.parser.getReferences(section, position, reflist=reflist)
         self.failUnless(len(references) > 0, 'No list of References can be retrieved!')
     
