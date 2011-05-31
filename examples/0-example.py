@@ -54,7 +54,7 @@ def main():
     Get the value assigned to the AddARGBGLXVisuals option in the 1st Screen section
     '''
     try:
-        print('AddARGBGLXVisuals', a.getValue('Screen', 'AddARGBGLXVisuals', position=1, identifier='Display'))
+        print('AddARGBGLXVisuals', a.get_value('Screen', 'AddARGBGLXVisuals', position=1, identifier='Display'))
     except OptionException as e:
         print('Error:', e)
     
@@ -121,8 +121,8 @@ def main():
     '''
     Get the identifier of the 1st Device section
     '''
-    print(a.getValue('Device', 'Identifier', 0))
-    #print a.getValue('SubSection', 'Name', position=0, identifier='Display', sect='Screen')
+    print(a.get_value('Device', 'Identifier', 0))
+    #print a.get_value('SubSection', 'Name', position=0, identifier='Display', sect='Screen')
     
     
     a.make_section('Screen', 'New Screen')
@@ -140,8 +140,8 @@ def main():
     a.add_reference('Device', 'Screen', 4, position=0)
     print(a.get_references('Screen', 0, reflist=['Device']))
     
-    print('Virtual', a.getValue('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen'))
-    print('Modes', a.getValue('SubSection', 'Modes', position=0, identifier='Display', sect='Screen'))
+    print('Virtual', a.get_value('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen'))
+    print('Modes', a.get_value('SubSection', 'Modes', position=0, identifier='Display', sect='Screen'))
     
     '''
     Create a new Device section and print the list of identifiers so as to see
@@ -156,7 +156,7 @@ def main():
     a.add_reference('Screen', 'Device', 'Broken Device Section', position=pos)
     
     try:
-        print('Horizsync value is', a.getValue('Monitor', 'Horizsync', 0))
+        print('Horizsync value is', a.get_value('Monitor', 'Horizsync', 0))
     except OptionException as e:
         print('Error:', e)
     

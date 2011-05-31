@@ -54,7 +54,7 @@ class Parser(object):
 
         globaldict = a global dictionary containing all the sections and
                      options. For further information on globaldict, have a
-                     look at __check_sanity() and at getValue().
+                     look at __check_sanity() and at get_value().
 
         globaldict['Comments'] = stores the commented lines located inside of
                                  the sections in the xorg.conf.
@@ -485,7 +485,7 @@ class Parser(object):
             it = 0
             for elem in self._gdict[sect]:
                 try:
-                    identifier = self.getValue(sect, 'Identifier', it)
+                    identifier = self.get_value(sect, 'Identifier', it)
                 except (OptionException, SectionException):#if no identifier can be found
                     error = 'No Identifier for section %s, position %d, can be found.' % (sect, elem)
                     raise ParseException(error)
@@ -836,16 +836,16 @@ class Parser(object):
                 # with the same 'Identifier' is found
                 create = True
                 for sub in self._gdict[section]:
-                    if self.getValue(section, option, sub):
+                    if self.get_value(section, option, sub):
                         try:
-                            if (self.getValue(section,
+                            if (self.get_value(section,
                                               option,
                                               sub).strip().lower()
                                               == identifier.strip().lower()):
                                 create = False
                                 break
                         except AttributeError:
-                            for elem in self.getValue(section, option, sub):
+                            for elem in self.get_value(section, option, sub):
                                 #print 'elem=', elem, 'id=', identifier
                                 if (elem.strip().lower()
                                     == identifier.strip().lower()):
@@ -999,7 +999,7 @@ class Parser(object):
             references[option] = []
             reference_dict = {}
             try:
-                ref = self.getValue(section, option, position, reference=True)
+                ref = self.get_value(section, option, position, reference=True)
             except OptionException:
                 ref = []
             if ref:
@@ -1415,7 +1415,7 @@ class Parser(object):
                 return optbits
             return False
 
-    def getValue(self, section, option, position, identifier=None, sect=None, reference=None):
+    def get_value(self, section, option, position, identifier=None, sect=None, reference=None):
         '''Get the value which is assigned to an option.
         
         Return types:
@@ -1445,7 +1445,7 @@ class Parser(object):
             * Exception:
                 Some options (with the "Option" prefix) (not references)
                 can be used with no value (explicitly) assigned and are
-                considered as True by the Xserver. In such case getValue()
+                considered as True by the Xserver. In such case get_value()
                 will return "True". For example:
                   Option "AddARGBGLXVisuals" 
                 is the same as:
@@ -1640,7 +1640,7 @@ class Parser(object):
         it = 0
         for flag in serverFlags:
             try:
-                defaultLayout = self.getValue('ServerFlags', 'DefaultServerLayout', it)
+                defaultLayout = self.get_value('ServerFlags', 'DefaultServerLayout', it)
                 if defaultLayout:
                     defIt = 0
                     for identifier in self.identifiers['ServerLayout']:

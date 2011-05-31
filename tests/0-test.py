@@ -98,7 +98,7 @@ class XorgParserTestCase(unittest.TestCase):
         
         
         self.assertRaises(SectionException,
-                      self.parser.getValue, 'Device', 'Identifier', 1)
+                      self.parser.get_value, 'Device', 'Identifier', 1)
         
         self.assertRaises(IdentifierException,
                       self.parser.get_identifier, 'Device', 0)
@@ -840,9 +840,9 @@ class XorgParserTestCase(unittest.TestCase):
                         found = True
                 self.failUnless(found == False, 'Option not removed from the Subsection')
     
-    def testGetValue1(self):
+    def test_get_value1(self):
         '''
-        def getValue(self, section, option, position, identifier=None, sect=None, reference=None):
+        def get_value(self, section, option, position, identifier=None, sect=None, reference=None):
         
             * When dealing with a Section:
                 section= e.g. 'Screen', 'Device', etc.
@@ -877,14 +877,14 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.add_option(section, option, value, option_type=option_type, position=position)
         
-        result = self.parser.getValue(section, option, position)
+        result = self.parser.get_value(section, option, position)
         self.failUnless(result == value, 'Incorrect value retrieved')
     
     
     
-    def testGetValue2(self):
+    def test_get_value2(self):
         '''
-        def getValue(self, section, option, position, identifier=None, sect=None, reference=None):
+        def get_value(self, section, option, position, identifier=None, sect=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
@@ -898,13 +898,13 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser.add_option(section, option, value, option_type=option_type,
                               position=position, reference=reference)
         
-        result = self.parser.getValue(section, option, position)
+        result = self.parser.get_value(section, option, position)
         self.failUnless(result == value, 'Incorrect value retrieved')
     
     
-    def testGetValue3(self):
+    def test_get_value3(self):
         '''
-        def getValue(self, section, option, position, identifier=None, sect=None, reference=None):
+        def get_value(self, section, option, position, identifier=None, sect=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -921,24 +921,24 @@ class XorgParserTestCase(unittest.TestCase):
         sect = section
         section = 'SubSection'
         
-        result = self.parser.getValue(section, option, position,
+        result = self.parser.get_value(section, option, position,
                                       identifier=identifier, sect=sect)
         
         self.failUnless(result == value, 'Incorrect value retrieved')
     
-    def testGetValue4(self):
+    def test_get_value4(self):
         self.this_function_name = sys._getframe().f_code.co_name
         self.parser = xorgparser.Parser(None)
  
         self.assertRaises(SectionException,
-                      self.parser.getValue, 'Device', 'Identifier', 1)
+                      self.parser.get_value, 'Device', 'Identifier', 1)
     
-    def testGetValue5(self):
+    def test_get_value5(self):
         self.this_function_name = sys._getframe().f_code.co_name
         self.parser = xorgparser.Parser(None)
         device = self.parser.make_section('Device', identifier='Default Device')
         self.assertRaises(OptionException,
-                      self.parser.getValue, 'Device', 'Driver', device)
+                      self.parser.get_value, 'Device', 'Driver', device)
     
     def testIntegrity1(self):
         self.this_function_name = sys._getframe().f_code.co_name

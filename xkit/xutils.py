@@ -44,10 +44,10 @@ class XUtils(Parser):
         Get the driver in use in a section. If none is found it will return
         false.
         
-        For further information see getValue
+        For further information see get_value
         '''
         option = 'Driver'
-        return self.getValue(section, option, position)
+        return self.get_value(section, option, position)
         
     def setDriver(self, section, driver, position):
         '''

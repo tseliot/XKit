@@ -83,11 +83,11 @@ class Accessories(XUtils):
         Get the Defaultdepth in an instance of the Screen section. If none is
         found, return False.
         
-        For further information see getValue
+        For further information see get_value
         '''
         option = 'DefaultDepth'
         section = 'Screen'
-        return self.getValue(section, option, position)
+        return self.get_value(section, option, position)
         
     def setDefaultDepth(self, depth, position):
         '''

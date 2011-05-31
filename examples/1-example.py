@@ -52,7 +52,7 @@ def main():
     Get the value assigned to the AddARGBGLXVisuals option in the 1st Screen section
     '''
     try:
-        print('AddARGBGLXVisuals', a.getValue('Screen', 'AddARGBGLXVisuals', position=1, identifier='Display'))
+        print('AddARGBGLXVisuals', a.get_value('Screen', 'AddARGBGLXVisuals', position=1, identifier='Display'))
     except OptionNotAvailableException as e:
         print('Error:', e)
     '''
@@ -120,8 +120,8 @@ def main():
     '''
     Get the identifier of the 1st Device section
     '''
-    print(a.getValue('Device', 'Identifier', 0))
-    #print a.getValue('SubSection', 'Name', position=0, identifier='Display', sect='Screen')
+    print(a.get_value('Device', 'Identifier', 0))
+    #print a.get_value('SubSection', 'Name', position=0, identifier='Display', sect='Screen')
     
     
     '''
@@ -153,8 +153,8 @@ def main():
     a.enableComposite()
     a.addArgbGlxVisuals(0)
     
-    print('Virtual', a.getValue('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen'))
-    print('Modes', a.getValue('SubSection', 'Modes', position=0, identifier='Display', sect='Screen'))
+    print('Virtual', a.get_value('SubSection', 'Virtual', position=0, identifier='Display', sect='Screen'))
+    print('Modes', a.get_value('SubSection', 'Modes', position=0, identifier='Display', sect='Screen'))
     
     '''
     Get the identifier of the first Device section
