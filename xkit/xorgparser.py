@@ -1103,9 +1103,12 @@ class Parser(object):
                 
         else:
             for elem in self._gdict[self.subsection]:
-                if self._gdict[self.subsection][elem].get('section') == section \
-                and self._gdict[self.subsection][elem].get('identifier') == identifier \
-                and self._gdict[self.subsection][elem].get('position') == position:
+                if (self._gdict[self.subsection][elem].get('section') ==
+                    section and
+                    self._gdict[self.subsection][elem].get('identifier') ==
+                    identifier and
+                    self._gdict[self.subsection][elem].get('position') ==
+                    position):
                     to_remove.append(elem)
         for item in to_remove:
             del self._gdict[self.subsection][item]
