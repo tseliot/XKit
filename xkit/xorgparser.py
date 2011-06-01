@@ -1670,63 +1670,64 @@ class Parser(object):
         return default
     
 
-    def _merge_subsections(self):
+    def _merge_subsections(self, temp_dict):
         '''Put SubSections back into the sections to which they belong.'''
         
-        for sect in self.tempdict['SubSection']:
-            section = self.tempdict['SubSection'][sect]['section']
-            identifier = self.tempdict['SubSection'][sect]['identifier']
-            position = self.tempdict['SubSection'][sect].get('position')
-            options = self.tempdict['SubSection'][sect]['options']
-            self.tempdict[section].setdefault(position, []).append(
+        for sect in temp_dict['SubSection']:
+            section = temp_dict['SubSection'][sect]['section']
+            identifier = temp_dict['SubSection'][sect]['identifier']
+            position = temp_dict['SubSection'][sect].get('position')
+            options = temp_dict['SubSection'][sect]['options']
+            temp_dict[section].setdefault(position, []).append(
                                                             '\tSubSection ' +
                                                             '"' + identifier +
                                                             '"' + '\n')
             if len(options) > 0:
-                self.tempdict[section][position].append('\t' +
-                                                        '\t'.join(options) +
-                                                        '\tEndSubSection\n')
+                temp_dict[section][position].append('\t' +
+                                                    '\t'.join(options) +
+                                                    '\tEndSubSection\n')
             else:
-                self.tempdict[section][position].append('\t'.join(options) +
-                                                        '\tEndSubSection\n')
+                temp_dict[section][position].append('\t'.join(options) +
+                                                    '\tEndSubSection\n')
         try:
             #remove subsection since it was merged
-            del self.tempdict['SubSection']
+            del temp_dict['SubSection']
         except KeyError:
             pass
+
+        return temp_dict
             
     
     def write(self, destination, test=None):
-        '''Write the changes to the destination file (e.g. /etc/X11/xorg.conf)
-        or file object (e.g. sys.stdout).
+        '''Write the changes to the destination
         
-        * Arguments:
-          destination = the destination file or file object (mandatory)
-          test = if set to True write will append the result to the
-                 destination file instead of overwriting it. It has no 
-                 effect on file objects. Useful for testing.
+        The destination can be either a file (e.g. /etc/X11/xorg.conf)
+        or a file object (e.g. sys.stdout).
         
-        NOTE: global dict's state is not altered.'''
+        destination = the destination file or file object (mandatory)
+        test = if set to True write will append the result to the
+               destination file instead of overwriting it. It has no
+               effect on file objects. Useful for testing.'''
         
-        # Create self.tempdict
-        self.tempdict = copy.deepcopy(self._gdict)
+        temp_dict = copy.deepcopy(self._gdict)
         
         # Commented options must be dealt with first
-        self._merge_commented_options()
+        temp_dict = self._merge_commented_options(temp_dict)
         
         # Merge all the non-commented subsections
-        self._merge_subsections()
+        temp_dict = self._merge_subsections(temp_dict)
         lines = []
         comments = ''.join(self.comments) + '\n'
         lines.append(comments)
-        for section in self.tempdict:
+        for section in temp_dict:
             if section != self.commentsection:
-                if len(self.tempdict[section]) > 0:
-                    for elem in self.tempdict[section]:
+                if len(temp_dict[section]) > 0:
+                    for elem in temp_dict[section]:
                         lines.append('Section ' + '"' + section + '"' + '\n')
-                        lines.append(''.join(self.tempdict[section][elem]) + 'EndSection\n\n')
+                        lines.append(''.join(temp_dict[section][elem]) +
+                                     'EndSection\n\n')
 
-        del self.tempdict
+        del temp_dict
         
         if not hasattr(destination, 'write'):#it is a file
             if test:
@@ -1999,28 +2000,28 @@ class Parser(object):
                 del self._gdict[self.subsection][elem]['options'][realpos]
                 modded += 1
     
-    def _merge_commented_options(self):
+    def _merge_commented_options(self, temp_dict):
         '''Put commented out options back into the sections or subsections to which they belong.'''
         
-        for sect in self.tempdict[self.commentsection]:
+        for sect in temp_dict[self.commentsection]:
             sectionOptions = None
-            for sectionInstance in self.tempdict[self.commentsection][sect]:
-                section = self.tempdict[self.commentsection][sect][sectionInstance].get('section')
+            for sectionInstance in temp_dict[self.commentsection][sect]:
+                section = temp_dict[self.commentsection][sect][sectionInstance].get('section')
                     
-                identifier = self.tempdict[self.commentsection][sect][sectionInstance].get('identifier')
-                position = self.tempdict[self.commentsection][sect][sectionInstance].get('position')
-                options = self.tempdict[self.commentsection][sect][sectionInstance]['options']
+                identifier = temp_dict[self.commentsection][sect][sectionInstance].get('identifier')
+                position = temp_dict[self.commentsection][sect][sectionInstance].get('position')
+                options = temp_dict[self.commentsection][sect][sectionInstance]['options']
                 if section == self.subsection:
-                    for sub in self.tempdict[sect]:
-                        subSection = self.tempdict[sect][sub]
+                    for sub in temp_dict[sect]:
+                        subSection = temp_dict[sect][sub]
                         if subSection['identifier'] == identifier and \
                         subSection['position'] == position and \
                         subSection['section'] == section:
-                            sectionOptions = self.tempdict[sect][sub]['options']
+                            sectionOptions = temp_dict[sect][sub]['options']
                             break
                     
                 else:
-                    sectionOptions = self.tempdict[sect].get(position)
+                    sectionOptions = temp_dict[sect].get(position)
             
             if sectionOptions:
                 for option in options:
@@ -2030,4 +2031,5 @@ class Parser(object):
                     else:
                         sectionOptions.append(option)
 
+        return temp_dict
     
