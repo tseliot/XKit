@@ -1414,7 +1414,8 @@ class Parser(object):
                 return optbits
             return False
 
-    def get_value(self, section, option, position, identifier=None, sect=None, reference=None):
+    def get_value(self, section, option, position, identifier=None,
+                  sect=None, reference=None):
         '''Get the value which is assigned to an option.
         
         Return types:
