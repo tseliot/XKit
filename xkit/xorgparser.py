@@ -1386,9 +1386,8 @@ class Parser(object):
             sections = [sect.strip().lower() for sect in self.sections]
 
 #            if optlen == 2 and optbits[0].lower().strip() in sections:
-#                '''
-#                Do not confuse Device "Configure device" with InputDevice "device"
-#                '''
+#                # Do not confuse Device "Configure device" with InputDevice
+#                # "device"
 #                if optbits[0].lower().strip() != optname.strip().lower():
 #                    return False
 
