@@ -1791,46 +1791,49 @@ class Parser(object):
         return comments
 
     def _merge_subsections_with_comments(self, subsections):
-        '''Put SubSections back into the sections to which they belong and comment them out
+        '''Put SubSections back into their sections and comment them out
         
-        WARNING: this alters globaldict and should be used only to comment out subsections
-                 (i.e. in commentOutSubSection() ) when the whole section is not being 
-                 commented out
+        This alters globaldict and should be used only to comment out
+        subsections (i.e. in commentOutSubSection()) when the whole section
+        is not being commented out.
                  
-        subsections = the list of the indices subsections to merge and remove'''
-        
-        endSubSection = '#\tEndSubSection\n'
-        
+        subsections = the list of the indices subsections to merge and
+                      remove'''
+
+        end_subsection = '#\tEndSubSection\n'
+
         for sect in subsections:
             section = self._gdict[self.subsection][sect]['section']
             identifier = self._gdict[self.subsection][sect]['identifier']
             position = self._gdict[self.subsection][sect].get('position')
             options = self._gdict[self.subsection][sect]['options']
-            
-            startSubSection = '#\tSubSection "%s"\n' % (identifier)
-            
+
+            start_subsection = '#\tSubSection "%s"\n' % (identifier)
+
             comments = self._get_comments(section, position)
             if not comments:
                 self._gdict[self.commentsection][section] = {}
                 self._gdict[self.commentsection][section][position] = {}
-                self._gdict[self.commentsection][section][position]['identifier'] = None
-                self._gdict[self.commentsection][section][position]['position'] = position
-                self._gdict[self.commentsection][section][position]['section'] = None
-                self._gdict[self.commentsection][section][position]['options'] = []
-                
-                
-            comments_options = self._gdict[self.commentsection][section][position]['options']
-            
-            comments_options.append(startSubSection)
+                temp_dict = self._gdict[self.commentsection][section][position]
+                temp_dict['identifier'] = None
+                temp_dict['position'] = position
+                temp_dict['section'] = None
+                temp_dict['options'] = []
+                del temp_dict
+
+            comments_options = self._gdict[self.commentsection][section
+                                           ][position]['options']
+
+            comments_options.append(start_subsection)
             for option in options:
                 opt = '#\t\t%s\n' % (option.strip())
                 comments_options.append(opt)
-            
-            comments_options.append(endSubSection)
-            
+
+            comments_options.append(end_subsection)
+
             #remove subsection since it was merged
             del self._gdict[self.subsection][sect]
-    
+
     def _comment_out_subsections(self, section, position):
         '''Comment out all the subsections of a section.'''
         
