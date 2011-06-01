@@ -1779,16 +1779,17 @@ class Parser(object):
                 pass
 
     def _get_comments(self, section, position):
-        '''Return the index of the comment entry in the Comments section for a section'''
-        
+        '''Return the index of the entry in the Comments section of a section'''
+
         comments = []
         if self._gdict[self.commentsection].get(section):
             for sect in self._gdict[self.commentsection][section]:
-                if self._gdict[self.commentsection][section][sect].get('position') == position:
+                if (self._gdict[self.commentsection][section][sect]
+                    .get('position') == position):
                     comments.append(sect)
-        
+
         return comments
-    
+
     def _merge_subsections_with_comments(self, subsections):
         '''Put SubSections back into the sections to which they belong and comment them out
         
