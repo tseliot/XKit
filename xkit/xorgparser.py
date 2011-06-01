@@ -450,7 +450,7 @@ class Parser(object):
                 raise ParseException(error)
             
             if not self.is_section('ServerLayout', position=default_layout[0]):
-                error = 'The default ServerLayout does not exist'
+                error = 'The default ServerLayout does not exist.'
                 raise ParseException(error)
         
     def _fill_identifiers(self):
