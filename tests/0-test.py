@@ -1711,7 +1711,7 @@ EndSection
         def write(self, destination):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
-        x = xorgparser.Parser()
+        x = self.parser = xorgparser.Parser()
 
         device = x.make_section('Device', identifier='Default Device')
         x.add_option('Device', 'Driver', 'mydrv', position=device)
@@ -1731,7 +1731,7 @@ EndSection
         def write(self, destination):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
-        x = xorgparser.Parser()
+        x = self.parser = xorgparser.Parser()
 
         device = x.make_section('Device', identifier='Default Device')
         x.add_option('Device', 'Driver', 'mydrv', position=device)
@@ -1749,7 +1749,7 @@ EndSection
         def write(self, destination):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
-        x = xorgparser.Parser()
+        x = self.parser = xorgparser.Parser()
 
         device = x.make_section('Device', identifier='Default Device')
         x.add_option('Device', 'Driver', 'mydrv', position=device)
@@ -1766,7 +1766,67 @@ EndSection
         x.write(f)
         
         self.assertEqual(oldDict, x.globaldict)
-        
+
+    def test_write4(self):
+        '''
+        def write(self, destination):
+        '''
+        self.this_function_name = sys._getframe().f_code.co_name
+
+        fakeDeviceOption = '#Option Fake Setting'
+        fakeMonitorOption = '#Option Fake ScreenSetting'
+        inventedOption = '#this does not exist'
+
+        confFile = open(tempFile, 'w')
+        print('''
+Section "Device"
+    Identifier "Default Video Device"
+    Driver "foo"
+    #Option Fake Setting
+    #another comment
+EndSection
+
+Section "Monitor"
+    Identifier "Another Video Device"
+EndSection
+
+Section "Monitor"
+    Identifier "Yet Another Video Device"
+    #Option Fake ScreenSetting
+EndSection
+''', file=confFile)
+        confFile.close()
+
+        # Read the file
+        y = self.parser = xorgparser.Parser(tempFile)
+        # Remove the file
+        os.remove(tempFile)
+        # Write the data back
+        y.write(tempFile)
+        # Delete the object
+        del y
+        # Read what we wrote
+        y = self.parser = xorgparser.Parser(tempFile)
+
+        commentFound = False
+        for commentSection in y.globaldict[y.commentsection]['Device']:
+            if fakeDeviceOption in y.globaldict[y.commentsection]['Device'][commentSection]['options']:
+                commentFound = True
+                break
+
+        self.assert_(commentFound)
+
+        commentFound = False
+        inventedFound = False
+        for commentSection in y.globaldict[y.commentsection]['Monitor']:
+            if fakeMonitorOption in y.globaldict[y.commentsection]['Monitor'][commentSection]['options']:
+                commentFound = True
+            if inventedOption in y.globaldict[y.commentsection]['Monitor'][commentSection]['options']:
+                inventedFound = True
+
+        self.assert_(commentFound)
+        self.assert_(inventedFound == False)
+
     def testParseComments1(self):
         '''
         def __process(self, destination):
@@ -1797,7 +1857,7 @@ EndSection
 ''', file=confFile)
         confFile.close()
         
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         
         #print >> sys.stderr, str(y.globaldict)
         
@@ -1860,7 +1920,7 @@ EndSection
 ''', file=confFile)
         confFile.close()
         
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         
         #print >> sys.stderr, str(y.globaldict)
         
@@ -1913,7 +1973,7 @@ EndSection
 ''', file=confFile)
         confFile.close()
         
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         
         #print >> sys.stderr, str(y.globaldict)
         
@@ -1970,7 +2030,7 @@ EndSection
 ''', file=confFile)
         confFile.close()
         
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         
         y.commentOutSubOption(section, identifier, option, position=None)
         
@@ -2038,7 +2098,7 @@ EndSection
 ''', file=confFile)
         confFile.close()
         
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         
         deviceSub = y.getSubSections('Device', 0)
         self.assert_(not deviceSub)
@@ -2101,7 +2161,7 @@ EndSection
 ''', file=confFile)
         confFile.close()
         
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         
         # the screen sections should have a 
         # reference to their id in y.identifiers
@@ -2187,7 +2247,7 @@ EndSection
         y.write(tempFile)
         
         # Make sure that the output validates
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
 
     def testCommentOutSection2(self):
         '''2 def commentOutSection(self, section, identifier=None, position=None)''' 
@@ -2241,7 +2301,7 @@ EndSection
 ''', file=confFile)
         confFile.close()
         
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         
         # the screen sections should have a 
         # reference to their id in y.identifiers
@@ -2324,7 +2384,7 @@ EndSection
         y.write(tempFile)
         
         # Make sure that the output validates
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
 
     def testCommentOutSection3(self):
         '''3 def commentOutSection(self, section, identifier=None, position=None)''' 
@@ -2435,7 +2495,7 @@ EndSection
         y.write(tempFile)
         
         # Make sure that the output validates
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
 
     def testCommentOutSection4(self):
         '''4 def commentOutSection(self, section, identifier=None, position=None)''' 
@@ -2605,7 +2665,7 @@ EndSection
         y.write(tempFile)
         
         # Make sure that the output validates
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
 
 
 
@@ -2704,7 +2764,7 @@ EndSection
         y.write(tempFile)
         
         # Make sure that the output validates
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         #y.write(sys.stderr)
 
     def test_remove_section1(self):
@@ -2816,7 +2876,7 @@ EndSection
         y.write(tempFile)
         
         # Make sure that the output validates
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         #y.write(sys.stderr)
         
         
@@ -2929,7 +2989,7 @@ EndSection
         y.write(tempFile)
         
         # Make sure that the output validates
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         #y.write(sys.stderr)
     
     def test_remove_section3(self):
@@ -3048,7 +3108,7 @@ EndSection
         y.write(tempFile)
         
         # Make sure that the output validates
-        y = xorgparser.Parser(tempFile)
+        y = self.parser = xorgparser.Parser(tempFile)
         #y.write(sys.stderr)
     
     def testOptionPrefix(self):
