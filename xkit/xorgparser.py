@@ -1696,13 +1696,13 @@ class Parser(object):
             pass
             
     
-    def writeFile(self, destination, test=None):
+    def write(self, destination, test=None):
         '''Write the changes to the destination file (e.g. /etc/X11/xorg.conf)
         or file object (e.g. sys.stdout).
         
         * Arguments:
           destination = the destination file or file object (mandatory)
-          test = if set to True writeFile will append the result to the
+          test = if set to True write will append the result to the
                  destination file instead of overwriting it. It has no 
                  effect on file objects. Useful for testing.
         

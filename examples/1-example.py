@@ -195,6 +195,6 @@ def main():
     '''
     Write the changes to the destination file
     '''
-    a.writeFile(destination)
+    a.write(destination)
 
 if __name__ == '__main__': main()

@@ -41,7 +41,7 @@ class XorgParserTestCase(unittest.TestCase):
     
     def tearDown(self):
         self.parser.comments.insert(0, '\n-----' + self.this_function_name + '-----\n')
-        self.parser.writeFile(destinationFile, test=True)
+        self.parser.write(destinationFile, test=True)
         try:
             os.remove(tempFile)
         except(OSError, IOError):
@@ -781,11 +781,11 @@ class XorgParserTestCase(unittest.TestCase):
                         found = True
                 self.failUnless(found == True, 'Option not added to all the Subsections')
         
-        #self.parser.writeFile(sys.stderr)
+        #self.parser.write(sys.stderr)
         
         self.parser.remove_suboption(section, identifier, option)
         
-        #self.parser.writeFile(sys.stderr)
+        #self.parser.write(sys.stderr)
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -1706,9 +1706,9 @@ EndSection
         self.assertRaises(IdentifierException,
                       self.parser.get_position, 'Screen', 'Default')
     
-    def testWriteFile1(self):
+    def test_write1(self):
         '''
-        def writeFile(self, destination):
+        def write(self, destination):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         x = xorgparser.Parser()
@@ -1721,14 +1721,14 @@ EndSection
         
         f = tempfile.TemporaryFile()
         
-        x.writeFile(f)
+        x.write(f)
 
         newDict = x.globaldict
         self.assertEqual(oldDict, newDict)
     
-    def testWriteFile2(self):
+    def test_write2(self):
         '''
-        def writeFile(self, destination):
+        def write(self, destination):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         x = xorgparser.Parser()
@@ -1739,14 +1739,14 @@ EndSection
 
         oldDict = copy.deepcopy(x.globaldict)
         
-        x.writeFile(tempFile)
+        x.write(tempFile)
 
         newDict = x.globaldict
         self.assertEqual(oldDict, newDict)
 
-    def testWriteFile3(self):
+    def test_write3(self):
         '''
-        def writeFile(self, destination):
+        def write(self, destination):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         x = xorgparser.Parser()
@@ -1758,12 +1758,12 @@ EndSection
         oldDict = copy.deepcopy(x.globaldict)
         
         f = tempfile.TemporaryFile()
-        x.writeFile(f)
+        x.write(f)
 
         self.assertEqual(oldDict, x.globaldict)
 
         f = tempfile.TemporaryFile()
-        x.writeFile(f)
+        x.write(f)
         
         self.assertEqual(oldDict, x.globaldict)
         
@@ -1801,7 +1801,7 @@ EndSection
         
         #print >> sys.stderr, str(y.globaldict)
         
-        #y.writeFile(sys.stderr)
+        #y.write(sys.stderr)
         
         commentFound = False
         for commentSection in y.globaldict[y.commentsection]['Device']:
@@ -1864,7 +1864,7 @@ EndSection
         
         #print >> sys.stderr, str(y.globaldict)
         
-        #y.writeFile(sys.stderr)
+        #y.write(sys.stderr)
         
         commentFound = False
         for commentSection in y.globaldict[y.commentsection]['Device']:
@@ -1917,7 +1917,7 @@ EndSection
         
         #print >> sys.stderr, str(y.globaldict)
         
-        #y.writeFile(sys.stderr)
+        #y.write(sys.stderr)
         
         
         found = False
@@ -1939,7 +1939,7 @@ EndSection
         #print >> sys.stderr, str(y.globaldict)
         
         self.assert_(commentFound)
-        #y.writeFile(sys.stderr)
+        #y.write(sys.stderr)
     
     def testCommentOutSubOption1(self):
         '''
@@ -1995,7 +1995,7 @@ EndSection
         
         
 #        print >> sys.stderr, str(y.globaldict)
-#        y.writeFile(sys.stderr)
+#        y.write(sys.stderr)
         self.assert_(commentFound)
 
     def testGetSubSections1(self):
@@ -2184,7 +2184,7 @@ EndSection
         self.assert_(not hasIdentifier1)
         
         
-        y.writeFile(tempFile)
+        y.write(tempFile)
         
         # Make sure that the output validates
         y = xorgparser.Parser(tempFile)
@@ -2320,8 +2320,8 @@ EndSection
         self.assert_(not hasIdentifier1)
         
         
-        #y.writeFile(sys.stderr)
-        y.writeFile(tempFile)
+        #y.write(sys.stderr)
+        y.write(tempFile)
         
         # Make sure that the output validates
         y = xorgparser.Parser(tempFile)
@@ -2431,8 +2431,8 @@ EndSection
         self.assert_(not hasIdentifier0)
         self.assert_(not hasIdentifier1)
         
-        #y.writeFile(sys.stderr)
-        y.writeFile(tempFile)
+        #y.write(sys.stderr)
+        y.write(tempFile)
         
         # Make sure that the output validates
         y = xorgparser.Parser(tempFile)
@@ -2601,8 +2601,8 @@ EndSection
                 
         self.assert_(commentFound)
         
-        #y.writeFile(sys.stderr)
-        y.writeFile(tempFile)
+        #y.write(sys.stderr)
+        y.write(tempFile)
         
         # Make sure that the output validates
         y = xorgparser.Parser(tempFile)
@@ -2701,11 +2701,11 @@ EndSection
         y.commentOutSection('Screen', position=1)
         self.assert_(not y.globaldict['Screen'].get(1))
         
-        y.writeFile(tempFile)
+        y.write(tempFile)
         
         # Make sure that the output validates
         y = xorgparser.Parser(tempFile)
-        #y.writeFile(sys.stderr)
+        #y.write(sys.stderr)
 
     def test_remove_section1(self):
         '''by identifier def remove_section(self, section, identifier=None, position=None)'''
@@ -2813,11 +2813,11 @@ EndSection
         self.assert_(hasIdentifier0)
         self.assert_(not hasIdentifier1)
                 
-        y.writeFile(tempFile)
+        y.write(tempFile)
         
         # Make sure that the output validates
         y = xorgparser.Parser(tempFile)
-        #y.writeFile(sys.stderr)
+        #y.write(sys.stderr)
         
         
     def test_remove_section2(self):
@@ -2926,11 +2926,11 @@ EndSection
         self.assert_(hasIdentifier0)
         self.assert_(not hasIdentifier1)
         
-        y.writeFile(tempFile)
+        y.write(tempFile)
         
         # Make sure that the output validates
         y = xorgparser.Parser(tempFile)
-        #y.writeFile(sys.stderr)
+        #y.write(sys.stderr)
     
     def test_remove_section3(self):
         '''by type def remove_section(self, section, identifier=None, position=None)'''
@@ -3045,11 +3045,11 @@ EndSection
         self.assert_(not hasIdentifier0)
         self.assert_(not hasIdentifier1)
         
-        y.writeFile(tempFile)
+        y.write(tempFile)
         
         # Make sure that the output validates
         y = xorgparser.Parser(tempFile)
-        #y.writeFile(sys.stderr)
+        #y.write(sys.stderr)
     
     def testOptionPrefix(self):
         '''Make sure that the option has quotation marks when required'''
