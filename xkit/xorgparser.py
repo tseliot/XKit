@@ -1640,30 +1640,31 @@ class Parser(object):
 
 
     def get_default_serverlayout(self):
-        '''See if one or more ServerLayout sections are set as default and return their
-        position in a list
+        '''Return a list with the position of default ServerLayout sections
         
         NOTE: If the section set as the default ServerLayout doesn't exist
               it will raise a ParseException.'''
         
         default = []
-        serverFlags = self._gdict['ServerFlags']
+        serverflags = self._gdict['ServerFlags']
         it = 0
-        for flag in serverFlags:
+        for flag in serverflags:
             try:
-                defaultLayout = self.get_value('ServerFlags', 'DefaultServerLayout', it)
-                if defaultLayout:
-                    defIt = 0
+                default_layout = self.get_value('ServerFlags',
+                                               'DefaultServerLayout', it)
+                if default_layout:
+                    def_it = 0
                     for identifier in self.identifiers['ServerLayout']:
-                        if identifier[0].lower().strip() == defaultLayout.lower().strip():
+                        if (identifier[0].lower().strip() ==
+                            default_layout.lower().strip()):
                             default.append(identifier[1])#LayoutPosition
-                            defIt += 1
-                    if defIt == 0:
-                        # If the section set as the default ServerLayout doesn't exist
-                        # raise a ParseException
+                            def_it += 1
+                    if def_it == 0:
+                        # If the section set as the default ServerLayout
+                        # doesn't exist raise a ParseException
                         error = 'The default ServerLayout does not exist.'
                         raise ParseException(error)
-            except OptionException:#no defaultLayout
+            except OptionException:#no default_layout
                 pass
             it += 1
         return default
