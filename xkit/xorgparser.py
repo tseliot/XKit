@@ -1745,10 +1745,10 @@ class Parser(object):
         # the section
         subsections = []
         for sub in self._gdict[self.subsection]:
-            if self._gdict[self.subsection][sub]['section'] == section \
-            and self._gdict[self.subsection][sub]['position'] == position:
+            if (self._gdict[self.subsection][sub]['section'] == section
+                and self._gdict[self.subsection][sub]['position'] == position):
                 subsections.append(sub)
-        
+
         return subsections
     
     def _permanent_merge_subsections(self, subsections):
