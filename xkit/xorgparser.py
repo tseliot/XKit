@@ -1752,19 +1752,21 @@ class Parser(object):
         return subsections
     
     def _permanent_merge_subsections(self, subsections):
-        '''Put SubSections back into the sections to which they belong and comment them out
+        '''Put SubSections back into their sections and comment them out
         
-        WARNING: this alters globaldict and should be used only in commentOutSection()
-                 i.e. when the whole section is being commented out.
+        This alters globaldict and should be used only in commentOutSection()
+        i.e. when the whole section is being commented out.
                   
-        subsections = the list of the indices subsections to merge and remove'''
-        
+        subsections = the list of the indices subsections to merge and
+        remove'''
+
         for sect in subsections:
             section = self._gdict[self.subsection][sect]['section']
             identifier = self._gdict[self.subsection][sect]['identifier']
             position = self._gdict[self.subsection][sect].get('position')
             options = self._gdict[self.subsection][sect]['options']
-            self.comments.append('#\tSubSection ' + '"' + identifier + '"' + '\n')
+            self.comments.append('#\tSubSection ' + '"' + identifier + '"' +
+                                 '\n')
 
             for option in options:
                 opt = '#\t\t%s\n' % (option.strip())
@@ -1775,7 +1777,7 @@ class Parser(object):
                 del self._gdict[self.subsection][sect]
             except KeyError:
                 pass
-    
+
     def _get_comments(self, section, position):
         '''Return the index of the comment entry in the Comments section for a section'''
         
