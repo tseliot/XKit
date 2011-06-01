@@ -911,7 +911,7 @@ class Parser(object):
         
         modded = 0
         for sect in sorted_remove:
-            subsections = self.getSubSections(section, sect)
+            subsections = self.get_subsections(section, sect)
             
             # Remove all its SubSections from SubSection
             for sub in subsections:
@@ -1739,7 +1739,7 @@ class Parser(object):
         else:#it is a file object
             destination.write(bytes(''.join(lines), 'UTF-8'))
     
-    def getSubSections(self, section, position):
+    def get_subsections(self, section, position):
         '''Get all the subsections contained in a section'''
         # loop through subsections and see what subsections match
         # the section
@@ -1831,7 +1831,7 @@ class Parser(object):
     def _comment_out_subsections(self, section, position):
         '''Comment out all the subsections of a section.'''
         
-        subsections = self.getSubSections(section, position)
+        subsections = self.get_subsections(section, position)
         self._permanent_merge_subsections(subsections)
     
     def _remove_comment_entries(self, section, position):

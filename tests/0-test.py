@@ -2058,8 +2058,8 @@ EndSection
 #        y.write(sys.stderr)
         self.assert_(commentFound)
 
-    def testGetSubSections1(self):
-        '''def getSubSections(self, section, position)''' 
+    def test_get_subsections1(self):
+        '''def get_subsections(self, section, position)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -2100,13 +2100,13 @@ EndSection
         
         y = self.parser = xorgparser.Parser(tempFile)
         
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(len(screenSub0) == 1)
         
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(len(screenSub1) == 2)
         
     def testCommentOutSection1(self):
@@ -2182,16 +2182,16 @@ EndSection
         
         
         # the Device section doesn't have subsections
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
         # the first Screen was commented out together with
         # its subsection
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(not screenSub0)
         
         # Screen section 2 has 2 subsections
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(len(screenSub1) == 2)
         
 #        print >> sys.stderr, str(y.globaldict)
@@ -2223,7 +2223,7 @@ EndSection
         
         # the second Screen was commented out together with
         # its subsection
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(not screenSub1)
         
         
@@ -2338,16 +2338,16 @@ EndSection
         
         
         # the Device section doesn't have subsections
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
         # the first Screen was commented out together with
         # its subsection
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(not screenSub0)
         
         # Screen section 2 has 2 subsections
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(len(screenSub1) == 2)
         
         
@@ -2359,7 +2359,7 @@ EndSection
         
         # the second Screen was commented out together with
         # its subsection
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(not screenSub1)
         
         
@@ -2459,16 +2459,16 @@ EndSection
         y.commentOutSection('Screen')
         
         # the Device section doesn't have subsections
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
         # the first Screen was commented out together with
         # its subsection
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(not screenSub0)
         
         # Screen section 2 has 2 subsections
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(not screenSub1)
         
 #        print >> sys.stderr, str(y.globaldict)
@@ -2595,16 +2595,16 @@ EndSection
         
         
         # the Device section doesn't have subsections
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
         # the first Screen was commented out together with
         # its subsection
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(not screenSub0)
         
         # Screen section 2 has 2 subsections
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(len(screenSub1) == 2)
         
         
@@ -2616,7 +2616,7 @@ EndSection
         
         # the second Screen was commented out together with
         # its subsection
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(not screenSub1)
         
         # screens should not have a reference to their id
@@ -2727,15 +2727,15 @@ EndSection
         y.commentOutSubSection('Screen', 'Whatever', 0)
         
         # the Device section doesn't have subsections
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
         # the first Screen has 1 subsection
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(len(screenSub0) == 1)
         
         # Screen section 2 has 2 subsections
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(len(screenSub1) == 2)
         
 #        print >> sys.stderr, str(y.globaldict)
@@ -2747,7 +2747,7 @@ EndSection
         # Remove "Whatever" subsection from Screen 1
         y.commentOutSubSection('Screen', 'Whatever', 1)
         
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         # Screen 1 must have only 1 subsection now
         self.assert_(len(screenSub1) == 1)
         
@@ -2843,15 +2843,15 @@ EndSection
         y.remove_section('Screen', identifier='My Screen1')
         
         # the Device section doesn't have subsections
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
         # the first Screen has 1 subsection
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(len(screenSub0) == 1)
         
         # Screen section 2 has 2 subsections
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(not screenSub1)
         
 #        print >> sys.stderr, str(y.globaldict)
@@ -2956,15 +2956,15 @@ EndSection
         y.remove_section('Screen', position=1)
         
         # the Device section doesn't have subsections
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
         # the first Screen has 1 subsection
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(len(screenSub0) == 1)
         
         # Screen section 2 has no subsections
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(not screenSub1)
         
 #        print >> sys.stderr, str(y.globaldict)
@@ -3070,15 +3070,15 @@ EndSection
         y.remove_section('Screen')
         
         # the Device section doesn't have subsections
-        deviceSub = y.getSubSections('Device', 0)
+        deviceSub = y.get_subsections('Device', 0)
         self.assert_(not deviceSub)
         
         # the first Screen has no subsections
-        screenSub0 = y.getSubSections('Screen', 0)
+        screenSub0 = y.get_subsections('Screen', 0)
         self.assert_(not screenSub0)
         
         # Screen section 2 has no subsections
-        screenSub1 = y.getSubSections('Screen', 1)
+        screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(not screenSub1)
         
 #        print >> sys.stderr, str(y.globaldict)
