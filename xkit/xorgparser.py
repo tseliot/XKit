@@ -1678,12 +1678,19 @@ class Parser(object):
             identifier = self.tempdict['SubSection'][sect]['identifier']
             position = self.tempdict['SubSection'][sect].get('position')
             options = self.tempdict['SubSection'][sect]['options']
-            self.tempdict[section].setdefault(position, []).append('\tSubSection ' + '"' + identifier + '"' + '\n')
+            self.tempdict[section].setdefault(position, []).append(
+                                                            '\tSubSection ' +
+                                                            '"' + identifier +
+                                                            '"' + '\n')
             if len(options) > 0:
-                self.tempdict[section][position].append('\t' + '\t'.join(options) + '\tEndSubSection\n')
+                self.tempdict[section][position].append('\t' +
+                                                        '\t'.join(options) +
+                                                        '\tEndSubSection\n')
             else:
-                self.tempdict[section][position].append('\t'.join(options) + '\tEndSubSection\n')
-        try:#remove subsection since it was merged
+                self.tempdict[section][position].append('\t'.join(options) +
+                                                        '\tEndSubSection\n')
+        try:
+            #remove subsection since it was merged
             del self.tempdict['SubSection']
         except KeyError:
             pass
