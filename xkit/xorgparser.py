@@ -1978,8 +1978,8 @@ class Parser(object):
                 
                 modded += 1
 
-    
-    def commentOutSubOption(self, section, identifier, option, position=None):
+
+    def comment_out_suboption(self, section, identifier, option, position=None):
         '''Comment out an option in a subsection.
         
         section= the section which contains the subsection

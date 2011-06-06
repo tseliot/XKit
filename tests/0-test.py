@@ -2001,9 +2001,9 @@ EndSection
         self.assert_(commentFound)
         #y.write(sys.stderr)
     
-    def testCommentOutSubOption1(self):
+    def test_comment_out_suboption1(self):
         '''
-        def commentOutSubOption(self, section, identifier, option, position=None):
+        def comment_out_suboption(self, section, identifier, option, position=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
@@ -2032,7 +2032,7 @@ EndSection
         
         y = self.parser = xorgparser.Parser(tempFile)
         
-        y.commentOutSubOption(section, identifier, option, position=None)
+        y.comment_out_suboption(section, identifier, option, position=None)
         
         commentFound = False
         for commentSection in y.globaldict[y.commentsection][y.subsection]:
