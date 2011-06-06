@@ -2669,8 +2669,8 @@ EndSection
 
 
 
-    def testCommentOutSubSection(self):
-        '''def commentOutSubSection(self, section, identifier, position=None):'''
+    def test_comment_out_subsection(self):
+        '''def comment_out_subsection(self, section, identifier, position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -2724,7 +2724,7 @@ EndSection
         y = xorgparser.Parser(tempFile)
 #        print >> sys.stderr, str(y.globaldict)
         # Try to comment out a subsection which doesn't exist
-        y.commentOutSubSection('Screen', 'Whatever', 0)
+        y.comment_out_subsection('Screen', 'Whatever', 0)
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
@@ -2745,7 +2745,7 @@ EndSection
         self.assert_(y.globaldict['Screen'].get(1))
         
         # Remove "Whatever" subsection from Screen 1
-        y.commentOutSubSection('Screen', 'Whatever', 1)
+        y.comment_out_subsection('Screen', 'Whatever', 1)
         
         screenSub1 = y.get_subsections('Screen', 1)
         # Screen 1 must have only 1 subsection now

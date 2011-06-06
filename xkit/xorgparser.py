@@ -1795,7 +1795,7 @@ class Parser(object):
         '''Put SubSections back into their sections and comment them out
         
         This alters globaldict and should be used only to comment out
-        subsections (i.e. in commentOutSubSection()) when the whole section
+        subsections (i.e. in comment_out_subsection()) when the whole section
         is not being commented out.
                  
         subsections = the list of the indices subsections to merge and
@@ -1920,7 +1920,7 @@ class Parser(object):
                 modded += 1
 
     
-    def commentOutSubSection(self, section, identifier, position):
+    def comment_out_subsection(self, section, identifier, position):
         '''Comment out a subsection.
         
         section= the type of the section which contains the subsection
