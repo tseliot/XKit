@@ -1841,11 +1841,11 @@ class Parser(object):
         self._permanent_merge_subsections(subsections)
     
     def _remove_comment_entries(self, section, position):
-        '''Remove comment sections of specific sections from the "Comments" section'''
+        '''Remove comment sections of a "section" from the "Comments" section'''
         
         comments = self._get_comments(section, position)
-        for commentSection in comments:
-            del self._gdict['Comments'][section][commentSection]
+        for comment_section in comments:
+            del self._gdict[self.commentsection][section][comment_section]
     
     def commentOutSection(self, section, identifier=None, position=None):
         '''Comment out a section and all its subsections.'''
