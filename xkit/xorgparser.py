@@ -1851,8 +1851,8 @@ class Parser(object):
     def comment_out_section(self, section, identifier=None, position=None):
         '''Comment out a section and all its subsections.'''
         
-        startSection = '\n#Section "%s"\n' % (section)
-        endSection = '#EndSection\n'
+        start_section = '\n#Section "%s"\n' % (section)
+        end_section = '#EndSection\n'
 
         # Comment any section of "section" type with the same identifier
         #   currently sections of the same type cannot have the same id
@@ -1872,8 +1872,8 @@ class Parser(object):
         
         # Comment any section of "section" type
         else:
-            allkeys = list(self._gdict[section].keys())
-            to_remove = {}.fromkeys(allkeys)
+            all_keys = list(self._gdict[section].keys())
+            to_remove = {}.fromkeys(all_keys)
         
         # If the section has an identifier i.e. if the section
         # is in self.require_id
@@ -1888,22 +1888,20 @@ class Parser(object):
                     pass
                 it += 1
         
-        
         sorted_remove = list(to_remove.keys())
         sorted_remove.sort()
         
-        
         modded = 0
         for sect in sorted_remove:
-            self.comments.append(startSection)
+            self.comments.append(start_section)
             for option in self._gdict[section][sect]:
-                commentedOption = '#\t%s\n' % (option.strip())
-                self.comments.append(commentedOption)
+                commented_option = '#\t%s\n' % (option.strip())
+                self.comments.append(commented_option)
 
             # Append all its SubSections (automatically commented
             #  out) and remove them from SubSection
             self._comment_out_subsections(section, sect)
-            self.comments.append(endSection)
+            self.comments.append(end_section)
             
             # Remember to remove any related entry from the "Comments"
             # section
@@ -1914,9 +1912,9 @@ class Parser(object):
             
             # Remove the reference from identifiers
             # if such reference exists
-            identref = to_remove[sect]
-            if identref != None:
-                realpos = identref - modded
+            ident_ref = to_remove[sect]
+            if ident_ref != None:
+                realpos = ident_ref - modded
 
                 del self.identifiers[section][realpos]
                 modded += 1
