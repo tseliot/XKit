@@ -1929,11 +1929,13 @@ class Parser(object):
         
         subsections = []
         for subsection in self._gdict[self.subsection]:
-            if self._gdict[self.subsection][subsection]['section'] == section \
-            and self._gdict[self.subsection][subsection]['identifier'] == identifier \
-            and self._gdict[self.subsection][subsection]['position'] == position:
+            temp_dict = self._gdict[self.subsection][subsection]
+            if (temp_dict['section'] == section
+            and temp_dict['identifier'] == identifier
+            and temp_dict['position'] == position):
                 subsections.append(subsection)
                 break
+            del temp_dict
         # Add the subsection to the Comments section
         self._merge_subsections_with_comments(subsections)
         
