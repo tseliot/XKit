@@ -2022,35 +2022,38 @@ class Parser(object):
                 modded += 1
 
     def _merge_commented_options(self, temp_dict):
-        '''Put commented out options back into the sections or subsections to which they belong.'''
+        '''Put commented out options back into their sections or subsections'''
         
         for sect in temp_dict[self.commentsection]:
-            sectionOptions = None
-            for sectionInstance in temp_dict[self.commentsection][sect]:
-                section = temp_dict[self.commentsection][sect][sectionInstance].get('section')
-                    
-                identifier = temp_dict[self.commentsection][sect][sectionInstance].get('identifier')
-                position = temp_dict[self.commentsection][sect][sectionInstance].get('position')
-                options = temp_dict[self.commentsection][sect][sectionInstance]['options']
+            section_options = None
+            for section_instance in temp_dict[self.commentsection][sect]:
+                section = temp_dict[self.commentsection][sect][
+                                    section_instance].get('section')
+                identifier = temp_dict[self.commentsection][sect][
+                                       section_instance].get('identifier')
+                position = temp_dict[self.commentsection][sect][
+                                     section_instance].get('position')
+                options = temp_dict[self.commentsection][sect][
+                                    section_instance]['options']
                 if section == self.subsection:
                     for sub in temp_dict[sect]:
-                        subSection = temp_dict[sect][sub]
-                        if subSection['identifier'] == identifier and \
-                        subSection['position'] == position and \
-                        subSection['section'] == section:
-                            sectionOptions = temp_dict[sect][sub]['options']
+                        subsection = temp_dict[sect][sub]
+                        if (subsection['identifier'] == identifier
+                        and subsection['position'] == position
+                        and subsection['section'] == section):
+                            section_options = temp_dict[sect][sub]['options']
                             break
-                    
                 else:
-                    sectionOptions = temp_dict[sect].get(position)
+                    section_options = temp_dict[sect].get(position)
             
-            if sectionOptions:
+            if section_options:
                 for option in options:
                     option = '\t%s\n' % (option.strip())
                     if sect == self.subsection:
-                        sectionOptions.setdefault('options', []).append(option)
+                        section_options.setdefault('options',
+                                                   []).append(option)
                     else:
-                        sectionOptions.append(option)
+                        section_options.append(option)
 
         return temp_dict
     
