@@ -311,18 +311,20 @@ class Parser(object):
                     if line.strip() != '':
                         #options
                         if has_subsection == True:
-                            # section =  the section in which the subsection is
-                            #            located (e.g. "Screen")
+                            # section =  the section in which the subsection
+                            #            is located (e.g. "Screen")
                             # position = e.g. in key 0 of the
                             #            self._gdict['Screen']
                             # identifier = e.g. 'Display' (in SubSection
                             #                             "Display")
                             # options = a list of lines with the options
-                            self._gdict[self.subsection][curlength]['options'].append('\t' + line.strip() + '\n')
+                            self._gdict[self.subsection][curlength][
+                                 'options'].append('\t' + line.strip() + '\n')
                         else:
                             self._gdict.setdefault(section_flag, {})
                             curlength = global_iters[section_flag]
-                            self._gdict[section_flag].setdefault(curlength, []).append('\t' + line.strip() + '\n')
+                            self._gdict[section_flag].setdefault(curlength,
+                                        []).append('\t' + line.strip() + '\n')
             it += 1
         
         if not empty:
@@ -486,8 +488,10 @@ class Parser(object):
             for elem in self._gdict[sect]:
                 try:
                     identifier = self.get_value(sect, 'Identifier', it)
-                except (OptionException, SectionException):#if no identifier can be found
-                    error = 'No Identifier for section %s, position %d, can be found.' % (sect, elem)
+                except (OptionException, SectionException):
+                    #if no identifier can be found
+                    error = ('No Identifier for section %s, position %d, '
+                             'can be found.' % (sect, elem))
                     raise ParseException(error)
                 try:
                     identifier.append('')
@@ -499,9 +503,10 @@ class Parser(object):
                 it += 1
     
     def _validate_options(self):
-        '''One word entries are not acceptable as either options or references.
-        If one is found, ParseException will be raised.'''
-        
+        '''One word entries are not acceptable as either options or references
+
+        If a one word entry is found, ParseException will be raised.'''
+
         # Sections in sections_whitelist won't be validated
         sections_whitelist = ['Files', 'Comments']
         options_whitelist = ['endmode']
@@ -519,38 +524,41 @@ class Parser(object):
                         if option.find('#') != -1:#remove comments
                             option = option[0: option.find('#')]
                         
-                        error = 'The following option is invalid: %s' % (option.strip())
+                        error = ('The following option is invalid: %s'
+                                 % (option.strip()))
                         
-                        optbits = self._clean_duplicates(option, includenull=True)
-                        
-                        if len(optbits) == 1 and optbits[0].strip().lower() not in options_whitelist:#ERROR
-                            
+                        optbits = self._clean_duplicates(option,
+                                                         include_null=True)
+
+                        if (len(optbits) == 1
+                        and optbits[0].strip().lower() not
+                        in options_whitelist):
                             raise ParseException(error)
                         
                         if not optbits[0][0].isalpha():
                             raise ParseException(error)
     
     def get_duplicate_options(self, section, position):
-        '''See if there are duplicate options in a section (it is ok to have duplicated
-        references) e.g. several Load options, or Screen, etc.'''
-        
+        '''See if there are duplicate options in a section
+
+        It is ok to have duplicated references e.g. several Load options, or
+        Screen, etc. though'''
+
         blacklist = ['driver', 'busid', 'identifier']
         total = []
         duplicates = []
-        
+
         if section == 'SubSection':
             options = self._gdict[section][position]['options']
         else:
             options = self._gdict[section][position]
-        
-        
+
         for option in options:
             option = option.strip()
             if option.find('#') != -1:#remove comments
                 option = option[0: option.find('#')]
             
             optbits = self._clean_duplicates(option)
-            
             # optbits may look like this:
             # 
             # ['Option', 'TestOption1', '0']
@@ -587,13 +595,13 @@ class Parser(object):
                 if len(duplopt) > 0:
                     duplicates.setdefault(section, {}).setdefault(elem,
                                                                   duplopt)
-        
+
         return duplicates
-        
-    def _clean_duplicates(self, option, includenull=None):
+
+    def _clean_duplicates(self, option, include_null=None):
         '''Clean the option and return all its components in a list
         
-        includenull - is used only by _validate_options() and makes
+        include_null - is used only by _validate_options() and makes
         sure that options with a null value assigned in quotation
         marks are not considered as one-word options'''
         
@@ -643,12 +651,12 @@ class Parser(object):
                         optbits.append(optbit)
                         #print 'i=END', 'optbit=', optbit
                     else:
-                        if includenull:
+                        if include_null:
                             optbit = ''
                             optbits.append(optbit)
                 it += 1
-        
-        if includenull and len(optbits) != optcount/2 +1:
+
+        if include_null and len(optbits) != optcount/2 +1:
             # e.g. if the option looks like the following:
             # 
             # Modelname ""
@@ -656,9 +664,9 @@ class Parser(object):
             # add a '' which wouldn't be caught by this method otherwise.
             optbit = ''
             optbits.append(optbit)
-        
+
         return optbits
-    
+
     def get_duplicate_sections(self):
         '''Return a dictionary with the duplicate sections i.e. sections
         of the same kind, with the same identifier'''
@@ -674,8 +682,8 @@ class Parser(object):
                                                        temp.count(elem))
 
         return duplicates
-    
-    
+
+
     def add_option(self, section, option, value, option_type=None,
                    position=None, reference=None, prefix='"'):
         '''Add an option to a section
@@ -826,9 +834,9 @@ class Parser(object):
         section= the section to create
         identifier= the identifier of a section (if the section requires
                     an identifier)'''
-        
+
         position  = len(self._gdict[section])
-        
+
         if section in self.require_id:
             if identifier != None:
                 option = 'Identifier'
@@ -887,12 +895,12 @@ class Parser(object):
         elif position != None:
             if self.is_section(section, position=position):
                 to_remove.setdefault(position, None)
-        
+
         # Comment any section of "section" type
         else:
             allkeys = list(self._gdict[section].keys())
             to_remove = {}.fromkeys(allkeys)
-        
+
         # If the section has an identifier i.e. if the section
         # is in self.require_id
         if section in self.require_id:
@@ -905,21 +913,21 @@ class Parser(object):
                 except ValueError:
                     pass
                 it += 1
-        
+
         sorted_remove = list(to_remove.keys())
         sorted_remove.sort()
-        
+
         modded = 0
         for sect in sorted_remove:
             subsections = self.get_subsections(section, sect)
-            
+
             # Remove all its SubSections from SubSection
             for sub in subsections:
                 try:#remove subsection
                     del self._gdict[self.subsection][sub]
                 except KeyError:
                     pass
-            
+
             # Remember to remove any related entry from the "Comments"
             # section
             self._remove_comment_entries(section, sect)
@@ -936,46 +944,46 @@ class Parser(object):
                 del self.identifiers[section][realpos]
                 modded += 1
 
-    
+
     def add_reference(self, section, reference, identifier, position=None):
         '''Add a reference to a section from another section.
-        
+
         For example:
         to put a reference to the Screen section named "Default Screen"
         in the ServerLayout section you should do:
-        
+
         section='ServerLayout'
         reference='Screen'
         identifier='Default Screen'
         position=0 #the first ServerLayout section
-        
+
         NOTE: if position is set to None it will add such reference to any
         instance of the section (e.g. to any ServerLayout section)'''
-        
+
         self.add_option(section, reference, value=identifier,
                         position=position, reference=True)
-        
+
     def remove_reference(self, section, reference, identifier, position=None):
         '''Remove a reference to a section from another section.
-        
+
         For example:
         to remove a reference to Screen "Default Screen" from the
         ServerLayout section you should do:
-        
+
         section='ServerLayout'
         reference='Screen'
         identifier='Default Screen'
         position=0 #the first ServerLayout section
-                
+
         NOTE: if position is set to None it will remove such reference from
         any instance of the section (e.g. from any ServerLayout section)'''
-        
+
         self.remove_option(section, reference, value=identifier,
                            position=position, reference=True)
-    
+
     def get_references(self, section, position, reflist=None):
         '''Get references to other sections which are located in a section.
-        
+
         section= the section (e.g. "Screen")
         position= e.g. 0 stands for the 1st Screen section
         reflist= a list of references which this function should look for.
@@ -984,7 +992,7 @@ class Parser(object):
                  example, if reflist is set to ['Device'], this function will
                  look for references to other devices only (references to,
                  say, screens, will be ignored).'''
-        
+
         if reflist == None:
             options = self.require_id
         else:
@@ -1023,10 +1031,10 @@ class Parser(object):
                 for reference in list(reference_dict.keys()):
                     references[option].append(reference)
         return references
-    
+
     def make_subsection(self, section, identifier, position=None):
         '''Create a new subsection inside of a section.
-        
+
         section= the section to which the subsection will belong
         identifier= the name of the subsection
         position= the position of the section in the dictionary with the
@@ -1034,9 +1042,9 @@ class Parser(object):
                   If set to None, it will create a new subsection in all
                   the instances of the said section (e.g. in all the
                   "Screen" sections)'''
-        
+
         curlength = len(self._gdict[self.subsection])
-        
+
         if position == None:
             for elem in self._gdict[section]:
                 # don't create a new subsection if one with the same
@@ -1050,7 +1058,7 @@ class Parser(object):
                         self._gdict[self.subsection][sub].get('position') ==
                         elem):
                         create = False
-                
+
                 if create:
                     temp_dict = self._gdict[self.subsection][curlength] = {}
                     temp_dict['section'] = section
@@ -1071,7 +1079,7 @@ class Parser(object):
                     self._gdict[self.subsection][sub].get('position') ==
                     position):
                     create = False
-            
+
             if create:
                 temp_dict = self._gdict[self.subsection][curlength] = {}
                 temp_dict['section'] = section
@@ -1100,7 +1108,6 @@ class Parser(object):
                     self._gdict[self.subsection][elem].get('identifier') ==
                     identifier):
                     to_remove.append(elem)
-                
         else:
             for elem in self._gdict[self.subsection]:
                 if (self._gdict[self.subsection][elem].get('section') ==
@@ -1112,7 +1119,7 @@ class Parser(object):
                     to_remove.append(elem)
         for item in to_remove:
             del self._gdict[self.subsection][item]
-    
+
     def add_suboption(self, section, identifier, option, value,
                       option_type=None, position=None):
         '''Add an option to one or more subsections.
@@ -1130,7 +1137,7 @@ class Parser(object):
         position= e.g. 0 (i.e. the option will be added to a subsection which
                   is located in the first element in the list of Screen
                   sections)'''
-        
+
         prefix = '"'
         not_to_create = []
         to_modify = []
@@ -1144,12 +1151,12 @@ class Parser(object):
         else:
             toadd = ('\t' + option_type + '\t' + prefix + option + prefix +
                      '\t' + prefix + str(value) + prefix + '\n')
-        
+
         curlength = len(self._gdict[self.subsection])
         if curlength == 0:
             self._gdict[self.subsection][0] = {'section': section,
             'identifier': identifier, 'options': []}
-        
+
         if position == None:
             # if there is not a subsection for each selected section then
             # create it
@@ -1175,7 +1182,6 @@ class Parser(object):
                     self._gdict[self.subsection][elem].get("section") ==
                     section):
                     to_modify.append(elem)
-                    
         else:
             for elem in self._gdict[self.subsection]:
                 if (self._gdict[self.subsection][elem].get("position") ==
@@ -1190,17 +1196,17 @@ class Parser(object):
                 {'section': section, 'identifier': identifier,
                  'options': [], 'position': position}
                 to_modify.append(curlength)
-        
+
         for elem in to_modify:
             self._gdict[self.subsection][elem]['options'].append(toadd)
-        
-    
+
+
     def _get_suboptions_to_blacklist(self, section, identifier, option,
                                      position=None):
         '''Get a dictionay of the suboptions to blacklist.
-        
+
         See add_suboption() for an explanation on the arguments.
-        
+
         Used in both remove_option() and remove_suboption()'''
         to_remove = {}
         if len(self._gdict[section]) != 0:#if the section exists
@@ -1232,7 +1238,7 @@ class Parser(object):
 
     def remove_suboption(self, section, identifier, option, position=None):
         '''Remove an option from a subsection.'''
-        
+
         to_remove = self._get_suboptions_to_blacklist(section, identifier,
                                                       option, position)
         for elem in to_remove:
@@ -1244,7 +1250,7 @@ class Parser(object):
 
     def get_identifier(self, section, position):
         '''Get the identifier of a specific section from its position.'''
-        
+
         error_msg = ('No identifier can be found for section "%s" No %d'
                     % (section, position))
         try:
@@ -1344,11 +1350,11 @@ class Parser(object):
             # e.g. if we're looking for a reference to Device we are not
             # interested in getting references to InputDevice
 
-            referencesList = [x.lower().strip() for x in self.references]
+            references_list = [x.lower().strip() for x in self.references]
 
             if (section != 'ServerLayout' and
                 quotation == 0 and optlen == 2 and
-                optbits[0].lower().strip() in referencesList):
+                optbits[0].lower().strip() in references_list):
                 # e.g. Screen 1 -> 1 stands for the position, therefore the 
                 # identifier of the section at position 1 should be returned
                 # instead of the number (if possible).
@@ -1417,7 +1423,7 @@ class Parser(object):
     def get_value(self, section, option, position, identifier=None,
                   sect=None, reference=None):
         '''Get the value which is assigned to an option.
-        
+
         Return types:
           * string (if only one value is available)
             - usually in options
@@ -1563,9 +1569,9 @@ class Parser(object):
 
     def is_section(self, section, identifier=None, position=None):
         '''See if a section with a certain identifier exists.
-        
+
         NOTE: either identifier or position must be provided.'''
-        
+
         if identifier != None:
             try:
                 self.get_position(section, identifier)
@@ -1574,14 +1580,13 @@ class Parser(object):
                 return False
         elif position != None:
             return self._gdict[section].get(position) != None
-        
         else:
             error_msg = 'Either identifier or position must be provided'
             raise Exception(error_msg)
     
     def get_position(self, section, identifier):
         '''Get the position of a specific section from its identifier.'''
-        
+
         error_msg = ('No %s section named "%s" can be found' %
                      (section, identifier))
         for sect in self.identifiers[section]:
@@ -1591,7 +1596,7 @@ class Parser(object):
             except AttributeError:
                 pass
         raise IdentifierException(error_msg)
-    
+
     def get_broken_references(self):
         '''Look for references to sections which don't exist
 
@@ -1622,7 +1627,6 @@ class Parser(object):
         for section in references_tree:
             for elem in references_tree[section]:
                 for refsect in references_tree[section][elem]:
-
                     if len(references_tree[section][elem][refsect]) > 0:
                         #references_tree[section][elem][refsect]
                         for ref in references_tree[section][elem][refsect]:
@@ -1641,10 +1645,10 @@ class Parser(object):
 
     def get_default_serverlayout(self):
         '''Return a list with the position of default ServerLayout sections
-        
+
         NOTE: If the section set as the default ServerLayout doesn't exist
               it will raise a ParseException.'''
-        
+
         default = []
         serverflags = self._gdict['ServerFlags']
         it = 0
@@ -1668,11 +1672,11 @@ class Parser(object):
                 pass
             it += 1
         return default
-    
+
 
     def _merge_subsections(self, temp_dict):
         '''Put SubSections back into the sections to which they belong.'''
-        
+
         for sect in temp_dict['SubSection']:
             section = temp_dict['SubSection'][sect]['section']
             identifier = temp_dict['SubSection'][sect]['identifier']
@@ -1696,24 +1700,24 @@ class Parser(object):
             pass
 
         return temp_dict
-            
-    
+
+
     def write(self, destination, test=None):
         '''Write the changes to the destination
-        
+
         The destination can be either a file (e.g. /etc/X11/xorg.conf)
         or a file object (e.g. sys.stdout).
-        
+
         destination = the destination file or file object (mandatory)
         test = if set to True write will append the result to the
                destination file instead of overwriting it. It has no
                effect on file objects. Useful for testing.'''
-        
+
         temp_dict = copy.deepcopy(self._gdict)
-        
+
         # Commented options must be dealt with first
         temp_dict = self._merge_commented_options(temp_dict)
-        
+
         # Merge all the non-commented subsections
         temp_dict = self._merge_subsections(temp_dict)
         lines = []
@@ -1728,7 +1732,7 @@ class Parser(object):
                                      'EndSection\n\n')
 
         del temp_dict
-        
+
         if not hasattr(destination, 'write'):#it is a file
             if test:
                 destination = open(destination, 'a')
@@ -1738,7 +1742,7 @@ class Parser(object):
             destination.close()
         else:#it is a file object
             destination.write(bytes(''.join(lines), 'UTF-8'))
-    
+
     def get_subsections(self, section, position):
         '''Get all the subsections contained in a section'''
         # loop through subsections and see what subsections match
@@ -1750,14 +1754,14 @@ class Parser(object):
                 subsections.append(sub)
 
         return subsections
-    
+
     def _permanent_merge_subsections(self, subsections):
         '''Put SubSections back into their sections and comment them out
-        
+
         This alters globaldict and should be used only in
         comment_out_section() i.e. when the whole section is being
         commented out.
-                  
+
         subsections = the list of the indices subsections to merge and
         remove'''
 
@@ -1793,11 +1797,11 @@ class Parser(object):
 
     def _merge_subsections_with_comments(self, subsections):
         '''Put SubSections back into their sections and comment them out
-        
+
         This alters globaldict and should be used only to comment out
         subsections (i.e. in comment_out_subsection()) when the whole section
         is not being commented out.
-                 
+
         subsections = the list of the indices subsections to merge and
                       remove'''
 
@@ -1837,20 +1841,20 @@ class Parser(object):
 
     def _comment_out_subsections(self, section, position):
         '''Comment out all the subsections of a section.'''
-        
+
         subsections = self.get_subsections(section, position)
         self._permanent_merge_subsections(subsections)
-    
+
     def _remove_comment_entries(self, section, position):
         '''Remove comment sections of a "section" from the "Comments" section'''
-        
+
         comments = self._get_comments(section, position)
         for comment_section in comments:
             del self._gdict[self.commentsection][section][comment_section]
-    
+
     def comment_out_section(self, section, identifier=None, position=None):
         '''Comment out a section and all its subsections.'''
-        
+
         start_section = '\n#Section "%s"\n' % (section)
         end_section = '#EndSection\n'
 
@@ -1864,17 +1868,17 @@ class Parser(object):
                 to_remove.setdefault(pos, None)
             except IdentifierException:
                 pass
-                    
+
         # Comment the section of "section" type at position "position"
         elif position != None:
             if self.is_section(section, position=position):
                 to_remove.setdefault(position, None)
-        
+
         # Comment any section of "section" type
         else:
             all_keys = list(self._gdict[section].keys())
             to_remove = {}.fromkeys(all_keys)
-        
+
         # If the section has an identifier i.e. if the section
         # is in self.require_id
         if section in self.require_id:
@@ -1887,10 +1891,10 @@ class Parser(object):
                 except ValueError:
                     pass
                 it += 1
-        
+
         sorted_remove = list(to_remove.keys())
         sorted_remove.sort()
-        
+
         modded = 0
         for sect in sorted_remove:
             self.comments.append(start_section)
@@ -1902,14 +1906,14 @@ class Parser(object):
             #  out) and remove them from SubSection
             self._comment_out_subsections(section, sect)
             self.comments.append(end_section)
-            
+
             # Remember to remove any related entry from the "Comments"
             # section
             self._remove_comment_entries(section, sect)
-        
+
             # Remove the section from _gdict
             del self._gdict[section][sect]
-            
+
             # Remove the reference from identifiers
             # if such reference exists
             ident_ref = to_remove[sect]
@@ -1919,14 +1923,14 @@ class Parser(object):
                 del self.identifiers[section][realpos]
                 modded += 1
 
-    
+
     def comment_out_subsection(self, section, identifier, position):
         '''Comment out a subsection.
-        
+
         section= the type of the section which contains the subsection
         identifier= the identifier of the subsection
         position= the position of the section'''
-        
+
         subsections = []
         for subsection in self._gdict[self.subsection]:
             temp_dict = self._gdict[self.subsection][subsection]
@@ -1938,19 +1942,19 @@ class Parser(object):
             del temp_dict
         # Add the subsection to the Comments section
         self._merge_subsections_with_comments(subsections)
-        
-    
+
+
     def comment_out_option(self, section, option, value=None, position=None,
                            reference=None):
         '''Comment out an option in a section.
-        
+
         section= the section which will have the option commented out
         option= the option to comment out
         value= if you want to comment out an option only if it has a
                certain value
         position= e.g. 0 (i.e. the first element in the list of Screen
                       sections)'''
-        
+
         to_remove = self._get_options_to_blacklist(section, option, value,
                                                    position, reference)
         for part in to_remove:
@@ -1975,20 +1979,20 @@ class Parser(object):
 
                 #Remove it from its section in _gdict
                 del self._gdict[section][part][realpos]
-                
+
                 modded += 1
 
 
     def comment_out_suboption(self, section, identifier, option, position=None):
         '''Comment out an option in a subsection.
-        
+
         section= the section which contains the subsection
         identifier= the identifier of the subsection
         option= the option to comment out
         position= the position of the section which contains the subsection
                   e.g. 0 (i.e. the first element in the list of Screen
                   sections)'''
-        
+
         to_remove = self._get_suboptions_to_blacklist(section, identifier,
                                                       option, position)
         for elem in to_remove:
@@ -1999,7 +2003,7 @@ class Parser(object):
                 self._gdict[self.subsection][part]['options'][realpos] = ('#%s'
                     % (self._gdict[self.subsection][part]['options'][realpos]
                     .strip()))
-                
+
                 self._gdict[self.commentsection].setdefault(self.subsection,
                                                             {})
                 temp_dict = self._gdict[self.commentsection][self.subsection]
@@ -2020,6 +2024,7 @@ class Parser(object):
                 #Remove the option from its section in _gdict
                 del self._gdict[self.subsection][elem]['options'][realpos]
                 modded += 1
+
 
     def _merge_commented_options(self, temp_dict):
         '''Put commented out options back into their sections or subsections'''
@@ -2056,4 +2061,4 @@ class Parser(object):
                         section_options.append(option)
 
         return temp_dict
-    
+
