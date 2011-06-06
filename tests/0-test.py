@@ -2109,8 +2109,8 @@ EndSection
         screenSub1 = y.get_subsections('Screen', 1)
         self.assert_(len(screenSub1) == 2)
         
-    def testCommentOutSection1(self):
-        '''1 def commentOutSection(self, section, identifier=None, position=None)''' 
+    def test_comment_out_section1(self):
+        '''1 def comment_out_section(self, section, identifier=None, position=None)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -2178,7 +2178,7 @@ EndSection
         
         
         # Comment out the first Screen section
-        y.commentOutSection('Screen', identifier='My Screen')
+        y.comment_out_section('Screen', identifier='My Screen')
         
         
         # the Device section doesn't have subsections
@@ -2218,7 +2218,7 @@ EndSection
         
         
         # Comment out the 2nd Screen section
-        y.commentOutSection('Screen', identifier='My Screen1')
+        y.comment_out_section('Screen', identifier='My Screen1')
         self.assert_(not y.globaldict['Screen'].get(1))
         
         # the second Screen was commented out together with
@@ -2249,8 +2249,8 @@ EndSection
         # Make sure that the output validates
         y = self.parser = xorgparser.Parser(tempFile)
 
-    def testCommentOutSection2(self):
-        '''2 def commentOutSection(self, section, identifier=None, position=None)''' 
+    def test_comment_out_section2(self):
+        '''2 def comment_out_section(self, section, identifier=None, position=None)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -2318,7 +2318,7 @@ EndSection
         
         
         # Comment out the first Screen section
-        y.commentOutSection('Screen', position=0)
+        y.comment_out_section('Screen', position=0)
         
         # check that the removed section doesn't have
         # a reference in y.identifiers any longer
@@ -2354,7 +2354,7 @@ EndSection
         self.assert_(not y.globaldict['Screen'].get(0))
         
         # Comment out the 2nd Screen section
-        y.commentOutSection('Screen', position=1)
+        y.comment_out_section('Screen', position=1)
         self.assert_(not y.globaldict['Screen'].get(1))
         
         # the second Screen was commented out together with
@@ -2386,8 +2386,8 @@ EndSection
         # Make sure that the output validates
         y = self.parser = xorgparser.Parser(tempFile)
 
-    def testCommentOutSection3(self):
-        '''3 def commentOutSection(self, section, identifier=None, position=None)''' 
+    def test_comment_out_section3(self):
+        '''3 def comment_out_section(self, section, identifier=None, position=None)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -2456,7 +2456,7 @@ EndSection
 
 
         # Comment out the all Screen sections
-        y.commentOutSection('Screen')
+        y.comment_out_section('Screen')
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
@@ -2497,8 +2497,8 @@ EndSection
         # Make sure that the output validates
         y = self.parser = xorgparser.Parser(tempFile)
 
-    def testCommentOutSection4(self):
-        '''4 def commentOutSection(self, section, identifier=None, position=None)''' 
+    def test_comment_out_section4(self):
+        '''4 def comment_out_section(self, section, identifier=None, position=None)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'Display'
@@ -2573,7 +2573,7 @@ EndSection
 
 
         # Comment out the first Screen section
-        y.commentOutSection('Screen', position=0)
+        y.comment_out_section('Screen', position=0)
         
 #        print >> sys.stderr, str(y.globaldict)
 #        print >> sys.stderr, '\n'
@@ -2611,7 +2611,7 @@ EndSection
         self.assert_(not y.globaldict['Screen'].get(0))
         
         # Comment out the 2nd Screen section
-        y.commentOutSection('Screen', position=1)
+        y.comment_out_section('Screen', position=1)
         self.assert_(not y.globaldict['Screen'].get(1))
         
         # the second Screen was commented out together with
@@ -2643,7 +2643,7 @@ EndSection
                 
         
         # comment out ServerFlags
-        y.commentOutSection('ServerFlags')
+        y.comment_out_section('ServerFlags')
         # ServerFlags should not exist
         self.assert_(not y.globaldict['ServerFlags'].get(0))
         
@@ -2758,7 +2758,7 @@ EndSection
         
         # Let's assume that I change my mind at this point and
         # decide to comment out the whole section
-        y.commentOutSection('Screen', position=1)
+        y.comment_out_section('Screen', position=1)
         self.assert_(not y.globaldict['Screen'].get(1))
         
         y.write(tempFile)

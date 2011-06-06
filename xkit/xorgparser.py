@@ -1754,8 +1754,9 @@ class Parser(object):
     def _permanent_merge_subsections(self, subsections):
         '''Put SubSections back into their sections and comment them out
         
-        This alters globaldict and should be used only in commentOutSection()
-        i.e. when the whole section is being commented out.
+        This alters globaldict and should be used only in
+        comment_out_section() i.e. when the whole section is being
+        commented out.
                   
         subsections = the list of the indices subsections to merge and
         remove'''
@@ -1847,7 +1848,7 @@ class Parser(object):
         for comment_section in comments:
             del self._gdict[self.commentsection][section][comment_section]
     
-    def commentOutSection(self, section, identifier=None, position=None):
+    def comment_out_section(self, section, identifier=None, position=None):
         '''Comment out a section and all its subsections.'''
         
         startSection = '\n#Section "%s"\n' % (section)
