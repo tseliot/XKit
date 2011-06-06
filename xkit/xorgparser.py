@@ -750,7 +750,7 @@ class Parser(object):
         
     def _get_options_to_blacklist(self, section, option, value=None,
                                   position=None, reference=None):
-        '''Private method shared by remove_option and CommentOutOption'''
+        '''Private method shared by remove_option and comment_out_option'''
         to_remove = {}
         if len(self._gdict[section]) != 0:#if the section exists
 
@@ -1940,7 +1940,7 @@ class Parser(object):
         self._merge_subsections_with_comments(subsections)
         
     
-    def commentOutOption(self, section, option, value=None, position=None, reference=None):
+    def comment_out_option(self, section, option, value=None, position=None, reference=None):
         '''Comment out an option in a section.
         
         section= the section which will have the option commented out

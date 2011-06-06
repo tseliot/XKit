@@ -1954,9 +1954,9 @@ EndSection
         self.assert_(commentFound)
     
     
-    def testCommentOutOption1(self):
+    def test_comment_out_option1(self):
         '''
-        def commentOutOption(self, section, option, value=None, position=None, reference=None):
+        def comment_out_option(self, section, option, value=None, position=None, reference=None):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
@@ -1981,7 +1981,7 @@ EndSection
         
         
         found = False
-        y.commentOutOption(section, option, value=None, position=None, reference=None)
+        y.comment_out_option(section, option, value=None, position=None, reference=None)
         for position in y.globaldict[section]:
             lines = y.globaldict[section][position]
             for line in lines:
