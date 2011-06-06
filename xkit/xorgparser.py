@@ -1989,31 +1989,38 @@ class Parser(object):
                   e.g. 0 (i.e. the first element in the list of Screen
                   sections)'''
         
-        to_remove = self._get_suboptions_to_blacklist(section, identifier, option, position)
+        to_remove = self._get_suboptions_to_blacklist(section, identifier,
+                                                      option, position)
         for elem in to_remove:
             modded = 0
             for part in to_remove[elem]:
                 realpos = part - modded
                 
-                self._gdict[self.subsection][part]['options'][realpos] = \
-                '#%s' % (self._gdict[self.subsection][part]['options'][realpos].strip())
+                self._gdict[self.subsection][part]['options'][realpos] = ('#%s'
+                    % (self._gdict[self.subsection][part]['options'][realpos]
+                    .strip()))
                 
-                self._gdict[self.commentsection].setdefault(self.subsection, {})
-                curlength = len(self._gdict[self.commentsection][self.subsection])
-                self._gdict[self.commentsection][self.subsection].setdefault(part, {})
-                self._gdict[self.commentsection][self.subsection][part].setdefault('identifier', identifier)
-                self._gdict[self.commentsection][self.subsection][part].setdefault('position', part)
-                self._gdict[self.commentsection][self.subsection][part].setdefault('section', section)
-                self._gdict[self.commentsection][self.subsection][part].setdefault('options', [])
+                self._gdict[self.commentsection].setdefault(self.subsection,
+                                                            {})
+                temp_dict = self._gdict[self.commentsection][self.subsection]
+
+                temp_dict.setdefault(part, {})
+                temp_dict[part].setdefault('identifier', identifier)
+                temp_dict[part].setdefault('position', part)
+                temp_dict[part].setdefault('section', section)
+                temp_dict[part].setdefault('options', [])
                 # Copy the option to the Comments section
-                commentsOptions = self._gdict[self.commentsection][self.subsection][part]['options']
-                commentedOption = self._gdict[self.subsection][part]['options'][realpos]
-                commentsOptions.append(commentedOption)
-                
+                comments_options = temp_dict[part]['options']
+                commented_option = self._gdict[self.subsection][part][
+                                              'options'][realpos]
+                comments_options.append(commented_option)
+
+                del temp_dict
+
                 #Remove the option from its section in _gdict
                 del self._gdict[self.subsection][elem]['options'][realpos]
                 modded += 1
-    
+
     def _merge_commented_options(self, temp_dict):
         '''Put commented out options back into the sections or subsections to which they belong.'''
         
