@@ -96,54 +96,55 @@ class XUtils(Parser):
         return devices_to_check
     
     def get_devices_in_use(self):
-        '''
-        If possible, return only the Device sections in use, otherwise return
-        all the Device sections.
-        
+        '''Return the Device sections in use
+
+        If no Device sections are referenced in ServerLayout then all of
+        the available Device sections are returned.
+
         This method supports old Xinerama setups and therefore looks for
-        references to Device sections in the ServerLayout section(s) and checks
-        only the default ServerLayout section provided than one is set in the
-        ServerFlags section.
-        '''
-        devicesToCheck = []
-        driverEnabled = False
+        references to Device sections in the ServerLayout section(s) and
+        checks only the default ServerLayout section provided than one is
+        set in the ServerFlags section.'''
+        devices_to_check = []
+        driver_enabled = False
         
-        serverLayout = self.globaldict['ServerLayout']
-        serverFlags = self.globaldict['ServerFlags']
-        serverLayoutLength = len(serverLayout)
-        serverFlagsLength = len(serverFlags)
+        serverlayout = self.globaldict['ServerLayout']
+        serverflags = self.globaldict['ServerFlags']
+        serverlayout_length = len(serverlayout)
+        serverflags_length = len(serverflags)
         
-        if serverLayoutLength > 0:
-            if serverLayoutLength > 1:#More than 1 ServerLayout?
-                if serverFlagsLength > 0:#has ServerFlags
-                    '''
-                    If the ServerFlags section exists there is a chance that
-                    a default ServerLayout is set.
-                    
-                    If no ServerLayout is set, this might be intentional since
-                    the user might start X with the -layout command line option.
-                    '''
-                    
-                    #See if it has a default ServerLayout
+        if serverlayout_length > 0:
+            if serverlayout_length > 1:#More than 1 ServerLayout?
+                if serverflags_length > 0:#has ServerFlags
+                    # If the ServerFlags section exists there is a chance that
+                    # a default ServerLayout is set.
+                    #
+                    # If no ServerLayout is set, this might be intentional
+                    # since the user might start X with the -layout command
+                    # line option.
+
+                    # See if it has a default ServerLayout
                     default = self.get_default_serverlayout()
-                    
+
                     if len(default) == 1:
-                        devicesToCheck = self.get_devices_in_serverlayout(default[0])
+                        devices_to_check = \
+                        self.get_devices_in_serverlayout(default[0])
                     else:
-                        for layout in serverLayout:
-                            devicesToCheck += self.get_devices_in_serverlayout(layout)
+                        for layout in serverlayout:
+                            devices_to_check += \
+                            self.get_devices_in_serverlayout(layout)
                 else:
-                    for layout in serverLayout:
-                        devicesToCheck += self.get_devices_in_serverlayout(layout)
+                    for layout in serverlayout:
+                        devices_to_check += \
+                        self.get_devices_in_serverlayout(layout)
             else:
-                devicesToCheck = self.get_devices_in_serverlayout(0)
-        #print 'devicesToCheck', devicesToCheck
-        
-        if len(devicesToCheck) == 0:
-            #Check all the Device sections
-            devicesToCheck = list(self.globaldict['Device'].keys())
-        
-        return devicesToCheck
+                devices_to_check = self.get_devices_in_serverlayout(0)
+
+        if len(devices_to_check) == 0:
+            # Check all the Device sections
+            devices_to_check = list(self.globaldict['Device'].keys())
+
+        return devices_to_check
     
     def isDriverEnabled(self, driver):
         '''
