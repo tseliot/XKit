@@ -48,7 +48,7 @@ class XUtils(Parser):
         option = 'Driver'
         self.add_option(section, option, driver, position=position)
 
-    def isDriverInSection(self, driver, sectionsList=None):
+    def section_has_driver(self, driver, sectionsList=None):
         '''
         Look for the driver in the Device sections.
         Return True if the driver is found in each of the
@@ -161,7 +161,7 @@ class XUtils(Parser):
         ServerFlags section.
         '''
         devicesToCheck = self.getDevicesInUse()
-        driverEnabled = self.isDriverInSection(driver, sectionsList=devicesToCheck)
+        driverEnabled = self.section_has_driver(driver, sectionsList=devicesToCheck)
         
         return driverEnabled#driverEnabled, devicesToCheck)
             
