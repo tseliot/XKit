@@ -50,8 +50,6 @@ class XUtils(Parser):
         option = 'Driver'
         self.add_option(section, option, driver, position=position)
 
-
-
     def isDriverInSection(self, driver, sectionsList=None):
         '''
         Look for the driver in the Device sections.
