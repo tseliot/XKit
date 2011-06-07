@@ -44,9 +44,7 @@ class XUtils(Parser):
         return self.get_value(section, option, position)
         
     def set_driver(self, section, driver, position):
-        '''
-        Set the driver in use in a section.
-        '''
+        '''Set the driver in use in a section'''
         option = 'Driver'
         self.add_option(section, option, driver, position=position)
 
