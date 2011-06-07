@@ -1626,7 +1626,7 @@ EndSection
 
     def testIntegrity17(self):
         '''
-        isDriverEnabled(self, driver)
+        is_driver_enabled(self, driver)
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         
@@ -1653,7 +1653,7 @@ EndSection
 
     def testIntegrity18(self):
         '''
-        isDriverEnabled(self, driver)
+        is_driver_enabled(self, driver)
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         

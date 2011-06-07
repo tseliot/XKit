@@ -146,7 +146,7 @@ class XUtils(Parser):
 
         return devices_to_check
     
-    def isDriverEnabled(self, driver):
+    def is_driver_enabled(self, driver):
         '''
         If possible, check only the Device sections in use, otherwise check
         all the Device sections and see if a driver is enabled.

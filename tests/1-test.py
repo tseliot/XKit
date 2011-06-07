@@ -628,9 +628,9 @@ EndSection
         
         self.failUnless(len(devices) == 2, 'Only 2 Device sections should be found!')
 
-    def testIsDriverEnabled1(self):
+    def test_is_driver_enabled1(self):
         '''
-        isDriverEnabled1(self, driver)
+        is_driver_enabled1(self, driver)
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         
@@ -685,16 +685,16 @@ EndSection
 ''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
-        enabled = self.parser.isDriverEnabled('foo')
+        enabled = self.parser.is_driver_enabled('foo')
         
         self.failUnless(enabled == False, 'The driver should not be enabled!')
         
-        enabled = self.parser.isDriverEnabled('bar')
+        enabled = self.parser.is_driver_enabled('bar')
         self.failUnless(enabled == False, 'The driver should not be enabled!')
         
-    def testIsDriverEnabled2(self):
+    def test_is_driver_enabled2(self):
         '''
-        isDriverEnabled2(self, driver)
+        is_driver_enabled2(self, driver)
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         
@@ -712,16 +712,16 @@ EndSection
 ''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
-        enabled = self.parser.isDriverEnabled('foo')
+        enabled = self.parser.is_driver_enabled('foo')
         
         self.failUnless(enabled == False, 'The driver should not be enabled!')
         
-        enabled = self.parser.isDriverEnabled('bar')
+        enabled = self.parser.is_driver_enabled('bar')
         self.failUnless(enabled == False, 'The driver should not be enabled!')
 
-    def testIsDriverEnabled3(self):
+    def test_is_driver_enabled3(self):
         '''
-        isDriverEnabled3(self, driver)
+        is_driver_enabled3(self, driver)
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         
@@ -766,11 +766,11 @@ EndSection
 ''', file=confFile)
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
-        enabled = self.parser.isDriverEnabled('foo')
+        enabled = self.parser.is_driver_enabled('foo')
         
         self.failUnless(enabled == True, 'The driver should be enabled!')
         
-        enabled = self.parser.isDriverEnabled('bar')
+        enabled = self.parser.is_driver_enabled('bar')
         self.failUnless(enabled == False, 'The driver should not be enabled!')
 
     def testGetScreenDeviceRelationships(self):
