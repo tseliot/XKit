@@ -35,12 +35,11 @@ class XUtils(Parser):
                 self.make_section(section, identifier=reference)
      
     def get_driver(self, section, position):
-        '''
-        Get the driver in use in a section. If none is found it will return
-        false.
-        
-        For further information see get_value
-        '''
+        '''Get the driver in use in a section
+
+        If no driver is found it will return false.
+
+        For further information see get_value()'''
         option = 'Driver'
         return self.get_value(section, option, position)
         
