@@ -95,9 +95,9 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.failUnless(screens == expectedScreens and devices == expectedDevices and inputDevices == expectedInputDevices, 'Not all the broken sections were fixed!')
     
-    def testGetDriver(self):
+    def test_get_driver(self):
         '''
-        def getDriver(self, section, position):
+        def get_driver(self, section, position):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
@@ -110,7 +110,7 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.parser.add_option(section, option, driver1, position=position)
         
-        driver2 = self.parser.getDriver(section, position)
+        driver2 = self.parser.get_driver(section, position)
         
         self.failUnless(driver1 == driver2, 'Driver not correctly retrieved!')
     
@@ -129,7 +129,7 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.parser.add_option(section, option, driver, position=position)
         
-        driver1 = self.parser.getDriver(section, position)
+        driver1 = self.parser.get_driver(section, position)
         
         self.setUp()
         
@@ -138,7 +138,7 @@ class XUtilsTestCase(unittest.TestCase):
         self.failUnless(sect != None, 'Section not created!')
         
         self.parser.setDriver(section, driver, position)
-        driver2 = self.parser.getDriver(section, position)
+        driver2 = self.parser.get_driver(section, position)
         
         self.failUnless(driver1 == driver2, 'Driver not correctly set!')
 

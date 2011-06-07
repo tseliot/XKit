@@ -131,7 +131,7 @@ def main():
     '''
     Get the driver  of the 1st Device section
     '''
-    print(a.getDriver('Device', 0))
+    print(a.get_driver('Device', 0))
     
     
     a.make_section('Screen', 'New Screen')

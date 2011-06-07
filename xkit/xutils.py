@@ -34,7 +34,7 @@ class XUtils(Parser):
             for reference in broken_references[section]:
                 self.make_section(section, identifier=reference)
      
-    def getDriver(self, section, position):
+    def get_driver(self, section, position):
         '''
         Get the driver in use in a section. If none is found it will return
         false.
@@ -66,7 +66,7 @@ class XUtils(Parser):
         
         for section in sectionsList:
             try:
-                if self.getDriver('Device', section) != driver:
+                if self.get_driver('Device', section) != driver:
                     return False
             except OptionException:
                 #no references to the Device section
