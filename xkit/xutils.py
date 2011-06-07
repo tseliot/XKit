@@ -29,7 +29,7 @@ class XUtils(Parser):
     def __init__(self, source=None):
         super(XUtils, self).__init__(source)
     
-    def checkNFixSection(self):
+    def fix_broken_references(self):
         '''
         Gathers information on one or more sections and try to fix 
         broken references to other sections.

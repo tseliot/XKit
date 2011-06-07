@@ -191,7 +191,7 @@ def main():
     '''
     Try to fix section with broken references
     '''
-    a.checkNFixSection('Screen', identifier='Broken Screen Section')
+    a.fix_broken_references()
     '''
     Write the changes to the destination file
     '''

@@ -44,9 +44,9 @@ class XUtilsTestCase(unittest.TestCase):
         except(OSError, IOError):
             pass
     
-    def testCheckNFixSection1(self):
+    def test_fix_broken_references1(self):
         '''
-        def checkNFixSection(self, section, position=None, identifier=None):
+        def fix_broken_references(self):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         
@@ -82,7 +82,7 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.parser.add_reference('ServerLayout', 'InputDevice', 'Mouse 1', position=layout)
         
-        self.parser.checkNFixSection()
+        self.parser.fix_broken_references()
         
         
         screens = len(self.parser.globaldict['Screen'])
