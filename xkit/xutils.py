@@ -48,18 +48,17 @@ class XUtils(Parser):
         option = 'Driver'
         self.add_option(section, option, driver, position=position)
 
-    def section_has_driver(self, driver, sectionsList=None):
-        '''
-        Look for the driver in the Device sections.
-        Return True if the driver is found in each of the
-        specified sections, otherwise return False. 
-        
-        if sectionsList == None check all the Device sections
-        '''
-        if sectionsList == None:
-            sectionsList = list(self.globaldict['Device'].keys())
-        
-        for section in sectionsList:
+    def section_has_driver(self, driver, sections_list=None):
+        '''Look for a driver in the Device sections
+
+        Return True if the driver is found in each of the specified
+        sections, otherwise return False.
+
+        if sections_list == None check all the Device sections'''
+        if sections_list == None:
+            sections_list = list(self.globaldict['Device'].keys())
+
+        for section in sections_list:
             try:
                 if self.get_driver('Device', section) != driver:
                     return False
@@ -67,7 +66,7 @@ class XUtils(Parser):
                 #no references to the Device section
                 return False
         return True
-    
+
     def getDevicesFromServerLayout(self, position):
         '''
         Look for references to Device sections in the Screen sections referred
@@ -161,7 +160,7 @@ class XUtils(Parser):
         ServerFlags section.
         '''
         devicesToCheck = self.getDevicesInUse()
-        driverEnabled = self.section_has_driver(driver, sectionsList=devicesToCheck)
+        driverEnabled = self.section_has_driver(driver, sections_list=devicesToCheck)
         
         return driverEnabled#driverEnabled, devicesToCheck)
             

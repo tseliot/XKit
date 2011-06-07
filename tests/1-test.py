@@ -144,7 +144,7 @@ class XUtilsTestCase(unittest.TestCase):
 
     def test_section_has_driver(self):
         '''
-        section_has_driver(self, driver, sectionsList=None)
+        section_has_driver(self, driver, sections_list=None)
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
@@ -157,7 +157,7 @@ class XUtilsTestCase(unittest.TestCase):
         position = self.parser.make_section(section, identifier=identifier)
         self.parser.add_option(section, option, driver, position=position)
         
-        status = self.parser.section_has_driver(driver, sectionsList=[position])
+        status = self.parser.section_has_driver(driver, sections_list=[position])
         
         self.failUnless(status == True, 'Driver not in section!')
 
