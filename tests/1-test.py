@@ -114,9 +114,9 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.failUnless(driver1 == driver2, 'Driver not correctly retrieved!')
     
-    def testSetDriver(self):
+    def test_set_driver(self):
         '''
-        def setDriver(self, section, driver, position):
+        def set_driver(self, section, driver, position):
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
@@ -137,7 +137,7 @@ class XUtilsTestCase(unittest.TestCase):
         sect = self.parser.globaldict[section].get(position)
         self.failUnless(sect != None, 'Section not created!')
         
-        self.parser.setDriver(section, driver, position)
+        self.parser.set_driver(section, driver, position)
         driver2 = self.parser.get_driver(section, position)
         
         self.failUnless(driver1 == driver2, 'Driver not correctly set!')

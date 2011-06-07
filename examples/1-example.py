@@ -127,7 +127,7 @@ def main():
     '''
     Set the driver  of the 1st Device section
     '''
-    a.setDriver('Device', 'fbdev', 0)
+    a.set_driver('Device', 'fbdev', 0)
     '''
     Get the driver  of the 1st Device section
     '''
