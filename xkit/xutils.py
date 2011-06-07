@@ -21,22 +21,17 @@ from .xorgparser import *
 import sys
 
 class XUtils(Parser):
-    '''
-    Subclass with higher-level methods
+    '''Subclass with higher-level methods
     
-    See xorgparser.Parser for the low-level methods
-    '''
+    See xorgparser.Parser for the low-level methods'''
     def __init__(self, source=None):
         super(XUtils, self).__init__(source)
     
     def fix_broken_references(self):
-        '''
-        Gathers information on one or more sections and try to fix 
-        broken references to other sections.
-        '''
-        brokenReferences = self.get_broken_references()
-        for section in brokenReferences:
-            for reference in brokenReferences[section]:
+        '''Fix broken references to non-existent sections'''
+        broken_references = self.get_broken_references()
+        for section in broken_references:
+            for reference in broken_references[section]:
                 self.make_section(section, identifier=reference)
      
     def getDriver(self, section, position):
