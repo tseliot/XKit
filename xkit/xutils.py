@@ -68,36 +68,32 @@ class XUtils(Parser):
         return True
 
     def get_devices_in_serverlayout(self, position):
-        '''
-        Look for references to Device sections in the Screen sections referred
-        to in the ServerLayout[position] section.
+        '''Return a list of references to the Device sections in ServerLayout
         
-        Return a list of references to the relevant Device sections
-        '''
-        devicesToCheck = []
+        This method looks for references to Device sections in the Screen
+        sections referred to in the ServerLayout[position] section.'''
+        devices_to_check = []
         references = self.get_references('ServerLayout', position, ['Screen'])
         if len(references['Screen']) > 0:
-            '''
-            Check all the device sections related to these Screen sections
-            
-            references will look like {'Screen': ['Screen1', '0']}
-            '''
+            # Check all the device sections related to these Screen sections
+            #
+            # references will look like {'Screen': ['Screen1', '0']}
             for reference in references['Screen']:
                 try:
-                    screenPosition = self.get_position('Screen', reference)#reference[1]
+                    screen_position = self.get_position('Screen', reference)
                 except IdentifierException:
                     continue
-                '''
-                get references to the Device sections in the Screen sections
-                '''
+                # Get references to the Device sections in the Screen sections
                 try:
-                    deviceReferences = self.get_references('Screen', screenPosition, ['Device'])
-                    for device in deviceReferences['Device']:
-                        devicePosition = self.get_position('Device', device)#device[1]
-                        devicesToCheck.append(devicePosition)
-                except OptionException:#no references to the Device section
+                    device_references = self.get_references('Screen',
+                                             screen_position, ['Device'])
+                    for device in device_references['Device']:
+                        device_position = self.get_position('Device', device)
+                        devices_to_check.append(device_position)
+                except OptionException:
+                    #no references to the Device section
                     pass
-        return devicesToCheck
+        return devices_to_check
     
     def getDevicesInUse(self):
         '''
