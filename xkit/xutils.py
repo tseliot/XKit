@@ -37,7 +37,7 @@ class XUtils(Parser):
     def get_driver(self, section, position):
         '''Get the driver in use in a section
 
-        If no driver is found it will return false.
+        If no driver is found it will return False.
 
         For further information see get_value()'''
         option = 'Driver'
