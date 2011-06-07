@@ -40,7 +40,8 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser = xorgparser.Parser(source)
     
     def tearDown(self):
-        self.parser.comments.insert(0, '\n-----' + self.this_function_name + '-----\n')
+        self.parser.comments.insert(0, '\n-----' + self.this_function_name +
+                                    '-----\n')
         self.parser.write(destinationFile, test=True)
         try:
             os.remove(tempFile)
@@ -48,65 +49,56 @@ class XorgParserTestCase(unittest.TestCase):
             pass
     
     def test_fill_identifiers(self):
-        '''
-        def __fill_identifiers(self):
-        '''
+        '''def __fill_identifiers(self):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
         self.parser.make_section(section, identifier)
-        
-        fullSection = self.parser.globaldict[section]
+
+        full_section = self.parser.globaldict[section]
         found1 = False
         found2 = False
-        for position in fullSection:
-            lines = fullSection[position]
+        for position in full_section:
+            lines = full_section[position]
             for line in lines:
                 if line.find(identifier) != -1 and \
                 line.lower().find('identifier') != -1:
                     found1 = True
                     break
-        
+
         ids = self.parser.identifiers[section]
-        
+
         for elem in ids:
             if elem[0] == identifier:
                 found2 = True
                 break
-        
-        self.failUnless(found1 == True and found2 == True, 'Not all the identifiers were returned')
+
+        self.failUnless(found1 == True and found2 == True,
+                        'Not all the identifiers were returned')
 
     def test_get_identifier1(self):
-        '''
-        def get_identifier(self, section, position):
-        '''
+        '''def get_identifier(self, section, position):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier1 = 'XKit Screen'
         position1 = self.parser.make_section(section, identifier1)
         identifier2 = self.parser.get_identifier(section, position1)
-        
+
         self.failUnless(identifier1 == identifier2, 
                         'The identifier was not correctly retrieved')
-    
+
     def test_get_identifier2(self):
-        '''
-        def get_identifier(self, section, position):
-        '''
+        '''def get_identifier(self, section, position):'''
         self.this_function_name = sys._getframe().f_code.co_name
         self.parser = xorgparser.Parser(None)
-        
-        
-        self.assertRaises(SectionException,
-                      self.parser.get_value, 'Device', 'Identifier', 1)
-        
-        self.assertRaises(IdentifierException,
-                      self.parser.get_identifier, 'Device', 0)
 
-    def testGetDuplicateOptions(self):
-        '''
-        def get_duplicate_options(self, section, position):
-        '''
+        self.assertRaises(SectionException,
+                          self.parser.get_value, 'Device', 'Identifier', 1)
+
+        self.assertRaises(IdentifierException,
+                          self.parser.get_identifier, 'Device', 0)
+    def test_get_duplicate_options(self):
+        '''def get_duplicate_options(self, section, position):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         identifier = 'XKit Device Section'
@@ -114,123 +106,100 @@ class XorgParserTestCase(unittest.TestCase):
         value1 = '0'
         value2 = '1'
         position = self.parser.make_section(section, identifier=identifier)
-        
-        self.parser.add_option(section, option, value1, option_type='Option', position=position)
-        
-        '''
-        add_option doesn't allow the creation of duplicates
-        '''
+
+        self.parser.add_option(section, option, value1, option_type='Option',
+                               position=position)
+
+        # add_option doesn't allow the creation of duplicates
         option2 = '\t' + 'Option' + '\t' + option + '\t\t"' + value2 + '"\n'
         self.parser.globaldict[section][position].append(option2)
-        
         duplicates = self.parser.get_duplicate_options(section, position)
-        
+
         self.failUnless(option in duplicates, 'Duplicates cannot be found!')
 
-    def testCheckDuplicateOptions(self):
-        '''
-        def check_duplicate_options(self):
-        '''
+    def test_check_duplicate_options(self):
+        '''def check_duplicate_options(self):'''
         self.this_function_name = sys._getframe().f_code.co_name
-        
         self.parser = xorgparser.Parser(None)
-        
         section = 'Device'
         identifier = 'XKit Device Section'
         option = 'TestOption1'
         value1 = '0'
         value2 = '1'
         position = self.parser.make_section(section, identifier=identifier)
-        
-        self.parser.add_option(section, option, value1, option_type='Option', position=position)
-        
+        self.parser.add_option(section, option, value1, option_type='Option',
+                                position=position)
         option2 = '\t' + 'Option' + '\t' + option + '\t\t"' + value2 + '"\n'
-        
-        '''
-        add_option doesn't allow the creation of duplicates
-        '''
+
+        # add_option doesn't allow the creation of duplicates
         self.parser.globaldict[section][position].append(option2)
-        
         duplicates = self.parser.check_duplicate_options()
-        
+
         self.failUnless(option in duplicates[section][position], 'Duplicates can still be found!')
-    
-    def testGetDuplicateSections(self):
-        '''
-        def get_duplicate_sections(self):
-        
-        '''
+
+    def test_get_duplicate_sections(self):
+        '''def get_duplicate_sections(self):'''
         self.this_function_name = sys._getframe().f_code.co_name
-        
+
         section = 'Screen'
         identifier1 = 'XKit Screen test1'
-        
+
         pos = self.parser.make_section(section, identifier=identifier1)
-        
-        '''
-        create a duplicate section without using add_option()
-        '''
-        self.parser.globaldict[section][pos+1] = ['\tIdentifier\t\t"' + identifier1 + '"\n']
-        self.parser.identifiers[section].append((identifier1, pos+1))#ADD to identifiers
+
+        # Create a duplicate section without using add_option()
+        self.parser.globaldict[section][pos+1] = ['\tIdentifier\t\t"' +
+                                                  identifier1 + '"\n']
+        # Add to identifiers
+        self.parser.identifiers[section].append((identifier1, pos+1))
         duplicates = self.parser.get_duplicate_sections()
-        
+
         self.failUnless(identifier1 in duplicates[section],
                         'Duplicates sections cannot be retrieved correctly!')
 
     def test_is_section1(self):
-        '''
-        def is_section(self, section, identifier):
-        '''
+        '''def is_section(self, section, identifier):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
         position = self.parser.make_section(section, identifier)
-        
         status1 = self.parser.is_section(section, identifier)
-        
         status2 = False
         sect = self.parser.globaldict[section][position]
         for line in sect:
             if line.find(identifier) != -1:
                 status2 = True
                 break
-        
+
         self.failUnless(status2 == True and status1 == status2, 
-                        'The existence of the section was not tested correctly')
+                      'The existence of the section was not tested correctly')
 
     def test_is_section2(self):
-        '''
-        def is_section(self, section, identifier):
-        '''
+        '''def is_section(self, section, identifier):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKit Screen'
         position = self.parser.make_section(section, identifier)
-        
         status1 = self.parser.is_section(section, position=position)
-        
         status2 = False
         sect = self.parser.globaldict[section][position]
         for line in sect:
             if line.find(identifier) != -1:
                 status2 = True
                 break
-        
+
         self.failUnless(status2 == True and status1 == status2, 
-                        'The existence of the section was not tested correctly')
+                      'The existence of the section was not tested correctly')
 
     def test_add_option1(self):
-        '''
-        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
-        '''
-        
+        '''def add_option(self, section, option, value, option_type=None,
+                          position=None, reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
-        
         option = 'TestOption'
         value = 'Ok'
         #position = 0
         found = False
-        self.parser.add_option(section, option, value, option_type=None, position=None, reference=None)
+        self.parser.add_option(section, option, value, option_type=None,
+                               position=None, reference=None)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
@@ -239,17 +208,16 @@ class XorgParserTestCase(unittest.TestCase):
                     #print line
             self.failUnless(found == True, 'Option not added!')
         
-        
     def test_add_option2(self):
-        '''
-        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
-        '''
+        '''def add_option(self, section, option, value, option_type=None,
+                          position=None, reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         option = 'TestOption'
         value = 'Ok'
         #position = 0
         found = False
-        self.parser.add_option(section, option, value, option_type="Option", position=None, reference=None)
+        self.parser.add_option(section, option, value, option_type="Option",
+                               position=None, reference=None)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
@@ -259,15 +227,15 @@ class XorgParserTestCase(unittest.TestCase):
             self.failUnless(found == True, 'Option not added!')
         
     def test_add_option3(self):
-        '''
-        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
-        '''
+        '''def add_option(self, section, option, value, option_type=None,
+                          position=None, reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         option = 'TestOption'
         value = 'Ok'
         position = 0
         found = False
-        self.parser.add_option(section, option, value, option_type=None, position=None, reference=None)
+        self.parser.add_option(section, option, value, option_type=None,
+                               position=None, reference=None)
         lines = self.parser.globaldict[section][position]
         for line in lines:
             if line.find(option) != -1:
@@ -275,15 +243,15 @@ class XorgParserTestCase(unittest.TestCase):
         self.failUnless(found == True, 'Option not added!')
         
     def test_add_option4(self):
-        '''
-        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
-        '''
+        '''def add_option(self, section, option, value, option_type=None,
+                          position=None, reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         option = 'TestOption'
         value = 'Ok'
         #position = 0
         found = False
-        self.parser.add_option(section, option, value, option_type=None, position=None, reference=True)
+        self.parser.add_option(section, option, value, option_type=None,
+                               position=None, reference=True)
         for position in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][position]
             for line in lines:
@@ -291,33 +259,31 @@ class XorgParserTestCase(unittest.TestCase):
                     found = True
                     #print line
             self.failUnless(found == True, 'Option not added!')
-        
+
     def test_add_option5(self):
-        '''
-        def add_option(self, section, option, value, option_type=None, position=None, reference=None):
-        '''
+        '''def add_option(self, section, option, value, option_type=None,
+                          position=None, reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         option = 'DefaultDepth'
         value = '24'
         #position = 0
         found = False
-        
-        screen = self.parser.make_section('Screen', identifier='Xkit Screen Device 5')
-        
-        self.parser.add_option(section, option, value, position=screen, prefix='')
+
+        screen = self.parser.make_section('Screen',
+                                          identifier='Xkit Screen Device 5')
+        self.parser.add_option(section, option, value, position=screen,
+                               prefix='')
         lines = self.parser.globaldict[section][screen]
         for line in lines:
             if line.find(option) != -1:
                 found = True
                 #print line
         self.failUnless(found == True, 'Option not added!')
-        
-        
+
     def test_remove_option1(self):
-        '''
-        def remove_option(self, section, option, value=None, position=None, reference=None):
-        '''
+        '''def remove_option(self, section, option, value=None, position=None,
+                             reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         option = 'Identifier'
@@ -330,11 +296,10 @@ class XorgParserTestCase(unittest.TestCase):
                     found = True
                     #print line
             self.failUnless(found == False, 'Option not removed!')
-    
+
     def test_remove_option2(self):
-        '''
-        def remove_option(self, section, option, value=None, position=None, reference=None):
-        '''
+        '''def remove_option(self, section, option, value=None, position=None,
+                             reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         option = 'Identifier'
@@ -348,7 +313,7 @@ class XorgParserTestCase(unittest.TestCase):
                     found = True
                     #print line
             self.failUnless(found == False, 'Option not removed!')
-    
+
     def test_remove_option3(self):
         '''
         def remove_option(self, section, option, value=None, position=None, reference=None):
@@ -368,21 +333,17 @@ class XorgParserTestCase(unittest.TestCase):
             self.failUnless(found == False, 'Option not removed!')
         
     def test_make_section1(self):
-        '''
-        def make_section(self, section, identifier=None):
-        '''
+        '''def make_section(self, section, identifier=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Extensions'
         before = len(self.parser.globaldict[section])
         position = self.parser.make_section(section, identifier=None)
-        
         sect = self.parser.globaldict[section].get(position)
+
         self.failUnless(sect != None, 'Section not created!')
-    
+
     def test_make_section2(self):
-        '''
-        def make_section(self, section, identifier=None):
-        '''
+        '''def make_section(self, section, identifier=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         identifier = 'XKit Video Device'
@@ -399,57 +360,52 @@ class XorgParserTestCase(unittest.TestCase):
         self.failUnless(found == True, 'Section not created correctly!')
 
     def test_make_section3(self):
-        '''
-        def make_section(self, section, identifier=None):
-        '''
+        '''def make_section(self, section, identifier=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Extensions'
         position = self.parser.make_section(section, identifier=None)
-        
         sect = self.parser.globaldict[section].get(position)
-        
-        self.failUnless(sect != None, 
-                        'The section was not created')
-    
+
+        self.failUnless(sect != None, 'The section was not created')
+
     def test_make_section4(self):
-        '''
-        def make_section(self, section, identifier=None):
-        '''
+        '''def make_section(self, section, identifier=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         identifier = 'XKit Video Device'
         position = self.parser.make_section(section, identifier=identifier)
         sect = self.parser.globaldict[section].get(position)
+
         self.failUnless(sect != None, 'Section not created!')
-        
+
         found = False
         lines = self.parser.globaldict[section][position]
         for line in lines:
             if line.find('Identifier') != -1 and line.find(identifier) != -1:
                 found = True
                 #print line
+
         self.failUnless(found == True, 'Section not created correctly!')
-        
+
         ids = self.parser.identifiers[section]
         found = False
         for elem in ids:
             if elem[0] == identifier:
                 found = True
                 break
-        
+
         self.failUnless(found == True, 'Identifiers list not updated!')
 
     def test_add_reference1(self):
-        '''
-        def add_reference(self, section, reference, identifier, position=None):
-        '''
+        '''def add_reference(self, section, reference, identifier,
+                             position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section='ServerLayout'
         reference='Screen'
         identifier = 'XKit Screen Device'
         #position=0 #the first ServerLayout section
         self.parser.add_reference(section, reference, identifier, position=None)
-        
+
         found = False
         for pos in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][pos]
@@ -457,47 +413,45 @@ class XorgParserTestCase(unittest.TestCase):
                 if line.find(reference) != -1 and line.find(identifier) != -1:
                     found = True
                     #print line
+
             self.failUnless(found == True, 'Reference not added!')
-    
+
     def test_add_reference2(self):
-        '''
-        def add_reference(self, section, reference, identifier, position=None):
-        '''
+        '''def add_reference(self, section, reference, identifier,
+                             position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section='ServerLayout'
         reference='Screen'
         identifier = 'XKit Screen Device'
         position=0 #the first ServerLayout section
-        
+
         if len(self.parser.globaldict[section]) == 0:
             position = self.parser.make_section(section, identifier='Default layout')
-            
         self.parser.add_reference(section, reference, identifier, position=position)
-        
         found = False
         lines = self.parser.globaldict[section][position]
         for line in lines:
             if line.find(reference) != -1 and line.find(identifier) != -1:
                 found = True
                 #print line
+
         self.failUnless(found == True, 'Reference not added!')
-    
+
     def test_remove_reference1(self):
-        '''
-        def remove_reference(self, section, reference, identifier, position=None):
-        '''
+        '''def remove_reference(self, section, reference, identifier,
+                                position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section='ServerLayout'
         reference='Screen'
         identifier = 'XKit Screen Device'
         #position=0 #the first ServerLayout section
-        
+
         if len(self.parser.globaldict[section]) == 0:
             position = self.parser.make_section(section, identifier='Default layout')
-        
+
         self.parser.add_reference(section, reference, identifier, position=None)
         self.parser.remove_reference(section, reference, identifier, position=None)
-        
+
         found = False
         for pos in self.parser.globaldict[section]:
             lines = self.parser.globaldict[section][pos]
@@ -505,71 +459,71 @@ class XorgParserTestCase(unittest.TestCase):
                 if line.find(reference) != -1 and line.find(identifier) != -1:
                     found = True
                     #print line
+
             self.failUnless(found == False, 'Reference not removed!')
-    
+
     def test_remove_reference2(self):
-        '''
-        def remove_reference(self, section, reference, identifier, position=None):
-        '''
+        '''def remove_reference(self, section, reference, identifier,
+                                position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section='ServerLayout'
         reference='Screen'
         identifier = 'XKit Screen Device'
-        position=0 #the first ServerLayout section
-        
+        position=0#the first ServerLayout section
+
         if len(self.parser.globaldict[section]) == 0:
             position = self.parser.make_section(section, identifier='Default layout')
-        
+
         self.parser.add_reference(section, reference, identifier, position=position)
         self.parser.remove_reference(section, reference, identifier, position=position)
-        
+
         found = False
         lines = self.parser.globaldict[section][position]
         for line in lines:
             if line.find(reference) != -1 and line.find(identifier) != -1:
                 found = True
                 #print line
+
         self.failUnless(found == False, 'Reference not removed!')
-    
-    
+
     def test_get_references1(self):
-        '''
-        def get_references(self, section, position, reflist=None):
-        '''
+        '''def get_references(self, section, position, reflist=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section='Screen'
         position=0 #the first ServerLayout section
         reference= 'Device'
         identifier = 'XKit Video Device'
-        
-        screen = self.parser.make_section('Screen', identifier=identifier.replace('Video', 'Screen'))
+
+        screen = self.parser.make_section('Screen',
+                             identifier=identifier.replace('Video', 'Screen'))
         device = self.parser.make_section(reference, identifier=identifier)
-        
-        #if len(self.parser.globaldict[section].setdefault(position, [])) == 0:
-        self.parser.add_reference(section, reference, identifier, position=screen)
-            
+
+        self.parser.add_reference(section, reference, identifier,
+                                  position=screen)
         references = self.parser.get_references(section, screen, reflist=None)
-        self.failUnless(len(references) > 0, 'No list of References can be retrieved!')
-    
+
+        self.failUnless(len(references) > 0,
+                        'No list of References can be retrieved!')
+
     def test_get_references2(self):
-        '''
-        def get_references(self, section, position, reflist=None):
-        '''
+        '''def get_references(self, section, position, reflist=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section='Screen'
-        position=0 #the first ServerLayout section
+        position=0#the first ServerLayout section
         reference='Device'
         identifier = 'XKit Video Device'
         reflist=['Device']
         if len(self.parser.globaldict[section].setdefault(position, [])) == 0:
-            self.parser.add_reference(section, reference, identifier, position=position)
-        references = self.parser.get_references(section, position, reflist=reflist)
-        self.failUnless(len(references) > 0, 'No list of References can be retrieved!')
-    
+            self.parser.add_reference(section, reference, identifier,
+                                      position=position)
+        references = self.parser.get_references(section, position,
+                                                reflist=reflist)
+
+        self.failUnless(len(references) > 0,
+                        'No list of References can be retrieved!')
+
     def test_make_subsection1(self):
-        '''
-        def make_subsection(self, section, identifier, position=None):
-        '''
+        '''def make_subsection(self, section, identifier, position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
@@ -577,13 +531,11 @@ class XorgParserTestCase(unittest.TestCase):
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.make_subsection(section, identifier)
-        '''
-        self.globaldict['SubSection'] =
-                    {0: {'section': 'Screen', 'identifier': 'Display', 
-                    'position': 0, 'options': [option1, option2, etc.], 
-                    etc.}
-        '''
-        
+        # self.globaldict['SubSection'] =
+        #            {0: {'section': 'Screen', 'identifier': 'Display', 
+        #            'position': 0, 'options': [option1, option2, etc.], 
+        #             etc.}
+
         found = 0
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -593,23 +545,20 @@ class XorgParserTestCase(unittest.TestCase):
         #print self.parser.globaldict['SubSection']
         #print 'found =', found, '; times =', times
         self.failUnless(found >= times, 'The subsections were not created!')
-    
+
     def test_make_subsection2(self):
-        '''
-        def make_subsection(self, section, identifier, position=None):
-        '''
+        '''def make_subsection(self, section, identifier, position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
         position = 0
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.make_subsection(section, identifier, position=position)
-        '''
-        self.globaldict['SubSection'] =
-                    {0: {'section': 'Screen', 'identifier': 'Display', 
-                    'position': 0, 'options': [option1, option2, etc.], 
-                    etc.}
-        '''
+
+        # self.globaldict['SubSection'] =
+        #            {0: {'section': 'Screen', 'identifier': 'Display', 
+        #            'position': 0, 'options': [option1, option2, etc.], 
+        #            etc.}
         found = False
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
@@ -617,34 +566,29 @@ class XorgParserTestCase(unittest.TestCase):
                 subsection.get('identifier') == identifier and \
                 subsection.get('position') == position:
                 found = True
+
         self.failUnless(found == True, 'The subsection was not created!')
-    
-    
+
     def test_remove_subsection1(self):
-        '''
-        def remove_subsection(self, section, identifier, position=None):
-        '''
+        '''def remove_subsection(self, section, identifier, position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
-        
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
             self.parser.make_subsection(section, identifier, position=pos)
-        
+
         self.parser.remove_subsection(section, identifier)
-        
+
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
             self.failUnless(subsection.get('identifier') != identifier or \
             subsection.get('section') != section,
             'The subsections were not removed!')
-    
+
     def test_remove_subsection2(self):
-        '''
-        def remove_subsection(self, section, identifier, position=None):
-        '''
+        '''def remove_subsection(self, section, identifier, position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
@@ -659,27 +603,24 @@ class XorgParserTestCase(unittest.TestCase):
             subsection.get('section') != section or \
             subsection.get('position') != position,
             'The subsections were not removed!')
-    
-    
-    
+
     def test_add_suboption1(self):
-        '''
-        def add_suboption(self, section, identifier, option, value, option_type=None, position=None):
-        '''
+        '''def add_suboption(self, section, identifier, option, value,
+                             option_type=None, position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
         #position = 0
         option = 'Virtual'
         value = '2048 2048'
-        
+
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.make_subsection(section, identifier)
-        
+
         self.parser.add_suboption(section, identifier, option, value)
-        
+
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
             if subsection.get('identifier') == identifier and \
@@ -689,40 +630,41 @@ class XorgParserTestCase(unittest.TestCase):
                 for line in lines:
                     if line.find(option) != -1 and line.find(value) != -1:
                         found = True
+
                 self.failUnless(found == True, 'Option not added to all the Subsections')
-        
+
     def test_add_suboption2(self):
-        '''
-        def add_suboption(self, section, identifier, option, value, option_type=None, position=None):
-        '''
+        '''def add_suboption(self, section, identifier, option, value,
+                             option_type=None, position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
         position = 0
         option = 'Virtual'
         value = '2048 2048'
-        
+
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.make_subsection(section, identifier, position=position)
-        
-        self.parser.add_suboption(section, identifier, option, value, position=position)
-        
+        self.parser.add_suboption(section, identifier, option, value,
+                                  position=position)
+
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
-            if subsection.get('identifier') == identifier and \
-            subsection.get('section') == section and \
-            subsection.get('position') == position:
+            if (subsection.get('identifier') == identifier
+            and subsection.get('section') == section
+            and subsection.get('position') == position):
                 lines = subsection.get('options')
                 found = False
                 for line in lines:
                     if line.find(option) != -1 and line.find(value) != -1:
                         found = True
-                self.failUnless(found == True, 'Option not added to the Subsection')
-        
+
+                self.failUnless(found == True,
+                                'Option not added to the Subsection')
+
     def test_add_suboption3(self):
-        '''
-        def add_suboption(self, section, identifier, option, value, option_type=None, position=None):
-        '''
+        '''def add_suboption(self, section, identifier, option, value,
+                             option_type=None, position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
@@ -730,31 +672,31 @@ class XorgParserTestCase(unittest.TestCase):
         option = 'Virtual'
         value = '2048 2048'
         option_type = 'Option'
-        
+
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.make_subsection(section, identifier)
-        
-        self.parser.add_suboption(section, identifier, option, value, option_type=option_type)
-        
+        self.parser.add_suboption(section, identifier, option, value,
+                                  option_type=option_type)
+
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
-            if subsection.get('identifier') == identifier and \
-            subsection.get('section') == section:
+            if (subsection.get('identifier') == identifier
+            and subsection.get('section') == section):
                 lines = subsection.get('options')
                 found = False
                 for line in lines:
-                    if line.find(option) != -1 and line.find(value) != -1 and \
-                    line.find(option_type) != -1:
+                    if (line.find(option) != -1 and line.find(value) != -1
+                    and line.find(option_type) != -1):
                         found = True
-                self.failUnless(found == True, 'Option not added to all the Subsections')
-    
-    
+
+                self.failUnless(found == True,
+                                'Option not added to all the Subsections')
+
     def test_remove_suboption1(self):
-        '''
-        def remove_suboption(self, section, identifier, option, position=None):
-        '''
+        '''def remove_suboption(self, section, identifier, option,
+                                position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
@@ -762,95 +704,100 @@ class XorgParserTestCase(unittest.TestCase):
         option = 'Virtual'
         value = '2048 2048'
         option_type = 'Option'
-        
+
         times = 5
         for pos in range(times):
             self.parser.globaldict[section].setdefault(pos, [])
         self.parser.make_subsection(section, identifier)
-        
-        self.parser.add_suboption(section, identifier, option, value, option_type=option_type)
-        
+        self.parser.add_suboption(section, identifier, option, value,
+                                  option_type=option_type)
+
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
-            if subsection.get('identifier') == identifier and \
-            subsection.get('section') == section:
+            if (subsection.get('identifier') == identifier
+            and subsection.get('section') == section):
                 lines = subsection.get('options')
                 found = False
                 for line in lines:
                     if line.find(option) != -1 and line.find(value) != -1:
                         found = True
-                self.failUnless(found == True, 'Option not added to all the Subsections')
-        
+
+                self.failUnless(found == True,
+                                'Option not added to all the Subsections')
+
         #self.parser.write(sys.stderr)
-        
         self.parser.remove_suboption(section, identifier, option)
-        
         #self.parser.write(sys.stderr)
-        
+
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
-            if subsection.get('identifier') == identifier and \
-            subsection.get('section') == section:
+            if (subsection.get('identifier') == identifier
+            and subsection.get('section') == section):
                 lines = subsection.get('options')
                 found = False
                 for line in lines:
                     if line.find(option) != -1:
                         found = True
-                self.failUnless(found == False, 'Option not removed from all the Subsections')
+
+                self.failUnless(found == False,
+                                'Option not removed from all the Subsections')
 
     def test_remove_suboption2(self):
-        '''
-        def remove_suboption(self, section, identifier, option, position=None):
-        '''
+        '''def remove_suboption(self, section, identifier, option,
+                                position=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
         position = 0
         option = 'Virtual'
         value = '2048 2048'
-        
+
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.make_subsection(section, identifier, position=position)
-        
-        self.parser.add_suboption(section, identifier, option, value, position=position)
-        
+        self.parser.add_suboption(section, identifier, option, value,
+                                  position=position)
+
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
-            if subsection.get('identifier') == identifier and \
-            subsection.get('section') == section and \
-            subsection.get('position') == position:
+            if (subsection.get('identifier') == identifier
+            and subsection.get('section') == section
+            and subsection.get('position') == position):
                 lines = subsection.get('options')
                 found = False
                 for line in lines:
                     if line.find(option) != -1 and line.find(value) != -1:
                         found = True
-                self.failUnless(found == True, 'Option not added to the Subsection')
-        
-        self.parser.remove_suboption(section, identifier, option, position=position)
-        
+                self.failUnless(found == True,
+                                'Option not added to the Subsection')
+
+        self.parser.remove_suboption(section, identifier, option,
+                                     position=position)
+
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
-            if subsection.get('identifier') == identifier and \
-            subsection.get('position') == position and \
-            subsection.get('section') == section:
+            if (subsection.get('identifier') == identifier
+            and subsection.get('position') == position
+            and subsection.get('section') == section):
                 lines = subsection.get('options')
                 found = False
                 for line in lines:
                     if line.find(option) != -1:
                         found = True
-                self.failUnless(found == False, 'Option not removed from the Subsection')
-    
+
+                self.failUnless(found == False,
+                                'Option not removed from the Subsection')
+
     def test_get_value1(self):
-        '''
-        def get_value(self, section, option, position, identifier=None, sect=None, reference=None):
-        
+        '''def get_value(self, section, option, position, identifier=None,
+                         sect=None, reference=None):
+
             * When dealing with a Section:
                 section= e.g. 'Screen', 'Device', etc.
                 option= the option
                 position= e.g. 0 (i.e. the first element in the list of Screen
                           sections)
                 reference= used only by get_references()
-            
+
             * When dealing with a SubSection:
                 section= 'SubSection' (this is mandatory)
                 option= the option
@@ -860,32 +807,29 @@ class XorgParserTestCase(unittest.TestCase):
                           sections)
                           ["position" is a key of an item of the list of 
                           subsections see below]
-                
+
                 identifier= the name of the subsection e.g. 'Display'
                 sect = the 'section' key of an item of the list of 
                        subsections e.g. the "Display" subsection can be 
-                       found in the "Screen" section ('sect' is the latter)
-                       
-        '''
+                       found in the "Screen" section ('sect' is the latter)'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         option = 'TestOption'
         value = 'Ok'
         position = 0
         option_type = 'Option'
-        
+
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.add_option(section, option, value, option_type=option_type, position=position)
-        
+        self.parser.add_option(section, option, value,
+                               option_type=option_type, position=position)
+
         result = self.parser.get_value(section, option, position)
+
         self.failUnless(result == value, 'Incorrect value retrieved')
-    
-    
-    
+
     def test_get_value2(self):
-        '''
-        def get_value(self, section, option, position, identifier=None, sect=None, reference=None):
-        '''
+        '''def get_value(self, section, option, position, identifier=None,
+                         sect=None, reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Device'
         option = 'TestOption'
@@ -893,19 +837,19 @@ class XorgParserTestCase(unittest.TestCase):
         position = 0
         option_type = None
         reference = True
-        
+
         self.parser.globaldict[section].setdefault(position, [])
-        self.parser.add_option(section, option, value, option_type=option_type,
-                              position=position, reference=reference)
-        
+        self.parser.add_option(section, option, value,
+                               option_type=option_type,
+                               position=position, reference=reference)
+
         result = self.parser.get_value(section, option, position)
+
         self.failUnless(result == value, 'Incorrect value retrieved')
-    
-    
+
     def test_get_value3(self):
-        '''
-        def get_value(self, section, option, position, identifier=None, sect=None, reference=None):
-        '''
+        '''def get_value(self, section, option, position, identifier=None,
+                         sect=None, reference=None):'''
         self.this_function_name = sys._getframe().f_code.co_name
         section = 'Screen'
         identifier = 'XKitDisplay'
@@ -913,36 +857,37 @@ class XorgParserTestCase(unittest.TestCase):
         value = 'Ok'
         position = 0
         option_type = 'Option'
-        
+
         self.parser.globaldict[section].setdefault(position, [])
         self.parser.add_suboption(section, identifier, option, value,
-                                 option_type=option_type, position=position)
-        
+                                  option_type=option_type, position=position)
+
         sect = section
         section = 'SubSection'
-        
+
         result = self.parser.get_value(section, option, position,
-                                      identifier=identifier, sect=sect)
-        
+                                       identifier=identifier, sect=sect)
+
         self.failUnless(result == value, 'Incorrect value retrieved')
-    
+
     def test_get_value4(self):
         self.this_function_name = sys._getframe().f_code.co_name
         self.parser = xorgparser.Parser(None)
- 
-        self.assertRaises(SectionException,
-                      self.parser.get_value, 'Device', 'Identifier', 1)
-    
+
+        self.assertRaises(SectionException, self.parser.get_value, 'Device',
+                          'Identifier', 1)
+
     def test_get_value5(self):
         self.this_function_name = sys._getframe().f_code.co_name
         self.parser = xorgparser.Parser(None)
-        device = self.parser.make_section('Device', identifier='Default Device')
-        self.assertRaises(OptionException,
-                      self.parser.get_value, 'Device', 'Driver', device)
-    
+        device = self.parser.make_section('Device',
+                                          identifier='Default Device')
+        self.assertRaises(OptionException, self.parser.get_value, 'Device',
+                          'Driver', device)
+
     def testIntegrity1(self):
         self.this_function_name = sys._getframe().f_code.co_name
-        
+
         confFile = '\
 Section "Screen"\n\
 \tIdentifier\t"Default Screen"\n\
@@ -958,17 +903,16 @@ Section "InputDevice"\n\
 \tOption\t\t"XkbModel"\t"pc105"\n\
 \tOption\t\t"XkbLayout"\t"it"\n\
 EndSection\n'
-        
+
         a = open(tempFile, 'w')
         a.write(confFile)
         a.close()
- 
-        self.assertRaises(ParseException,
-                      xorgparser.Parser, tempFile)
-    
+
+        self.assertRaises(ParseException, xorgparser.Parser, tempFile)
+
     def testIntegrity2(self):
         self.this_function_name = sys._getframe().f_code.co_name
-        
+
         confFile = '\
 Section "Screen"\n\
 \tIdentifier\t"Default Screen"\n\
@@ -984,17 +928,17 @@ Section "InputDevice"\n\
 \tOption\t\t"XkbModel"\t"pc105"\n\
 \tOption\t\t"XkbLayout"\t"it"\n\
 EndSection\n'
-        
+
         a = open(tempFile, 'w')
         a.write(confFile)
         a.close()
- 
+
         self.assertRaises(ParseException,
                       xorgparser.Parser, tempFile)
 
     def testIntegrity3(self):
         self.this_function_name = sys._getframe().f_code.co_name
-        
+
         confFile = '\
 Section "Screeen"\n\
 \tIdentifier\t"Default Screen"\n\
@@ -1010,11 +954,11 @@ Section "InputDevice"\n\
 \tOption\t\t"XkbModel"\t"pc105"\n\
 \tOption\t\t"XkbLayout"\t"it"\n\
 EndSection\n'
-        
+
         a = open(tempFile, 'w')
         a.write(confFile)
         a.close()
- 
+
         self.assertRaises(ParseException,
                       xorgparser.Parser, tempFile)
 
