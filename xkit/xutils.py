@@ -163,9 +163,7 @@ class XUtils(Parser):
         return driver_enabled
 
     def get_screen_device_relationships(self):
-        '''
-        See which Screen sections are related to which Device sections
-        '''
+        '''See which Screen sections are related to which Device sections'''
         relationships = {}
         it = 0
         for screen in self.globaldict['Screen']:
@@ -176,6 +174,6 @@ class XUtils(Parser):
             relationships[device] = {}
             relationships[device]['Screen'] = it
             it += 1
-        
+
         return relationships
 
