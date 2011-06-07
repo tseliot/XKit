@@ -162,7 +162,7 @@ class XUtils(Parser):
 
         return driver_enabled
 
-    def getScreenDeviceRelationships(self):
+    def get_screen_device_relationships(self):
         '''
         See which Screen sections are related to which Device sections
         '''

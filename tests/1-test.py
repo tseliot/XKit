@@ -773,9 +773,9 @@ EndSection
         enabled = self.parser.is_driver_enabled('bar')
         self.failUnless(enabled == False, 'The driver should not be enabled!')
 
-    def testGetScreenDeviceRelationships(self):
+    def test_get_screen_device_relationships(self):
         '''
-        getScreenDeviceRelationships(self)
+        get_screen_device_relationships(self)
         '''
         self.this_function_name = sys._getframe().f_code.co_name
         
@@ -826,7 +826,7 @@ EndSection
 ''', file=confFile)        
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
-        relationships = self.parser.getScreenDeviceRelationships()
+        relationships = self.parser.get_screen_device_relationships()
         
         correct = {0: {'Screen': 0}, 1: {'Screen': 2}, 2: {'Screen': 1}}
         
