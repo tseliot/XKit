@@ -276,9 +276,9 @@ EndSection
         self.failUnless(len(devices) == 2, 'No section should be found!')
     
     
-    def testGetDevicesInUse1(self):
+    def test_get_devices_in_use1(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: No ServerLayout
         '''
@@ -321,14 +321,14 @@ EndSection
 
         self.parser = xutils.XUtils(tempFile)
         
-        devices = self.parser.getDevicesInUse()
+        devices = self.parser.get_devices_in_use()
         devices.sort()
         
         self.failUnless(devices == list(self.parser.globaldict['Device'].keys()), 'All the Device sections should be returned!')
 
-    def testGetDevicesInUse2(self):
+    def test_get_devices_in_use2(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: 1 ServerLayout with no references to Screen sections
         '''
@@ -376,14 +376,14 @@ EndSection
         
         self.parser = xutils.XUtils(tempFile)
         
-        devices = self.parser.getDevicesInUse()
+        devices = self.parser.get_devices_in_use()
         devices.sort()
         
         self.failUnless(len(devices) == 2, 'Only 2 Device sections should have been returned!')
 
-    def testGetDevicesInUse3(self):
+    def test_get_devices_in_use3(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: 1 ServerLayout with references to Screen sections
         '''
@@ -436,13 +436,13 @@ EndSection
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         
-        devices = self.parser.getDevicesInUse()
+        devices = self.parser.get_devices_in_use()
         
         self.failUnless(len(devices) == 2, 'Only 2 Device sections should be found!')
         
-    def testGetDevicesInUse4(self):
+    def test_get_devices_in_use4(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: More than 1 ServerLayout with no ServerFlags
         '''
@@ -497,13 +497,13 @@ EndSection
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         
-        devices = self.parser.getDevicesInUse()
+        devices = self.parser.get_devices_in_use()
         
         self.failUnless(len(devices) == 3, 'Only 3 Device sections should be found!')
 
-    def testGetDevicesInUse5(self):
+    def test_get_devices_in_use5(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: More than 1 ServerLayout with ServerFlags with no default layout
         '''
@@ -561,12 +561,12 @@ EndSection
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         
-        devices = self.parser.getDevicesInUse()
+        devices = self.parser.get_devices_in_use()
         self.failUnless(len(devices) == 3, 'Only 3 Device sections should be found!')
 
-    def testGetDevicesInUse6(self):
+    def test_get_devices_in_use6(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: More than 1 ServerLayout with ServerFlags with one default layout
         '''
@@ -624,7 +624,7 @@ EndSection
         confFile.close()
         self.parser = xutils.XUtils(tempFile)
         
-        devices = self.parser.getDevicesInUse()
+        devices = self.parser.get_devices_in_use()
         
         self.failUnless(len(devices) == 2, 'Only 2 Device sections should be found!')
 

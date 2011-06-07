@@ -95,7 +95,7 @@ class XUtils(Parser):
                     pass
         return devices_to_check
     
-    def getDevicesInUse(self):
+    def get_devices_in_use(self):
         '''
         If possible, return only the Device sections in use, otherwise return
         all the Device sections.
@@ -155,7 +155,7 @@ class XUtils(Parser):
         only the default ServerLayout section provided than one is set in the
         ServerFlags section.
         '''
-        devicesToCheck = self.getDevicesInUse()
+        devicesToCheck = self.get_devices_in_use()
         driverEnabled = self.section_has_driver(driver, sections_list=devicesToCheck)
         
         return driverEnabled#driverEnabled, devicesToCheck)

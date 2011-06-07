@@ -1398,7 +1398,7 @@ EndSection
 
     def testIntegrity13(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: More than 1 ServerLayout with ServerFlags with more than one default
            layout
@@ -1465,7 +1465,7 @@ EndSection
 
     def testIntegrity14(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: No ServerLayout and ServerFlags with one default
            layout
@@ -1515,7 +1515,7 @@ EndSection
 
     def testIntegrity15(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: One ServerLayout and ServerFlags with one default
               layout which doesn't exist
@@ -1570,7 +1570,7 @@ EndSection
     
     def testIntegrity16(self):
         '''
-        getDevicesInUse(self)
+        get_devices_in_use(self)
         
         case: One ServerLayout and ServerFlags with one default
               layout which doesn't exist
