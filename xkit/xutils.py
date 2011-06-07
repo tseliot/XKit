@@ -147,20 +147,21 @@ class XUtils(Parser):
         return devices_to_check
     
     def is_driver_enabled(self, driver):
-        '''
-        If possible, check only the Device sections in use, otherwise check
-        all the Device sections and see if a driver is enabled.
-        
+        '''See if a driver is enabled in the Device sections
+
+        When possible, this method checks only the Device sections in use,
+        otherwise it checks any available Device section.
+
         This method supports old Xinerama setups and therefore looks for
-        references to Device sections in the ServerLayout section(s) and checks
-        only the default ServerLayout section provided than one is set in the
-        ServerFlags section.
-        '''
-        devicesToCheck = self.get_devices_in_use()
-        driverEnabled = self.section_has_driver(driver, sections_list=devicesToCheck)
-        
-        return driverEnabled#driverEnabled, devicesToCheck)
-            
+        references to Device sections in the ServerLayout section(s) and
+        checks only the default ServerLayout section provided than one is
+        set in the ServerFlags section.'''
+        devices_to_check = self.get_devices_in_use()
+        driver_enabled = self.section_has_driver(driver,
+                                               sections_list=devices_to_check)
+
+        return driver_enabled
+
     def getScreenDeviceRelationships(self):
         '''
         See which Screen sections are related to which Device sections
