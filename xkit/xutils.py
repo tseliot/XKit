@@ -67,7 +67,7 @@ class XUtils(Parser):
                 return False
         return True
 
-    def getDevicesFromServerLayout(self, position):
+    def get_devices_in_serverlayout(self, position):
         '''
         Look for references to Device sections in the Screen sections referred
         to in the ServerLayout[position] section.
@@ -132,15 +132,15 @@ class XUtils(Parser):
                     default = self.get_default_serverlayout()
                     
                     if len(default) == 1:
-                        devicesToCheck = self.getDevicesFromServerLayout(default[0])
+                        devicesToCheck = self.get_devices_in_serverlayout(default[0])
                     else:
                         for layout in serverLayout:
-                            devicesToCheck += self.getDevicesFromServerLayout(layout)
+                            devicesToCheck += self.get_devices_in_serverlayout(layout)
                 else:
                     for layout in serverLayout:
-                        devicesToCheck += self.getDevicesFromServerLayout(layout)
+                        devicesToCheck += self.get_devices_in_serverlayout(layout)
             else:
-                devicesToCheck = self.getDevicesFromServerLayout(0)
+                devicesToCheck = self.get_devices_in_serverlayout(0)
         #print 'devicesToCheck', devicesToCheck
         
         if len(devicesToCheck) == 0:

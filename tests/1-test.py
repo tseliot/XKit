@@ -161,9 +161,9 @@ class XUtilsTestCase(unittest.TestCase):
         
         self.failUnless(status == True, 'Driver not in section!')
 
-    def testGetDevicesFromServerLayout1(self):
+    def test_get_devices_in_serverlayout1(self):
         '''
-        getDevicesFromServerLayout(self, position)
+        get_devices_in_serverlayout(self, position)
         
         case: no references
         '''
@@ -210,13 +210,13 @@ EndSection
         confFile.close()
         
         self.parser = xutils.XUtils(tempFile)
-        devices = self.parser.getDevicesFromServerLayout(0)
+        devices = self.parser.get_devices_in_serverlayout(0)
         
         self.failUnless(len(devices) == 1, 'Only one section should be found!')
     
-    def testGetDevicesFromServerLayout2(self):
+    def test_get_devices_in_serverlayout2(self):
         '''
-        getDevicesFromServerLayout(self, position)
+        get_devices_in_serverlayout(self, position)
         
         case: good references (the sections referred to in the layout exist)
         
@@ -271,7 +271,7 @@ EndSection
         confFile.close()
         
         self.parser = xutils.XUtils(tempFile)
-        devices = self.parser.getDevicesFromServerLayout(0)
+        devices = self.parser.get_devices_in_serverlayout(0)
         
         self.failUnless(len(devices) == 2, 'No section should be found!')
     
