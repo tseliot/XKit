@@ -1663,9 +1663,8 @@ EndSection
 
         oldDict = copy.deepcopy(x.globaldict)
         
-        f = tempfile.TemporaryFile()
-        
-        x.write(f)
+        with tempfile.TemporaryFile(mode='w') as f:
+            x.write(f)
 
         newDict = x.globaldict
         self.assertEqual(oldDict, newDict)
@@ -1701,13 +1700,13 @@ EndSection
 
         oldDict = copy.deepcopy(x.globaldict)
         
-        f = tempfile.TemporaryFile()
-        x.write(f)
+        with tempfile.TemporaryFile(mode='w') as f:
+            x.write(f)
 
         self.assertEqual(oldDict, x.globaldict)
 
-        f = tempfile.TemporaryFile()
-        x.write(f)
+        with tempfile.TemporaryFile(mode='w') as f:
+            x.write(f)
         
         self.assertEqual(oldDict, x.globaldict)
 
