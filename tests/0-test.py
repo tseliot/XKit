@@ -73,7 +73,7 @@ class XorgParserTestCase(unittest.TestCase):
                 found2 = True
                 break
 
-        self.failUnless(found1 == True and found2 == True,
+        self.assertTrue(found1 == True and found2 == True,
                         'Not all the identifiers were returned')
 
     def test_get_identifier1(self):
@@ -84,7 +84,7 @@ class XorgParserTestCase(unittest.TestCase):
         position1 = self.parser.make_section(section, identifier1)
         identifier2 = self.parser.get_identifier(section, position1)
 
-        self.failUnless(identifier1 == identifier2, 
+        self.assertEqual(identifier1, identifier2,
                         'The identifier was not correctly retrieved')
 
     def test_get_identifier2(self):
@@ -93,7 +93,8 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser = xorgparser.Parser(None)
 
         self.assertRaises(SectionException,
-                          self.parser.get_value, 'Device', 'Identifier', 1)
+                          self.parser.get_value, 'Device',
+                          'Identifier', 1)
 
         self.assertRaises(IdentifierException,
                           self.parser.get_identifier, 'Device', 0)
@@ -115,7 +116,8 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser.globaldict[section][position].append(option2)
         duplicates = self.parser.get_duplicate_options(section, position)
 
-        self.failUnless(option in duplicates, 'Duplicates cannot be found!')
+        self.assertTrue(option in duplicates,
+                         'Duplicates cannot be found!')
 
     def test_check_duplicate_options(self):
         '''def check_duplicate_options(self):'''
@@ -135,7 +137,8 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser.globaldict[section][position].append(option2)
         duplicates = self.parser.check_duplicate_options()
 
-        self.failUnless(option in duplicates[section][position], 'Duplicates can still be found!')
+        self.assertTrue(option in duplicates[section][position],
+                        'Duplicates can still be found!')
 
     def test_get_duplicate_sections(self):
         '''def get_duplicate_sections(self):'''
@@ -153,7 +156,7 @@ class XorgParserTestCase(unittest.TestCase):
         self.parser.identifiers[section].append((identifier1, pos+1))
         duplicates = self.parser.get_duplicate_sections()
 
-        self.failUnless(identifier1 in duplicates[section],
+        self.assertTrue(identifier1 in duplicates[section],
                         'Duplicates sections cannot be retrieved correctly!')
 
     def test_is_section1(self):
@@ -170,7 +173,7 @@ class XorgParserTestCase(unittest.TestCase):
                 status2 = True
                 break
 
-        self.failUnless(status2 == True and status1 == status2, 
+        self.assertTrue(status2 == True and status1 == status2,
                       'The existence of the section was not tested correctly')
 
     def test_is_section2(self):
@@ -187,7 +190,7 @@ class XorgParserTestCase(unittest.TestCase):
                 status2 = True
                 break
 
-        self.failUnless(status2 == True and status1 == status2, 
+        self.assertTrue(status2 == True and status1 == status2,
                       'The existence of the section was not tested correctly')
 
     def test_add_option1(self):
@@ -206,7 +209,7 @@ class XorgParserTestCase(unittest.TestCase):
                 if line.find(option) != -1:
                     found = True
                     #print line
-            self.failUnless(found == True, 'Option not added!')
+            self.assertTrue(found, 'Option not added!')
         
     def test_add_option2(self):
         '''def add_option(self, section, option, value, option_type=None,
@@ -224,7 +227,7 @@ class XorgParserTestCase(unittest.TestCase):
                 if line.find(option) != -1:
                     found = True
                     #print line
-            self.failUnless(found == True, 'Option not added!')
+            self.assertTrue(found, 'Option not added!')
         
     def test_add_option3(self):
         '''def add_option(self, section, option, value, option_type=None,
@@ -240,7 +243,7 @@ class XorgParserTestCase(unittest.TestCase):
         for line in lines:
             if line.find(option) != -1:
                 found = True
-        self.failUnless(found == True, 'Option not added!')
+        self.assertTrue(found, 'Option not added!')
         
     def test_add_option4(self):
         '''def add_option(self, section, option, value, option_type=None,
@@ -258,7 +261,7 @@ class XorgParserTestCase(unittest.TestCase):
                 if line.find(option) != -1:
                     found = True
                     #print line
-            self.failUnless(found == True, 'Option not added!')
+            self.assertTrue(found, 'Option not added!')
 
     def test_add_option5(self):
         '''def add_option(self, section, option, value, option_type=None,
@@ -279,7 +282,7 @@ class XorgParserTestCase(unittest.TestCase):
             if line.find(option) != -1:
                 found = True
                 #print line
-        self.failUnless(found == True, 'Option not added!')
+        self.assertTrue(found, 'Option not added!')
 
     def test_remove_option1(self):
         '''def remove_option(self, section, option, value=None, position=None,
@@ -295,7 +298,7 @@ class XorgParserTestCase(unittest.TestCase):
                 if line.find(option) != -1:
                     found = True
                     #print line
-            self.failUnless(found == False, 'Option not removed!')
+            self.assertFalse(found, 'Option not removed!')
 
     def test_remove_option2(self):
         '''def remove_option(self, section, option, value=None, position=None,
@@ -312,7 +315,7 @@ class XorgParserTestCase(unittest.TestCase):
                 if line.find(option) != -1 and line.find(value) != -1:
                     found = True
                     #print line
-            self.failUnless(found == False, 'Option not removed!')
+            self.assertFalse(found, 'Option not removed!')
 
     def test_remove_option3(self):
         '''
@@ -330,7 +333,7 @@ class XorgParserTestCase(unittest.TestCase):
                 if line.find(option) != -1:
                     found = True
                     #print line
-            self.failUnless(found == False, 'Option not removed!')
+            self.assertFalse(found, 'Option not removed!')
         
     def test_make_section1(self):
         '''def make_section(self, section, identifier=None):'''
@@ -340,7 +343,7 @@ class XorgParserTestCase(unittest.TestCase):
         position = self.parser.make_section(section, identifier=None)
         sect = self.parser.globaldict[section].get(position)
 
-        self.failUnless(sect != None, 'Section not created!')
+        self.assertTrue(sect != None, 'Section not created!')
 
     def test_make_section2(self):
         '''def make_section(self, section, identifier=None):'''
@@ -349,7 +352,7 @@ class XorgParserTestCase(unittest.TestCase):
         identifier = 'XKit Video Device'
         position = self.parser.make_section(section, identifier=identifier)
         sect = self.parser.globaldict[section].get(position)
-        self.failUnless(sect != None, 'Section not created!')
+        self.assertTrue(sect != None, 'Section not created!')
         
         found = False
         lines = self.parser.globaldict[section][position]
@@ -357,7 +360,7 @@ class XorgParserTestCase(unittest.TestCase):
             if line.find('Identifier') != -1 and line.find(identifier) != -1:
                 found = True
                 #print line
-        self.failUnless(found == True, 'Section not created correctly!')
+        self.assertTrue(found, 'Section not created correctly!')
 
     def test_make_section3(self):
         '''def make_section(self, section, identifier=None):'''
@@ -366,7 +369,7 @@ class XorgParserTestCase(unittest.TestCase):
         position = self.parser.make_section(section, identifier=None)
         sect = self.parser.globaldict[section].get(position)
 
-        self.failUnless(sect != None, 'The section was not created')
+        self.assertTrue(sect != None, 'The section was not created')
 
     def test_make_section4(self):
         '''def make_section(self, section, identifier=None):'''
@@ -376,7 +379,7 @@ class XorgParserTestCase(unittest.TestCase):
         position = self.parser.make_section(section, identifier=identifier)
         sect = self.parser.globaldict[section].get(position)
 
-        self.failUnless(sect != None, 'Section not created!')
+        self.assertTrue(sect != None, 'Section not created!')
 
         found = False
         lines = self.parser.globaldict[section][position]
@@ -385,7 +388,7 @@ class XorgParserTestCase(unittest.TestCase):
                 found = True
                 #print line
 
-        self.failUnless(found == True, 'Section not created correctly!')
+        self.assertTrue(found, 'Section not created correctly!')
 
         ids = self.parser.identifiers[section]
         found = False
@@ -394,7 +397,7 @@ class XorgParserTestCase(unittest.TestCase):
                 found = True
                 break
 
-        self.failUnless(found == True, 'Identifiers list not updated!')
+        self.assertTrue(found, 'Identifiers list not updated!')
 
     def test_add_reference1(self):
         '''def add_reference(self, section, reference, identifier,
@@ -414,7 +417,7 @@ class XorgParserTestCase(unittest.TestCase):
                     found = True
                     #print line
 
-            self.failUnless(found == True, 'Reference not added!')
+            self.assertTrue(found, 'Reference not added!')
 
     def test_add_reference2(self):
         '''def add_reference(self, section, reference, identifier,
@@ -435,7 +438,7 @@ class XorgParserTestCase(unittest.TestCase):
                 found = True
                 #print line
 
-        self.failUnless(found == True, 'Reference not added!')
+        self.assertTrue(found, 'Reference not added!')
 
     def test_remove_reference1(self):
         '''def remove_reference(self, section, reference, identifier,
@@ -460,7 +463,7 @@ class XorgParserTestCase(unittest.TestCase):
                     found = True
                     #print line
 
-            self.failUnless(found == False, 'Reference not removed!')
+            self.assertFalse(found, 'Reference not removed!')
 
     def test_remove_reference2(self):
         '''def remove_reference(self, section, reference, identifier,
@@ -484,7 +487,7 @@ class XorgParserTestCase(unittest.TestCase):
                 found = True
                 #print line
 
-        self.failUnless(found == False, 'Reference not removed!')
+        self.assertFalse(found, 'Reference not removed!')
 
     def test_get_references1(self):
         '''def get_references(self, section, position, reflist=None):'''
@@ -502,7 +505,7 @@ class XorgParserTestCase(unittest.TestCase):
                                   position=screen)
         references = self.parser.get_references(section, screen, reflist=None)
 
-        self.failUnless(len(references) > 0,
+        self.assertTrue(len(references) > 0,
                         'No list of References can be retrieved!')
 
     def test_get_references2(self):
@@ -519,7 +522,7 @@ class XorgParserTestCase(unittest.TestCase):
         references = self.parser.get_references(section, position,
                                                 reflist=reflist)
 
-        self.failUnless(len(references) > 0,
+        self.assertTrue(len(references) > 0,
                         'No list of References can be retrieved!')
 
     def test_make_subsection1(self):
@@ -544,7 +547,8 @@ class XorgParserTestCase(unittest.TestCase):
                 found += 1
         #print self.parser.globaldict['SubSection']
         #print 'found =', found, '; times =', times
-        self.failUnless(found >= times, 'The subsections were not created!')
+        self.assertTrue(found >= times,
+                        'The subsections were not created!')
 
     def test_make_subsection2(self):
         '''def make_subsection(self, section, identifier, position=None):'''
@@ -567,7 +571,7 @@ class XorgParserTestCase(unittest.TestCase):
                 subsection.get('position') == position:
                 found = True
 
-        self.failUnless(found == True, 'The subsection was not created!')
+        self.assertTrue(found, 'The subsection was not created!')
 
     def test_remove_subsection1(self):
         '''def remove_subsection(self, section, identifier, position=None):'''
@@ -583,7 +587,7 @@ class XorgParserTestCase(unittest.TestCase):
 
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
-            self.failUnless(subsection.get('identifier') != identifier or \
+            self.assertTrue(subsection.get('identifier') != identifier or \
             subsection.get('section') != section,
             'The subsections were not removed!')
 
@@ -599,7 +603,7 @@ class XorgParserTestCase(unittest.TestCase):
         
         for pos in self.parser.globaldict['SubSection']:
             subsection = self.parser.globaldict['SubSection'][pos]
-            self.failUnless(subsection.get('identifier') != identifier or \
+            self.assertTrue(subsection.get('identifier') != identifier or \
             subsection.get('section') != section or \
             subsection.get('position') != position,
             'The subsections were not removed!')
@@ -631,7 +635,8 @@ class XorgParserTestCase(unittest.TestCase):
                     if line.find(option) != -1 and line.find(value) != -1:
                         found = True
 
-                self.failUnless(found == True, 'Option not added to all the Subsections')
+                self.assertTrue(found,
+                                'Option not added to all the Subsections')
 
     def test_add_suboption2(self):
         '''def add_suboption(self, section, identifier, option, value,
@@ -659,7 +664,7 @@ class XorgParserTestCase(unittest.TestCase):
                     if line.find(option) != -1 and line.find(value) != -1:
                         found = True
 
-                self.failUnless(found == True,
+                self.assertTrue(found,
                                 'Option not added to the Subsection')
 
     def test_add_suboption3(self):
@@ -691,7 +696,7 @@ class XorgParserTestCase(unittest.TestCase):
                     and line.find(option_type) != -1):
                         found = True
 
-                self.failUnless(found == True,
+                self.assertTrue(found,
                                 'Option not added to all the Subsections')
 
     def test_remove_suboption1(self):
@@ -722,7 +727,7 @@ class XorgParserTestCase(unittest.TestCase):
                     if line.find(option) != -1 and line.find(value) != -1:
                         found = True
 
-                self.failUnless(found == True,
+                self.assertTrue(found,
                                 'Option not added to all the Subsections')
 
         #self.parser.write(sys.stderr)
@@ -739,7 +744,7 @@ class XorgParserTestCase(unittest.TestCase):
                     if line.find(option) != -1:
                         found = True
 
-                self.failUnless(found == False,
+                self.assertFalse(found,
                                 'Option not removed from all the Subsections')
 
     def test_remove_suboption2(self):
@@ -767,7 +772,7 @@ class XorgParserTestCase(unittest.TestCase):
                 for line in lines:
                     if line.find(option) != -1 and line.find(value) != -1:
                         found = True
-                self.failUnless(found == True,
+                self.assertTrue(found,
                                 'Option not added to the Subsection')
 
         self.parser.remove_suboption(section, identifier, option,
@@ -784,7 +789,7 @@ class XorgParserTestCase(unittest.TestCase):
                     if line.find(option) != -1:
                         found = True
 
-                self.failUnless(found == False,
+                self.assertFalse(found,
                                 'Option not removed from the Subsection')
 
     def test_get_value1(self):
@@ -825,7 +830,7 @@ class XorgParserTestCase(unittest.TestCase):
 
         result = self.parser.get_value(section, option, position)
 
-        self.failUnless(result == value, 'Incorrect value retrieved')
+        self.assertTrue(result == value, 'Incorrect value retrieved')
 
     def test_get_value2(self):
         '''def get_value(self, section, option, position, identifier=None,
@@ -845,7 +850,7 @@ class XorgParserTestCase(unittest.TestCase):
 
         result = self.parser.get_value(section, option, position)
 
-        self.failUnless(result == value, 'Incorrect value retrieved')
+        self.assertTrue(result == value, 'Incorrect value retrieved')
 
     def test_get_value3(self):
         '''def get_value(self, section, option, position, identifier=None,
@@ -868,7 +873,7 @@ class XorgParserTestCase(unittest.TestCase):
         result = self.parser.get_value(section, option, position,
                                        identifier=identifier, sect=sect)
 
-        self.failUnless(result == value, 'Incorrect value retrieved')
+        self.assertTrue(result == value, 'Incorrect value retrieved')
 
     def test_get_value4(self):
         self.this_function_name = sys._getframe().f_code.co_name
@@ -1078,7 +1083,7 @@ EndSection
         except ParseException:
             valid = False
         
-        self.failUnless(valid == True, 'the xorg.conf should be considered valid')
+        self.assertTrue(valid, 'the xorg.conf should be considered valid')
 
     def testIntegrity9(self):
         self.this_function_name = sys._getframe().f_code.co_name
@@ -1296,7 +1301,8 @@ EndSection
         except ParseException:
             valid = False
         
-        self.failUnless(valid == True, 'This file should be considered valid')
+        self.assertTrue(valid,
+                        'This file should be considered valid')
 
     def testIntegrity12(self):
         '''
@@ -1593,7 +1599,7 @@ EndSection
         except ParseException:
             valid = False
          
-        self.failUnless(valid == True, 'The xorg.conf should be valid!')
+        self.assertTrue(valid, 'The xorg.conf should be valid!')
 
     def testIntegrity18(self):
         '''
@@ -1627,7 +1633,7 @@ EndSection
         position1 = self.parser.make_section(section, identifier)
         position2 = self.parser.get_position(section, identifier)
         
-        self.failUnless(position1 == position2, 
+        self.assertTrue(position1 == position2,
                         'The position was not correctly retrieved')
 
     def test_get_position2(self):
@@ -1757,7 +1763,7 @@ EndSection
                 commentFound = True
                 break
 
-        self.assert_(commentFound)
+        self.assertTrue(commentFound)
 
         commentFound = False
         inventedFound = False
@@ -1767,8 +1773,8 @@ EndSection
             if inventedOption in y.globaldict[y.commentsection]['Monitor'][commentSection]['options']:
                 inventedFound = True
 
-        self.assert_(commentFound)
-        self.assert_(inventedFound == False)
+        self.assertTrue(commentFound)
+        self.assertFalse(inventedFound)
 
     def testParseComments1(self):
         '''
@@ -1812,7 +1818,7 @@ EndSection
                 commentFound = True
                 break
         
-        self.assert_(commentFound)
+        self.assertTrue(commentFound)
         
         commentFound = False
         inventedFound = False
@@ -1822,8 +1828,8 @@ EndSection
             if inventedOption in y.globaldict[y.commentsection]['Monitor'][commentSection]['options']:
                 inventedFound = True
         
-        self.assert_(commentFound)
-        self.assert_(inventedFound == False)
+        self.assertTrue(commentFound)
+        self.assertFalse(inventedFound)
 
     def testParseSubComments1(self):
         '''
@@ -1875,7 +1881,7 @@ EndSection
                 commentFound = True
                 break
         
-        self.assert_(commentFound)
+        self.assertTrue(commentFound)
         
         commentFound = False
         inventedFound = False
@@ -1885,8 +1891,8 @@ EndSection
             if inventedOption in y.globaldict[y.commentsection]['Monitor'][commentSection]['options']:
                 inventedFound = True
         
-        self.assert_(commentFound)
-        self.assert_(inventedFound == False)
+        self.assertTrue(commentFound)
+        self.assertFalse(inventedFound)
         
         SubOption = '#I rock'
         commentFound = False
@@ -1894,7 +1900,7 @@ EndSection
             if SubOption in y.globaldict[y.commentsection][y.subsection][commentSection]['options']:
                 commentFound = True
                 break
-        self.assert_(commentFound)
+        self.assertTrue(commentFound)
     
     
     def test_comment_out_option1(self):
@@ -1931,7 +1937,7 @@ EndSection
                 if line.find(option) != -1:
                     found = True
                     #print line
-            self.failUnless(found == False, 'Option not removed!')
+            self.assertFalse(found, 'Option not removed!')
         
         commentFound = False
         for commentSection in y.globaldict[y.commentsection]['Device']:
@@ -1941,7 +1947,7 @@ EndSection
         
         #print >> sys.stderr, str(y.globaldict)
         
-        self.assert_(commentFound)
+        self.assertTrue(commentFound)
         #y.write(sys.stderr)
     
     def test_comment_out_suboption1(self):
@@ -1994,12 +2000,12 @@ EndSection
                 for line in lines:
                     if line.find(option) != -1:
                         found = True
-                self.failUnless(found == False, 'Option not commented out from all the Subsections')
+                self.assertFalse(found, 'Option not commented out from all the Subsections')
         
         
 #        print >> sys.stderr, str(y.globaldict)
 #        y.write(sys.stderr)
-        self.assert_(commentFound)
+        self.assertTrue(commentFound)
 
     def test_get_subsections1(self):
         '''def get_subsections(self, section, position)'''
@@ -2044,13 +2050,13 @@ EndSection
         y = self.parser = xorgparser.Parser(tempFile)
         
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(len(screenSub0) == 1)
+        self.assertTrue(len(screenSub0) == 1)
         
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(len(screenSub1) == 2)
+        self.assertTrue(len(screenSub1) == 2)
         
     def test_comment_out_section1(self):
         '''1 def comment_out_section(self, section, identifier=None, position=None)'''
@@ -2116,8 +2122,8 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
         
         
         # Comment out the first Screen section
@@ -2126,20 +2132,20 @@ EndSection
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         # the first Screen was commented out together with
         # its subsection
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(not screenSub0)
+        self.assertFalse(screenSub0)
         
         # Screen section 2 has 2 subsections
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(len(screenSub1) == 2)
+        self.assertEqual(2, len(screenSub1))
         
 #        print >> sys.stderr, str(y.globaldict)
         
-        self.assert_(not y.globaldict['Screen'].get(0))
+        self.assertFalse(y.globaldict['Screen'].get(0))
         
         
         # check that the removed section doesn't have
@@ -2156,18 +2162,18 @@ EndSection
         
         
         
-        self.assert_(not hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertFalse(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
         
         
         # Comment out the 2nd Screen section
         y.comment_out_section('Screen', identifier='My Screen1')
-        self.assert_(not y.globaldict['Screen'].get(1))
+        self.assertFalse(y.globaldict['Screen'].get(1))
         
         # the second Screen was commented out together with
         # its subsection
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(not screenSub1)
+        self.assertFalse(screenSub1)
         
         
         # check that the removed section doesn't have
@@ -2183,8 +2189,8 @@ EndSection
                 #print >> sys.stderr, "\n\nfound 1 in", str(elem)
         
         
-        self.assert_(not hasIdentifier0)
-        self.assert_(not hasIdentifier1)
+        self.assertFalse(hasIdentifier0)
+        self.assertFalse(hasIdentifier1)
         
         
         y.write(tempFile)
@@ -2256,8 +2262,8 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
         
         
         # Comment out the first Screen section
@@ -2276,34 +2282,34 @@ EndSection
                 #print >> sys.stderr, "\n\nfound 1 in", str(elem)
         
         
-        self.assert_(not hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertFalse(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
         
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         # the first Screen was commented out together with
         # its subsection
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(not screenSub0)
+        self.assertFalse(screenSub0)
         
         # Screen section 2 has 2 subsections
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(len(screenSub1) == 2)
+        self.assertEqual(2, len(screenSub1))
         
         
-        self.assert_(not y.globaldict['Screen'].get(0))
+        self.assertFalse(y.globaldict['Screen'].get(0))
         
         # Comment out the 2nd Screen section
         y.comment_out_section('Screen', position=1)
-        self.assert_(not y.globaldict['Screen'].get(1))
+        self.assertFalse(y.globaldict['Screen'].get(1))
         
         # the second Screen was commented out together with
         # its subsection
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(not screenSub1)
+        self.assertFalse(screenSub1)
         
         
         # check that the removed sections don't have
@@ -2319,8 +2325,8 @@ EndSection
                 #print >> sys.stderr, "\n\nfound 1 in", str(elem)
         
         
-        self.assert_(not hasIdentifier0)
-        self.assert_(not hasIdentifier1)
+        self.assertFalse(hasIdentifier0)
+        self.assertFalse(hasIdentifier1)
         
         
         #y.write(sys.stderr)
@@ -2394,8 +2400,8 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
 
 
         # Comment out the all Screen sections
@@ -2403,22 +2409,22 @@ EndSection
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         # the first Screen was commented out together with
         # its subsection
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(not screenSub0)
+        self.assertFalse(screenSub0)
         
         # Screen section 2 has 2 subsections
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(not screenSub1)
+        self.assertFalse(screenSub1)
         
 #        print >> sys.stderr, str(y.globaldict)
         
-        self.assert_(not y.globaldict['Screen'].get(0))
+        self.assertFalse(y.globaldict['Screen'].get(0))
         
-        self.assert_(not y.globaldict['Screen'].get(1))
+        self.assertFalse(y.globaldict['Screen'].get(1))
         
         
         # the screen sections should not have a reference
@@ -2431,8 +2437,8 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(not hasIdentifier0)
-        self.assert_(not hasIdentifier1)
+        self.assertFalse(hasIdentifier0)
+        self.assertFalse(hasIdentifier1)
         
         #y.write(sys.stderr)
         y.write(tempFile)
@@ -2511,8 +2517,8 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
 
 
         # Comment out the first Screen section
@@ -2532,35 +2538,36 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(not hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertFalse(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
         
         
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         # the first Screen was commented out together with
         # its subsection
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(not screenSub0)
+        self.assertFalse(screenSub0)
         
         # Screen section 2 has 2 subsections
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(len(screenSub1) == 2)
+        self.assertEqual(2, len(screenSub1))
         
         
-        self.assert_(not y.globaldict['Screen'].get(0))
+        self.assertFalse(y.globaldict['Screen'].get(0))
+
         
         # Comment out the 2nd Screen section
         y.comment_out_section('Screen', position=1)
-        self.assert_(not y.globaldict['Screen'].get(1))
+        self.assertFalse(y.globaldict['Screen'].get(1))
         
         # the second Screen was commented out together with
         # its subsection
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(not screenSub1)
+        self.assertFalse(screenSub1)
         
         # screens should not have a reference to their id
         # in y.identifiers
@@ -2572,23 +2579,23 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(not hasIdentifier0)
-        self.assert_(not hasIdentifier1)
+        self.assertFalse(hasIdentifier0)
+        self.assertFalse(hasIdentifier1)
         
         
         
         # ServerFlags should exist
-        self.assert_(y.globaldict['ServerFlags'].get(0))
+        self.assertTrue(y.globaldict['ServerFlags'].get(0))
         
         # serverFlags should not have a reference to its id
         # in y.identifiers
-        self.assert_(not y.identifiers.get('ServerFlags'))
+        self.assertFalse(y.identifiers.get('ServerFlags'))
                 
         
         # comment out ServerFlags
         y.comment_out_section('ServerFlags')
         # ServerFlags should not exist
-        self.assert_(not y.globaldict['ServerFlags'].get(0))
+        self.assertFalse(y.globaldict['ServerFlags'].get(0))
         
         # Make sure that the option in ServerFlags was preserved
         # in the comments
@@ -2600,9 +2607,9 @@ EndSection
         
         # serverFlags should not have a reference to its id
         # in y.identifiers
-        self.assert_(not y.identifiers.get('ServerFlags'))
+        self.assertFalse(y.identifiers.get('ServerFlags'))
                 
-        self.assert_(commentFound)
+        self.assertTrue(commentFound)
         
         #y.write(sys.stderr)
         y.write(tempFile)
@@ -2671,38 +2678,38 @@ EndSection
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         # the first Screen has 1 subsection
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(len(screenSub0) == 1)
+        self.assertEqual(1, len(screenSub0))
         
         # Screen section 2 has 2 subsections
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(len(screenSub1) == 2)
+        self.assertEqual(2, len(screenSub1))
         
 #        print >> sys.stderr, str(y.globaldict)
         
-        self.assert_(y.globaldict['Screen'].get(0))
+        self.assertTrue(y.globaldict['Screen'].get(0))
         
-        self.assert_(y.globaldict['Screen'].get(1))
+        self.assertTrue(y.globaldict['Screen'].get(1))
         
         # Remove "Whatever" subsection from Screen 1
         y.comment_out_subsection('Screen', 'Whatever', 1)
         
         screenSub1 = y.get_subsections('Screen', 1)
         # Screen 1 must have only 1 subsection now
-        self.assert_(len(screenSub1) == 1)
+        self.assertEqual(1, len(screenSub1))
         
         # Make sure that the Screen sections are still there
-        self.assert_(y.globaldict['Screen'].get(0))
+        self.assertTrue(y.globaldict['Screen'].get(0))
         
-        self.assert_(y.globaldict['Screen'].get(1))
+        self.assertTrue(y.globaldict['Screen'].get(1))
         
         # Let's assume that I change my mind at this point and
         # decide to comment out the whole section
         y.comment_out_section('Screen', position=1)
-        self.assert_(not y.globaldict['Screen'].get(1))
+        self.assertFalse(y.globaldict['Screen'].get(1))
         
         y.write(tempFile)
         
@@ -2764,9 +2771,9 @@ EndSection
         
         y = xorgparser.Parser(tempFile)
         
-        self.assert_(y.globaldict['Screen'].get(0))
+        self.assertTrue(y.globaldict['Screen'].get(0))
         
-        self.assert_(y.globaldict['Screen'].get(1))
+        self.assertTrue(y.globaldict['Screen'].get(1))
 #        print >> sys.stderr, str(y.globaldict)
         
         # the screen sections should have a reference
@@ -2779,29 +2786,29 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
         
         # Remove Screen "My Screen 1"
         y.remove_section('Screen', identifier='My Screen1')
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         # the first Screen has 1 subsection
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(len(screenSub0) == 1)
+        self.assertEqual(1, len(screenSub0))
         
         # Screen section 2 has 2 subsections
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(not screenSub1)
+        self.assertFalse(screenSub1)
         
 #        print >> sys.stderr, str(y.globaldict)
         
-        self.assert_(y.globaldict['Screen'].get(0))
+        self.assertTrue(y.globaldict['Screen'].get(0))
         
-        self.assert_(not y.globaldict['Screen'].get(1))
+        self.assertFalse(y.globaldict['Screen'].get(1))
         
         # check that the removed section doesn't have
         # a reference in y.identifiers any longer
@@ -2813,8 +2820,8 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(not hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertFalse(hasIdentifier1)
                 
         y.write(tempFile)
         
@@ -2877,9 +2884,9 @@ EndSection
         
         y = xorgparser.Parser(tempFile)
         
-        self.assert_(y.globaldict['Screen'].get(0))
+        self.assertTrue(y.globaldict['Screen'].get(0))
         
-        self.assert_(y.globaldict['Screen'].get(1))
+        self.assertTrue(y.globaldict['Screen'].get(1))
 #        print >> sys.stderr, str(y.globaldict)
         
         # the screen sections should have a reference
@@ -2892,29 +2899,29 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
         
         # Remove Screen section 1
         y.remove_section('Screen', position=1)
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         # the first Screen has 1 subsection
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(len(screenSub0) == 1)
+        self.assertEqual(1, len(screenSub0))
         
         # Screen section 2 has no subsections
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(not screenSub1)
+        self.assertFalse(screenSub1)
         
 #        print >> sys.stderr, str(y.globaldict)
         
-        self.assert_(y.globaldict['Screen'].get(0))
+        self.assertTrue(y.globaldict['Screen'].get(0))
         
-        self.assert_(not y.globaldict['Screen'].get(1))
+        self.assertFalse(y.globaldict['Screen'].get(1))
         
         # check that the removed section doesn't have
         # a reference in y.identifiers any longer
@@ -2926,8 +2933,8 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(not hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertFalse(hasIdentifier1)
         
         y.write(tempFile)
         
@@ -2989,11 +2996,11 @@ EndSection
         
         y = xorgparser.Parser(tempFile)
         
-        self.assert_(y.globaldict['Screen'].get(0))
+        self.assertTrue(y.globaldict['Screen'].get(0))
         
-        self.assert_(y.globaldict['Screen'].get(1))
+        self.assertTrue(y.globaldict['Screen'].get(1))
         
-        self.assert_(y.globaldict['Device'].get(0))
+        self.assertTrue(y.globaldict['Device'].get(0))
 #        print >> sys.stderr, str(y.globaldict)
         
         # the screen sections should have a reference
@@ -3006,31 +3013,31 @@ EndSection
             elif elem[1] == 1:
                 hasIdentifier1 = True
         
-        self.assert_(hasIdentifier0)
-        self.assert_(hasIdentifier1)
+        self.assertTrue(hasIdentifier0)
+        self.assertTrue(hasIdentifier1)
         
         # Remove any Screen section
         y.remove_section('Screen')
         
         # the Device section doesn't have subsections
         deviceSub = y.get_subsections('Device', 0)
-        self.assert_(not deviceSub)
+        self.assertFalse(deviceSub)
         
         # the first Screen has no subsections
         screenSub0 = y.get_subsections('Screen', 0)
-        self.assert_(not screenSub0)
+        self.assertFalse(screenSub0)
         
         # Screen section 2 has no subsections
         screenSub1 = y.get_subsections('Screen', 1)
-        self.assert_(not screenSub1)
+        self.assertFalse(screenSub1)
         
 #        print >> sys.stderr, str(y.globaldict)
         
-        self.assert_(not y.globaldict['Screen'].get(0))
+        self.assertFalse(y.globaldict['Screen'].get(0))
         
-        self.assert_(not y.globaldict['Screen'].get(1))
+        self.assertFalse(y.globaldict['Screen'].get(1))
         
-        self.assert_(y.globaldict['Device'].get(0))
+        self.assertTrue(y.globaldict['Device'].get(0))
         
         # check that the removed section doesn't have
         # a reference in y.identifiers any longer
@@ -3045,8 +3052,8 @@ EndSection
                 #print >> sys.stderr, "\n\nfound 1 in", str(elem)
         
         
-        self.assert_(not hasIdentifier0)
-        self.assert_(not hasIdentifier1)
+        self.assertFalse(hasIdentifier0)
+        self.assertFalse(hasIdentifier1)
         
         y.write(tempFile)
         
@@ -3062,16 +3069,16 @@ EndSection
         section = 'ServerFlags'
         
         y.add_option(section, 'OffTime', 1, option_type='Option', prefix='')
-        self.assert_(y.globaldict[section][0][0] == '\tOption\t"OffTime"\t1\n')
+        self.assertEqual('\tOption\t"OffTime"\t1\n', y.globaldict[section][0][0])
 
         y.add_option(section, 'OffTime', 1, option_type='Option', prefix='"')
-        self.assert_(y.globaldict[section][0][0] == '\tOption\t"OffTime"\t"1"\n')
+        self.assertEqual('\tOption\t"OffTime"\t"1"\n', y.globaldict[section][0][0])
         
         y.add_option(section, 'OffTime', 1, option_type=None, prefix='')
-        self.assert_(y.globaldict[section][0][0] == '\tOffTime\t1\n')
+        self.assertEqual('\tOffTime\t1\n', y.globaldict[section][0][0])
         
         y.add_option(section, 'OffTime', 1)
-        self.assert_(y.globaldict[section][0][0] == '\tOffTime\t"1"\n')
+        self.assertEqual('\tOffTime\t"1"\n', y.globaldict[section][0][0])
 
     
 if __name__ == '__main__':
