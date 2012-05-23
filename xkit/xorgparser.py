@@ -1741,7 +1741,7 @@ class Parser(object):
             destination.write(''.join(lines))
             destination.close()
         else:#it is a file object
-            destination.write(bytes(''.join(lines), 'UTF-8'))
+            destination.write(str(bytes(''.join(lines), 'UTF-8')))
 
     def get_subsections(self, section, position):
         '''Get all the subsections contained in a section'''
