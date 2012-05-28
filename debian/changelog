@@ -1,3 +1,9 @@
+x-kit (0.5.0) UNRELEASED; urgency=low
+
+  * 
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Mon, 28 May 2012 17:42:55 +0200
+
 x-kit (0.4.2.3build1) precise; urgency=low
 
   * Rebuild to drop python2.6 dependencies.
