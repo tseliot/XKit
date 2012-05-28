@@ -1,3 +1,47 @@
+x-kit (0.4.2.3build1) precise; urgency=low
+
+  * Rebuild to drop python2.6 dependencies.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 31 Dec 2011 02:15:46 +0000
+
+x-kit (0.4.2.3) oneiric; urgency=low
+
+  [ Alberto Milone ]
+  * new upstream release: 0.4.2.3:
+    + README:
+      - Correct the instructions on how to get the documentation.
+    + 1-example.py:
+      - Use the right function to get the device position properly.
+
+  [ Colin Watson ]
+  * debian/control, debian/rules:
+    - Convert to dh_python2 (LP: #788514).
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Tue, 28 Jun 2011 15:13:06 +0100
+
+x-kit (0.4.2.2) lucid; urgency=low
+
+  * new upstream release: 0.4.2.2:
+    + xutils.py:
+      - make isDriverInSection() return True only if all of the specified
+        sections contain the driver. This prevents isDriverEnabled() from
+        returning false positives.
+    + 1-test.py:
+      - Modify the test for testIsDriverEnabled() so as to test the correct
+        behaviour.
+      - Add two more tests for IsDriverEnabled().
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Tue, 30 Mar 2010 13:05:57 +0200
+
+x-kit (0.4.2.1) lucid; urgency=low
+
+  * new upstream release: 0.4.2.1:
+    + xorgparser.py:
+      - Add "InputClass" to the whitelist of xorg.conf sections so that
+        the validator doesn't raise an error about it.
+
+ -- Alberto Milone <alberto.milone@canonical.com>  Fri, 26 Mar 2010 13:46:06 +0100
+
 x-kit (0.4.2) jaunty; urgency=low
 
   * new upstream release: 0.4.2:
