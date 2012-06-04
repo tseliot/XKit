@@ -1,15 +1,25 @@
 Source: x-kit
 Section: python
 Priority: optional
-Build-Depends: cdbs (>= 0.4.90~), debhelper (>= 5.0.38), python-dev (>= 2.4), intltool
+Build-Depends: debhelper (>= 5.0.38), python-dev (>= 2.4), python3-dev, intltool
 Maintainer: Alberto Milone (tseliot) <albertomilone@alice.it>
 Standards-Version: 3.8.0
-X-Python-Version: >= 2.4
+X-Python-Version: >= 2.6
+X-Python3-Version: >= 3.2
 Vcs-Bzr: https://code.launchpad.net/~albertomilone/xorgparser/main/
 
 Package: python-xkit
 Architecture: all
-Depends: ${python:Depends}
-Breaks: ${python:Breaks}
-Description: library for the manipulation of the xorg.conf
+Depends: ${python:Depends}, ${misc:Depends}
+Description: library for the manipulation of the xorg.conf (Python 2)
  X-Kit is library for the manipulation of the xorg.conf.
+ .
+ This is the Python 2 version of the package.
+
+Package: python3-xkit
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}
+Description: library for the manipulation of the xorg.conf (Python 3)
+ X-Kit is library for the manipulation of the xorg.conf.
+ .
+ This is the Python 3 version of the package.

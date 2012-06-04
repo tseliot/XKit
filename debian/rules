@@ -1,12 +1,43 @@
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/python-distutils.mk
+#DH_VERBOSE=1
 
-DEB_PYTHON_INSTALL_ARGS_ALL := --no-compile
+PYTHON2=$(shell pyversions -vr)
+PYTHON3=$(shell py3versions -vr)
+PYTHON2MJ=$(shell pyversions -vr | cut -c1-1)
+PYTHON3MJ=$(shell py3versions -vr | cut -c1-1)
 
-common-post-build-indep::
-	(cd tests; PYTHONPATH=.. ./run)
+%:
+	dh $@ --with python2,python3
 
-clean::
-	rm -f settings.py tests/xkittest-*.txt
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+test-python%:
+	(cd tests; PYTHONPATH=.. ./run$*)
+override_dh_auto_test: $(PYTHON2MJ:%=test-python%) $(PYTHON3MJ:%=test-python%)
+endif
+
+build-python%:
+	python$* setup.py build
+
+override_dh_auto_build: $(PYTHON3:%=build-python%)
+	dh_auto_build
+
+install-python%:
+	python$* setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
+
+override_dh_auto_install: $(PYTHON3:%=install-python%)
+	dh_auto_install
+
+#override_dh_installchangelogs:
+#	dh_installchangelogs -k foo/NEWS.rst
+
+#override_dh_installdocs:
+#	python setup.py build_sphinx
+#	dh_installdocs build/sphinx/html
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf build
+	rm -rf *.egg-info
+	rm -f settings.py tests/xkittest-*.txt tests/xkittest-*.txt
+
