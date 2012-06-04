@@ -15,7 +15,7 @@ setup(
     url="https://launchpad.net/x-kit",
     license="GPL v2 or later",
     description="library for the manipulation of the xorg.conf",
-    packages=["XKit"],
+    packages=["xkit"],
     scripts=[],
 )
 
