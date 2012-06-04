@@ -17,10 +17,11 @@
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
+from __future__ import print_function
+from __future__ import unicode_literals
 import sys
 from sys import stdout, stderr
 import copy
-
 
 class IdentifierException(Exception):
     '''Raise if no identifier can be found'''
@@ -1741,7 +1742,10 @@ class Parser(object):
             destination.write(''.join(lines))
             destination.close()
         else:#it is a file object
-            destination.write(str(bytes(''.join(lines), 'UTF-8')))
+            try:
+                destination.write(str(bytes(''.join(lines), 'UTF-8')))
+            except TypeError:
+                destination.write(b''.join(lines))
 
     def get_subsections(self, section, position):
         '''Get all the subsections contained in a section'''
